@@ -41,7 +41,7 @@
         </toolkit:Accordion>
 
         <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <eh:GenomeViewer x:Name="genomeViewer"/>
+            <eh:GenomesViewer x:Name="genomeViewer"/>
         </ScrollViewer>
     </Grid>
 </navigation:Page>

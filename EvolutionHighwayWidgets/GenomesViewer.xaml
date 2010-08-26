@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="EvolutionHighwayWidgets.GenomeViewer"
+﻿<UserControl x:Class="EvolutionHighwayWidgets.GenomesViewer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="genomeTemplate">
             <Border BorderBrush="Black" BorderThickness="1">
-                <eh:ChromosomeViewer DataContext="{Binding Path=Chromosomes}"/>
+                <eh:ChromosomesViewer GenomeName="{Binding Path=Name}" DataContext="{Binding Path=Chromosomes}"/>
             </Border>
         </DataTemplate>
     </UserControl.Resources>

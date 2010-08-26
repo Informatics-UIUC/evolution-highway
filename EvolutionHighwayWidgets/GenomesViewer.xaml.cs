@@ -12,9 +12,9 @@ using System.Windows.Shapes;
 
 namespace EvolutionHighwayWidgets
 {
-    public partial class SynBlock : UserControl
+    public partial class GenomesViewer : UserControl
     {
-        public SynBlock()
+        public GenomesViewer()
         {
             InitializeComponent();
         }
