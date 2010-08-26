@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayApp", "EvolutionHighwayApp\EvolutionHighwayApp.csproj", "{86DE6B00-2E74-4402-A622-A0DA2D50315A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayApp.Web", "EvolutionHighwayApp.Web\EvolutionHighwayApp.Web.csproj", "{202ECFC1-63D8-4B20-9ADA-F4336B5D3341}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86DE6B00-2E74-4402-A622-A0DA2D50315A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86DE6B00-2E74-4402-A622-A0DA2D50315A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86DE6B00-2E74-4402-A622-A0DA2D50315A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86DE6B00-2E74-4402-A622-A0DA2D50315A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{202ECFC1-63D8-4B20-9ADA-F4336B5D3341}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{202ECFC1-63D8-4B20-9ADA-F4336B5D3341}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{202ECFC1-63D8-4B20-9ADA-F4336B5D3341}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{202ECFC1-63D8-4B20-9ADA-F4336B5D3341}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
