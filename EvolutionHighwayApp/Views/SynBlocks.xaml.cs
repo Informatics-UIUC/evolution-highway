@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using EvolutionHighwayApp.Model;
+using EvolutionHighwayModel;
 
 namespace EvolutionHighwayApp.Views
 {

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayApp.Web", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayWidgets", "EvolutionHighwayWidgets\EvolutionHighwayWidgets.csproj", "{5B331813-6C47-4E71-8FF8-669E7F7706AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayModel", "EvolutionHighwayModel\EvolutionHighwayModel.csproj", "{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -29,6 +31,10 @@ Global
 		{5B331813-6C47-4E71-8FF8-669E7F7706AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B331813-6C47-4E71-8FF8-669E7F7706AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B331813-6C47-4E71-8FF8-669E7F7706AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

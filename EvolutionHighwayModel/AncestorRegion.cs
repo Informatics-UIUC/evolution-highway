@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace EvolutionHighwayApp.Model
+namespace EvolutionHighwayModel
 {
     [DataContract]
     public class AncestorRegion

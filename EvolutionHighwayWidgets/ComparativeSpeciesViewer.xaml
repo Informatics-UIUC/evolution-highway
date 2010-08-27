@@ -12,7 +12,7 @@
         <DataTemplate x:Key="comparativeSpeciesTemplate">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="90"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -24,12 +24,14 @@
                                VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                 </toolkit:LayoutTransformer>
                 
-                <eh:AncestorRegionsViewer Grid.Row="1" Width="24" DataContext="{Binding Path=AncestorRegions,Mode=OneWay}"/>
+                <eh:AncestorRegionsViewer Grid.Row="1" Width="24"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
     
-    <ItemsControl x:Name="comparativeSpeciesViewer" ItemsSource="{Binding}" ItemTemplate="{StaticResource comparativeSpeciesTemplate}">
+    <ItemsControl x:Name="comparativeSpeciesViewer" 
+                  ItemsSource="{Binding Path=ComparativeSpecies}" 
+                  ItemTemplate="{StaticResource comparativeSpeciesTemplate}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel Orientation="Horizontal"/>

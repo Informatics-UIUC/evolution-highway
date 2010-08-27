@@ -13,13 +13,15 @@
         <converters:TopMarginConverter x:Key="topMarginConverter"/>
         
         <DataTemplate x:Key="ancestorRegionsTemplate">
-            <eh:SyntenyBlock Grid.Row="0" VerticalAlignment="Top" DataContext="{Binding}"
-                         Margin="{Binding Path=Start,Mode=OneWay,Converter={StaticResource topMarginConverter}}"
-                         Height="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}"/>
+            <eh:SyntenyBlock Grid.Row="0" VerticalAlignment="Top"
+                             Margin="{Binding Path=Start,Mode=OneWay,Converter={StaticResource topMarginConverter}}"
+                             Height="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}"/>
         </DataTemplate>
     </UserControl.Resources>
     
-    <ItemsControl x:Name="ancestorRegionsViewer" ItemsSource="{Binding}" ItemTemplate="{StaticResource ancestorRegionsTemplate}">
+    <ItemsControl x:Name="ancestorRegionsViewer" 
+                  ItemsSource="{Binding Path=AncestorRegions}" 
+                  ItemTemplate="{StaticResource ancestorRegionsTemplate}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <Grid>

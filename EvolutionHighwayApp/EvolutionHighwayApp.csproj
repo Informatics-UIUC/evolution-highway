@@ -78,10 +78,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\AncestorRegion.cs" />
-    <Compile Include="Model\Chromosome.cs" />
-    <Compile Include="Model\ComparativeSpecies.cs" />
-    <Compile Include="Model\Genome.cs" />
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -133,6 +129,10 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EvolutionHighwayModel\EvolutionHighwayModel.csproj">
+      <Project>{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}</Project>
+      <Name>EvolutionHighwayModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EvolutionHighwayWidgets\EvolutionHighwayWidgets.csproj">
       <Project>{5B331813-6C47-4E71-8FF8-669E7F7706AB}</Project>
       <Name>EvolutionHighwayWidgets</Name>

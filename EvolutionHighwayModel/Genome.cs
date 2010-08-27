@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace EvolutionHighwayApp.Model
+namespace EvolutionHighwayModel
 {
     [DataContract]
     public class Genome
