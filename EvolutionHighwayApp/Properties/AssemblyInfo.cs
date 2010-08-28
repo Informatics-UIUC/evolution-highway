@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EvolutionHighwayApp")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("EvolutionHighway")]
+[assembly: AssemblyDescription("Comparative genomics visualization application")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("EvolutionHighwayApp")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2010")]
+[assembly: AssemblyCompany("NCSA")]
+[assembly: AssemblyProduct("EvolutionHighway")]
+[assembly: AssemblyCopyright("Copyright © NCSA/University of Illinois 2010")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

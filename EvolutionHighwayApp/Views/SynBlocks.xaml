@@ -21,19 +21,19 @@
         </Grid.RowDefinitions>
 
         <toolkit:Accordion x:Name="accordion" Grid.Row="0" Grid.Column="0" Width="180" SelectionMode="ZeroOrMore">
-            <toolkit:AccordionItem Header="Reference genome" HorizontalContentAlignment="Stretch">
-                <ListBox x:Name="lstGenomes" 
+            <toolkit:AccordionItem Header="Reference genome" HorizontalContentAlignment="Stretch" Height="100">
+                <ListBox x:Name="lstGenomes" DisplayMemberPath="Name"  
                          SelectionMode="Extended" 
                          SelectionChanged="lstGenomes_SelectionChanged"/>
             </toolkit:AccordionItem>
 
-            <toolkit:AccordionItem Header="Reference chromosome" HorizontalContentAlignment="Stretch">
-                <ListBox x:Name="lstChromosomes" 
+            <toolkit:AccordionItem Header="Reference chromosome" HorizontalContentAlignment="Stretch" Height="100">
+                <ListBox x:Name="lstChromosomes" DisplayMemberPath="Name"
                          SelectionMode="Extended"
                          SelectionChanged="lstChromosomes_SelectionChanged"/>
             </toolkit:AccordionItem>
 
-            <toolkit:AccordionItem Header="Comparative species" HorizontalContentAlignment="Stretch">
+            <toolkit:AccordionItem Header="Comparative species" HorizontalContentAlignment="Stretch" Height="100">
                 <ListBox x:Name="lstSpecies" 
                          SelectionMode="Extended"
                          SelectionChanged="lstSpecies_SelectionChanged"/>

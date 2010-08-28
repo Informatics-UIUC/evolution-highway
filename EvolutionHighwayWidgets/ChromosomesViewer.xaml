@@ -10,7 +10,7 @@
     
     <UserControl.Resources>
         <DataTemplate x:Key="chromosomeTemplate">
-            <Grid>
+            <Grid Margin="5,0,5,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -21,7 +21,7 @@
                     <TextBlock Text="{Binding Path=Name}" Margin="4,0,0,0"/>
                 </StackPanel>
 
-                <eh:ComparativeSpeciesViewer Grid.Row="1"/>
+                <eh:ComparativeSpeciesViewer Grid.Row="1" HorizontalAlignment="Center"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>

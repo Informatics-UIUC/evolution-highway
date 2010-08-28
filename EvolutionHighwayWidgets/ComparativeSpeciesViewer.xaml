@@ -23,8 +23,10 @@
                     <TextBlock Text="{Binding Path=SpeciesName}" 
                                VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                 </toolkit:LayoutTransformer>
-                
-                <eh:AncestorRegionsViewer Grid.Row="1" Width="24"/>
+
+                <Border Grid.Row="1" Width="24" BorderBrush="Black" BorderThickness="1" Margin="0,5,0,0">
+                    <eh:AncestorRegionsViewer/>
+                </Border>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>

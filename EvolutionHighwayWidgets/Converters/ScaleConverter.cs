@@ -9,13 +9,13 @@ namespace EvolutionHighwayWidgets.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var dValue = (double)value;
-            return dValue / 1;
+            return dValue / 3e5;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var dValue = (double)value;
-            return dValue * 1;
+            return dValue * 3e5;
         }
     }
 }
