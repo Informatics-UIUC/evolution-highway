@@ -13,7 +13,7 @@
         </DataTemplate>
     </UserControl.Resources>
     
-    <ItemsControl x:Name="genomeViewer" 
+    <ItemsControl x:Name="genomesViewer" 
                   ItemsSource="{Binding}" 
                   ItemTemplate="{StaticResource genomeTemplate}">
         <ItemsControl.ItemsPanel>

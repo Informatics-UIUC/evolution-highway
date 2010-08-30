@@ -21,27 +21,27 @@
         </Grid.RowDefinitions>
 
         <toolkit:Accordion x:Name="accordion" Grid.Row="0" Grid.Column="0" Width="180" SelectionMode="ZeroOrMore">
-            <toolkit:AccordionItem Header="Reference genome" HorizontalContentAlignment="Stretch" Height="100">
-                <ListBox x:Name="lstGenomes" DisplayMemberPath="Name"  
-                         SelectionMode="Extended" 
-                         SelectionChanged="lstGenomes_SelectionChanged"/>
+            <toolkit:AccordionItem Header="Reference genome" HorizontalContentAlignment="Stretch">
+                <ListBox x:Name="lstGenomes" Height="150"
+                         SelectionMode="Extended"
+                         SelectionChanged="OnGenomesSelectionChanged"/>
             </toolkit:AccordionItem>
 
-            <toolkit:AccordionItem Header="Reference chromosome" HorizontalContentAlignment="Stretch" Height="100">
-                <ListBox x:Name="lstChromosomes" DisplayMemberPath="Name"
+            <toolkit:AccordionItem Header="Reference chromosome" HorizontalContentAlignment="Stretch">
+                <ListBox x:Name="lstChromosomes" Height="150"
                          SelectionMode="Extended"
-                         SelectionChanged="lstChromosomes_SelectionChanged"/>
+                         SelectionChanged="OnChromosomesSelectionChanged"/>
             </toolkit:AccordionItem>
 
-            <toolkit:AccordionItem Header="Comparative species" HorizontalContentAlignment="Stretch" Height="100">
-                <ListBox x:Name="lstSpecies" 
+            <toolkit:AccordionItem Header="Comparative species" HorizontalContentAlignment="Stretch">
+                <ListBox x:Name="lstSpecies" Height="150"
                          SelectionMode="Extended"
-                         SelectionChanged="lstSpecies_SelectionChanged"/>
+                         SelectionChanged="OnSpeciesSelectionChanged"/>
             </toolkit:AccordionItem>
         </toolkit:Accordion>
 
         <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <eh:GenomesViewer x:Name="genomeViewer"/>
+            <eh:GenomesViewer x:Name="genomesViewer"/>
         </ScrollViewer>
     </Grid>
 </navigation:Page>
