@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading;
@@ -48,20 +49,22 @@ namespace EvolutionHighwayApp.Views
 
             bw.DoWork += (s, ea) =>
                 {
-                    var waitHandles = (from genomeName in e.AddedItems.Cast<string>()
-                                       let genome = _genomeNameLookup[genomeName].First()
-                                       where genome.Chromosomes == null
-                                       select _serviceProxy.BeginListChromosomes(genome.Name,
-                                                   asyncResult =>
-                                                       {
-                                                           var chromosomes = _serviceProxy.EndListChromosomes(asyncResult);
-                                                           chromosomes.Sort((a, b) => ChromosomeNameComparer.Compare(a.Name, b.Name));
-                                                           genome.Chromosomes = chromosomes;
-                                                       })
-                                                       .AsyncWaitHandle).ToArray();
+                    var waitHandles = from genomeName in e.AddedItems.Cast<string>()
+                                      let genome = _genomeNameLookup[genomeName].First()
+                                      where genome.Chromosomes == null
+                                      let mre = new ManualResetEvent(false)
+                                      let completed = _serviceProxy.BeginListChromosomes(genome.Name,
+                                                  asyncResult =>
+                                                  {
+                                                      var chromosomes = _serviceProxy.EndListChromosomes(asyncResult);
+                                                      chromosomes.Sort((a, b) => ChromosomeNameComparer.Compare(a.Name, b.Name));
+                                                      genome.Chromosomes = chromosomes;
+                                                      ((ManualResetEvent) asyncResult.AsyncState).Set();
+                                                  }, mre).IsCompleted
+                                      where !completed
+                                      select mre;
 
-                    if (waitHandles.Length > 0)
-                        WaitHandle.WaitAll(waitHandles);
+                    waitHandles.All(w => w.WaitOne());
                 };
 
             bw.RunWorkerCompleted += (s, ea) =>
@@ -87,21 +90,23 @@ namespace EvolutionHighwayApp.Views
 
             bw.DoWork += (s, ea) =>
             {
-                var waitHandles = (from genomeName in lstGenomes.SelectedItems.Cast<string>()
-                                   let genome = _genomeNameLookup[genomeName].First()
-                                   from chromosome in genome.Chromosomes
-                                   where e.AddedItems.Contains(chromosome.Name) && chromosome.ComparativeSpecies == null
-                                   select _serviceProxy.BeginListSpecies(genome.Name, chromosome.Name,
-                                               asyncResult =>
-                                                   {
-                                                       var species = _serviceProxy.EndListSpecies(asyncResult);
-                                                       species.Sort((a, b) => a.SpeciesName.CompareTo(b.SpeciesName));
-                                                       chromosome.ComparativeSpecies = species;
-                                                   })
-                                               .AsyncWaitHandle).ToArray();
+                var waitHandles = from genomeName in lstGenomes.SelectedItems.Cast<string>()
+                                  let genome = _genomeNameLookup[genomeName].First()
+                                  from chromosome in genome.Chromosomes
+                                  where e.AddedItems.Contains(chromosome.Name) && chromosome.ComparativeSpecies == null
+                                  let mre = new ManualResetEvent(false)
+                                  let completed = _serviceProxy.BeginListSpecies(genome.Name, chromosome.Name,
+                                              asyncResult =>
+                                              {
+                                                  var species = _serviceProxy.EndListSpecies(asyncResult);
+                                                  species.Sort((a, b) => a.SpeciesName.CompareTo(b.SpeciesName));
+                                                  chromosome.ComparativeSpecies = species;
+                                                  ((ManualResetEvent) asyncResult.AsyncState).Set();
+                                              }, mre).IsCompleted
+                                  where !completed 
+                                  select mre;
 
-                if (waitHandles.Length > 0)
-                    WaitHandle.WaitAll(waitHandles);
+                waitHandles.All(w => w.WaitOne());
             };
 
             bw.RunWorkerCompleted += (s, ea) =>
@@ -130,38 +135,46 @@ namespace EvolutionHighwayApp.Views
 
             bw.DoWork += (s, ea) =>
             {
-                var waitHandles = (from genomeName in lstGenomes.SelectedItems.Cast<string>()
-                                   let genome = _genomeNameLookup[genomeName].First()
-                                   from chromosome in genome.Chromosomes
-                                   where lstChromosomes.SelectedItems.Contains(chromosome.Name)
-                                   from species in chromosome.ComparativeSpecies
-                                   where e.AddedItems.Contains(species.SpeciesName) && species.AncestorRegions == null
-                                   select _serviceProxy.BeginListSynblocks(genome.Name, chromosome.Name, species.SpeciesName,
-                                               asyncResult => species.AncestorRegions = _serviceProxy.EndListSynblocks(asyncResult))
-                                               .AsyncWaitHandle).ToArray();
+                var waitHandles = from genomeName in lstGenomes.SelectedItems.Cast<string>()
+                                  let genome = _genomeNameLookup[genomeName].First()
+                                  from chromosome in genome.Chromosomes
+                                  where lstChromosomes.SelectedItems.Contains(chromosome.Name)
+                                  from species in chromosome.ComparativeSpecies
+                                  where e.AddedItems.Contains(species.SpeciesName) && species.AncestorRegions == null
+                                  let mre = new ManualResetEvent(false)
+                                  let completed = _serviceProxy.BeginListSynblocks(genome.Name, chromosome.Name, species.SpeciesName,
+                                               asyncResult =>
+                                               {
+                                                   species.AncestorRegions = _serviceProxy.EndListSynblocks(asyncResult);
+                                                   ((ManualResetEvent) asyncResult.AsyncState).Set();
+                                               }, mre).IsCompleted
+                                  where !completed
+                                  select mre;
 
-                if (waitHandles.Length > 0)
-                    WaitHandle.WaitAll(waitHandles);
+                waitHandles.All(w => w.WaitOne());
             };
 
             bw.RunWorkerCompleted += (s, ea) =>
             {
                 if (lstSpecies.SelectedItems.Count > 0)
-                    genomesViewer.DataContext = from genome in _genomes
-                                                where lstGenomes.SelectedItems.Contains(genome.Name)
-                                                select new Genome
-                                                           {
-                                                               Name = genome.Name,
-                                                               Chromosomes = from chromosome in genome.Chromosomes
-                                                                             where lstChromosomes.SelectedItems.Contains(chromosome.Name)
-                                                                             select new Chromosome
-                                                                                        {
-                                                                                            Name = chromosome.Name,
-                                                                                            ComparativeSpecies = from species in chromosome.ComparativeSpecies
-                                                                                                                 where lstSpecies.SelectedItems.Contains(species.SpeciesName)
-                                                                                                                 select species
-                                                                                        }
-                                                           };
+                    genomesViewer.DataContext = 
+                        from genome in _genomes
+                        where lstGenomes.SelectedItems.Contains(genome.Name)
+                        select new Genome
+                                {
+                                    Name = genome.Name,
+                                    Chromosomes = 
+                                        from chromosome in genome.Chromosomes
+                                        where lstChromosomes.SelectedItems.Contains(chromosome.Name)
+                                        select new Chromosome
+                                                {
+                                                    Name = chromosome.Name,
+                                                    ComparativeSpecies = 
+                                                        from species in chromosome.ComparativeSpecies
+                                                        where lstSpecies.SelectedItems.Contains(species.SpeciesName)
+                                                        select species
+                                                }
+                                };
             };
 
             bw.RunWorkerAsync();
