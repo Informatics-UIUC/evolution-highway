@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
         <tklayout:Accordion x:Name="accordion" Grid.Row="0" Grid.Column="0" Width="180" SelectionMode="ZeroOrMore">
-            <tklayout:AccordionItem Header="Reference genome" HorizontalContentAlignment="Stretch">
+            <tklayout:AccordionItem Header="Reference Genome" HorizontalContentAlignment="Stretch">
                 <tkctrl:BusyIndicator x:Name="biGenomes" BusyContent="Loading genomes..." DisplayAfter="0">
                     <ListBox x:Name="lstGenomes" Height="150"
                              SelectionMode="Extended"
@@ -30,7 +30,7 @@
                 </tkctrl:BusyIndicator>
             </tklayout:AccordionItem>
 
-            <tklayout:AccordionItem Header="Reference chromosome" HorizontalContentAlignment="Stretch">
+            <tklayout:AccordionItem Header="Reference Chromosome" HorizontalContentAlignment="Stretch">
                 <tkctrl:BusyIndicator x:Name="biChromosomes" BusyContent="Loading chromosomes...">
                     <ListBox x:Name="lstChromosomes" Height="150"
                          SelectionMode="Extended"
@@ -38,8 +38,8 @@
                 </tkctrl:BusyIndicator>
             </tklayout:AccordionItem>
 
-            <tklayout:AccordionItem Header="Comparative species" HorizontalContentAlignment="Stretch">
-                <tkctrl:BusyIndicator x:Name="biSpecies" BusyContent="Loading species...">
+            <tklayout:AccordionItem Header="Comparative Genome" HorizontalContentAlignment="Stretch">
+                <tkctrl:BusyIndicator x:Name="biSpecies" BusyContent="Loading genomes...">
                     <ListBox x:Name="lstSpecies" Height="150"
                          SelectionMode="Extended"
                          SelectionChanged="OnSpeciesSelectionChanged"/>

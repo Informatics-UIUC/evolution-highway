@@ -2,7 +2,7 @@
 
 namespace EvolutionHighwayWidgets
 {
-    public partial class ChromosomesViewer : UserControl
+    public partial class ChromosomesViewer : Grid
     {
         public ChromosomesViewer()
         {

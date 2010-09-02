@@ -4,22 +4,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets" 
+    xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
     
     <UserControl.Resources>
+        <converters:AlternationConverter x:Key="backgroundConverter">
+            <SolidColorBrush Color="Honeydew"/>
+            <SolidColorBrush Color="OldLace"/>
+        </converters:AlternationConverter>
+        
         <DataTemplate x:Key="genomeTemplate">
-            <eh:ChromosomesViewer Margin="5,0,5,0"/>
+            <eh:ChromosomesViewer Background="{Binding Path=AlternationIndex,ElementName=genomesViewer,Converter={StaticResource backgroundConverter}}"
+                                  Margin="5,0,5,0"/>
         </DataTemplate>
     </UserControl.Resources>
-    
-    <ItemsControl x:Name="genomesViewer" 
+
+    <eh:AlternatingItemsControl x:Name="genomesViewer" 
                   ItemsSource="{Binding}" 
                   ItemTemplate="{StaticResource genomeTemplate}">
-        <ItemsControl.ItemsPanel>
+        <eh:AlternatingItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel Orientation="Horizontal"/>
             </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+        </eh:AlternatingItemsControl.ItemsPanel>
+    </eh:AlternatingItemsControl>
 </UserControl>
