@@ -4,7 +4,8 @@
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
-           xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit" 
+           xmlns:tklayout="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit" 
+           xmlns:tkctrl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit" 
            xmlns:eh="clr-namespace:EvolutionHighwayWidgets;assembly=EvolutionHighwayWidgets" 
            mc:Ignorable="d"
            d:DesignWidth="640" d:DesignHeight="480"
@@ -20,28 +21,36 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <toolkit:Accordion x:Name="accordion" Grid.Row="0" Grid.Column="0" Width="180" SelectionMode="ZeroOrMore">
-            <toolkit:AccordionItem Header="Reference genome" HorizontalContentAlignment="Stretch">
-                <ListBox x:Name="lstGenomes" Height="150"
-                         SelectionMode="Extended"
-                         SelectionChanged="OnGenomesSelectionChanged"/>
-            </toolkit:AccordionItem>
+        <tklayout:Accordion x:Name="accordion" Grid.Row="0" Grid.Column="0" Width="180" SelectionMode="ZeroOrMore">
+            <tklayout:AccordionItem Header="Reference genome" HorizontalContentAlignment="Stretch">
+                <tkctrl:BusyIndicator x:Name="biGenomes" BusyContent="Loading genomes..." DisplayAfter="0">
+                    <ListBox x:Name="lstGenomes" Height="150"
+                             SelectionMode="Extended"
+                             SelectionChanged="OnGenomesSelectionChanged"/>
+                </tkctrl:BusyIndicator>
+            </tklayout:AccordionItem>
 
-            <toolkit:AccordionItem Header="Reference chromosome" HorizontalContentAlignment="Stretch">
-                <ListBox x:Name="lstChromosomes" Height="150"
+            <tklayout:AccordionItem Header="Reference chromosome" HorizontalContentAlignment="Stretch">
+                <tkctrl:BusyIndicator x:Name="biChromosomes" BusyContent="Loading chromosomes...">
+                    <ListBox x:Name="lstChromosomes" Height="150"
                          SelectionMode="Extended"
                          SelectionChanged="OnChromosomesSelectionChanged"/>
-            </toolkit:AccordionItem>
+                </tkctrl:BusyIndicator>
+            </tklayout:AccordionItem>
 
-            <toolkit:AccordionItem Header="Comparative species" HorizontalContentAlignment="Stretch">
-                <ListBox x:Name="lstSpecies" Height="150"
+            <tklayout:AccordionItem Header="Comparative species" HorizontalContentAlignment="Stretch">
+                <tkctrl:BusyIndicator x:Name="biSpecies" BusyContent="Loading species...">
+                    <ListBox x:Name="lstSpecies" Height="150"
                          SelectionMode="Extended"
                          SelectionChanged="OnSpeciesSelectionChanged"/>
-            </toolkit:AccordionItem>
-        </toolkit:Accordion>
+                </tkctrl:BusyIndicator>
+            </tklayout:AccordionItem>
+        </tklayout:Accordion>
 
-        <ScrollViewer Grid.Row="0" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <eh:GenomesViewer x:Name="genomesViewer"/>
-        </ScrollViewer>
+        <tkctrl:BusyIndicator Grid.Row="0" Grid.Column="1" x:Name="biViewer" BusyContent="Loading synteny blocks...">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <eh:GenomesViewer x:Name="genomesViewer"/>
+            </ScrollViewer>
+        </tkctrl:BusyIndicator>
     </Grid>
 </navigation:Page>

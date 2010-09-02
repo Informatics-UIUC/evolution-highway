@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading;
@@ -26,14 +24,23 @@ namespace EvolutionHighwayApp.Views
         {
             InitializeComponent();
 
+            biGenomes.IsBusy = true;
+
             _serviceProxy.BeginListGenomes(
                 asyncResult =>
                     {
                         _genomes = _serviceProxy.EndListGenomes(asyncResult);
                         _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
                         _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
-                        
-                        Dispatcher.BeginInvoke(() => lstGenomes.ItemsSource = from genome in _genomes select genome.Name);
+
+                        Dispatcher.BeginInvoke(() =>
+                            {
+                                lstGenomes.ItemsSource = from genome in _genomes
+                                                            select genome.Name;
+                                biGenomes.IsBusy = false;
+                                accordion.SelectAll();
+                            }
+                        );
                     }
             );
         }
@@ -45,7 +52,7 @@ namespace EvolutionHighwayApp.Views
 
         private void OnGenomesSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var bw = new BackgroundWorker {WorkerReportsProgress = false, WorkerSupportsCancellation = false};
+            var bw = new BackgroundWorker { WorkerReportsProgress = false, WorkerSupportsCancellation = false };
 
             bw.DoWork += (s, ea) =>
                 {
@@ -76,10 +83,19 @@ namespace EvolutionHighwayApp.Views
                                                   from chromosome in genome.Chromosomes
                                                   select chromosome.Name).Distinct().OrderBy(a => a, ChromosomeNameComparer);
                     selectedChromosomes.ForEach(chrName => lstChromosomes.SelectedItems.Add(chrName));
+
+                    biChromosomes.IsBusy = false;
+                    lstGenomes.IsEnabled = true;
+                    lstSpecies.IsEnabled = true;
+
                     OnChromosomesSelectionChanged(lstChromosomes, 
                         new SelectionChangedEventArgs(new List<string>(), lstChromosomes.SelectedItems.Cast<string>().ToList()));
                     lstChromosomes.SelectionChanged += OnChromosomesSelectionChanged;
                 };
+
+            biChromosomes.IsBusy = true;
+            lstGenomes.IsEnabled = false;
+            lstSpecies.IsEnabled = false;
 
             bw.RunWorkerAsync();
         }
@@ -121,10 +137,19 @@ namespace EvolutionHighwayApp.Views
                                               orderby species.SpeciesName
                                               select species.SpeciesName).Distinct();
                 selectedSpecies.ForEach(speciesName => lstSpecies.SelectedItems.Add(speciesName));
+
+                biSpecies.IsBusy = false;
+                lstGenomes.IsEnabled = true;
+                lstChromosomes.IsEnabled = true;
+
                 OnSpeciesSelectionChanged(lstSpecies, 
                     new SelectionChangedEventArgs(new List<string>(), lstSpecies.SelectedItems.Cast<string>().ToList()));
                 lstSpecies.SelectionChanged += OnSpeciesSelectionChanged;
             };
+
+            biSpecies.IsBusy = true;
+            lstGenomes.IsEnabled = false;
+            lstChromosomes.IsEnabled = false;
 
             bw.RunWorkerAsync();
         }
@@ -157,25 +182,37 @@ namespace EvolutionHighwayApp.Views
             bw.RunWorkerCompleted += (s, ea) =>
             {
                 if (lstSpecies.SelectedItems.Count > 0)
-                    genomesViewer.DataContext = 
+                    genomesViewer.DataContext =
                         from genome in _genomes
                         where lstGenomes.SelectedItems.Contains(genome.Name)
                         select new Genome
                                 {
                                     Name = genome.Name,
-                                    Chromosomes = 
+                                    Chromosomes =
                                         from chromosome in genome.Chromosomes
                                         where lstChromosomes.SelectedItems.Contains(chromosome.Name)
                                         select new Chromosome
                                                 {
                                                     Name = chromosome.Name,
-                                                    ComparativeSpecies = 
+                                                    ComparativeSpecies =
                                                         from species in chromosome.ComparativeSpecies
                                                         where lstSpecies.SelectedItems.Contains(species.SpeciesName)
                                                         select species
                                                 }
                                 };
+                else
+                    genomesViewer.DataContext = null;
+
+                biViewer.IsBusy = false;
+                lstGenomes.IsEnabled = true;
+                lstChromosomes.IsEnabled = true;
+                lstSpecies.IsEnabled = true;
             };
+
+            biViewer.IsBusy = true;
+            lstGenomes.IsEnabled = false;
+            lstChromosomes.IsEnabled = false;
+            lstSpecies.IsEnabled = false;
 
             bw.RunWorkerAsync();
         }
