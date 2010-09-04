@@ -37,7 +37,7 @@ namespace EvolutionHighwayApp
         {
             var binding = new CustomBinding(
                 new WebMessageEncodingBindingElement(),
-                new HttpTransportBindingElement { ManualAddressing = true }
+                new HttpTransportBindingElement { ManualAddressing = true, MaxReceivedMessageSize = 1024000 }
             );
             
             var factory = new ChannelFactory<IEHDataService>(binding, address);

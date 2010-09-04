@@ -36,7 +36,7 @@ namespace EvolutionHighwayApp.Views
                         Dispatcher.BeginInvoke(() =>
                             {
                                 lstGenomes.ItemsSource = from genome in _genomes
-                                                            select genome.Name;
+                                                         select genome.Name;
                                 biGenomes.IsBusy = false;
                                 accordion.SelectAll();
                             }
