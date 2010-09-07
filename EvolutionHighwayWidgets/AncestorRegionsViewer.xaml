@@ -15,12 +15,25 @@
         <DataTemplate x:Key="ancestorRegionsTemplate">
             <eh:SyntenyBlock Grid.Row="0" VerticalAlignment="Top"
                              Margin="{Binding Path=Start,Mode=OneWay,Converter={StaticResource topMarginConverter}}"
-                             Height="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}"/>
+                             Height="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}">
+                <ToolTipService.ToolTip>
+                    <ToolTip>
+                        <ToolTip.Content>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Genome.Name}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Name}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Path=ComparativeSpecies.SpeciesName}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Path=Label}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </ToolTip.Content>
+                    </ToolTip>
+                </ToolTipService.ToolTip>
+            </eh:SyntenyBlock>
         </DataTemplate>
     </UserControl.Resources>
     
     <ItemsControl x:Name="ancestorRegionsViewer" 
-                  ItemsSource="{Binding Path=AncestorRegions}" 
+                  ItemsSource="{Binding}" 
                   ItemTemplate="{StaticResource ancestorRegionsTemplate}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

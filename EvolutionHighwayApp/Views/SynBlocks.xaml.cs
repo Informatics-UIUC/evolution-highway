@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading;
@@ -19,6 +21,7 @@ namespace EvolutionHighwayApp.Views
 
         private static readonly ChromosomeNameComparer ChromosomeNameComparer = new ChromosomeNameComparer();
 
+//        private List<Genome> _genomes = GetFakeGenomes();
 
         public SynBlocks()
         {
@@ -26,6 +29,7 @@ namespace EvolutionHighwayApp.Views
 
             biGenomes.IsBusy = true;
 
+            if (_genomes == null || _genomes.Count == 0)
             _serviceProxy.BeginListGenomes(
                 asyncResult =>
                     {
@@ -43,6 +47,12 @@ namespace EvolutionHighwayApp.Views
                         );
                     }
             );
+
+//            _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
+//            _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
+//            lstGenomes.ItemsSource = from genome in _genomes
+//                                     select genome.Name;
+//            biGenomes.IsBusy = false;
         }
 
         // Executes when the user navigates to this page.
@@ -65,6 +75,7 @@ namespace EvolutionHighwayApp.Views
                                                   {
                                                       var chromosomes = _serviceProxy.EndListChromosomes(asyncResult);
                                                       chromosomes.Sort((a, b) => ChromosomeNameComparer.Compare(a.Name, b.Name));
+                                                      //chromosomes.ForEach(chr => chr.Genome = genome);
                                                       genome.Chromosomes = chromosomes;
                                                       ((ManualResetEvent) asyncResult.AsyncState).Set();
                                                   }, mre).IsCompleted
@@ -116,6 +127,7 @@ namespace EvolutionHighwayApp.Views
                                               {
                                                   var species = _serviceProxy.EndListSpecies(asyncResult);
                                                   species.Sort((a, b) => a.SpeciesName.CompareTo(b.SpeciesName));
+                                                  //species.ForEach(sp => sp.Chromosome = chromosome);
                                                   chromosome.ComparativeSpecies = species;
                                                   ((ManualResetEvent) asyncResult.AsyncState).Set();
                                               }, mre).IsCompleted
@@ -170,7 +182,9 @@ namespace EvolutionHighwayApp.Views
                                   let completed = _serviceProxy.BeginListSynblocks(genome.Name, chromosome.Name, species.SpeciesName,
                                                asyncResult =>
                                                {
-                                                   species.AncestorRegions = _serviceProxy.EndListSynblocks(asyncResult);
+                                                   var ancestorRegions = _serviceProxy.EndListSynblocks(asyncResult);
+                                                   //ancestorRegions.ForEach(ar => ar.ComparativeSpecies = species);
+                                                   species.AncestorRegions = ancestorRegions;
                                                    ((ManualResetEvent) asyncResult.AsyncState).Set();
                                                }, mre).IsCompleted
                                   where !completed
@@ -182,24 +196,40 @@ namespace EvolutionHighwayApp.Views
             bw.RunWorkerCompleted += (s, ea) =>
             {
                 if (lstSpecies.SelectedItems.Count > 0)
-                    genomesViewer.DataContext =
-                        from genome in _genomes
+                {
+                    var data =
+                        (from genome in _genomes
                         where lstGenomes.SelectedItems.Contains(genome.Name)
                         select new Genome
                                 {
                                     Name = genome.Name,
                                     Chromosomes =
-                                        from chromosome in genome.Chromosomes
+                                        (from chromosome in genome.Chromosomes
                                         where lstChromosomes.SelectedItems.Contains(chromosome.Name)
                                         select new Chromosome
                                                 {
                                                     Name = chromosome.Name,
                                                     ComparativeSpecies =
-                                                        from species in chromosome.ComparativeSpecies
+                                                        (from species in chromosome.ComparativeSpecies
                                                         where lstSpecies.SelectedItems.Contains(species.SpeciesName)
-                                                        select species
-                                                }
-                                };
+                                                        select species).ToList()
+                                                }).ToList()
+                                }).ToList();
+
+                    data.ForEach(gen =>
+                                 gen.Chromosomes.ForEach(chr =>
+                                    {
+                                        chr.Genome = gen;
+                                        chr.ComparativeSpecies.ForEach(spc =>
+                                            {
+                                                spc.Chromosome = chr;
+                                                spc.AncestorRegions.ForEach(ar =>
+                                                        ar.ComparativeSpecies = spc);
+                                            });
+                                    }));
+
+                    genomesViewer.DataContext = data;
+                }
                 else
                     genomesViewer.DataContext = null;
 
@@ -209,12 +239,134 @@ namespace EvolutionHighwayApp.Views
                 lstSpecies.IsEnabled = true;
             };
 
-            biViewer.IsBusy = true;
-            lstGenomes.IsEnabled = false;
-            lstChromosomes.IsEnabled = false;
-            lstSpecies.IsEnabled = false;
+//            biViewer.IsBusy = true;
+//            lstGenomes.IsEnabled = false;
+//            lstChromosomes.IsEnabled = false;
+//            lstSpecies.IsEnabled = false;
 
             bw.RunWorkerAsync();
+        }
+
+
+        public static List<Genome> GetFakeGenomes()
+        {
+            var genomes = new List<Genome>();
+
+            for (int i = 0; i <= 4; i++)
+            {
+                Genome g = new Genome();
+                g.Name = "G" + i;
+                g.Chromosomes = new List<Chromosome>();
+
+                for (int j = 0; j <= 5; j++)
+                {
+                    Chromosome c = new Chromosome();
+                    c.Name = string.Format("Chr{0}", j);
+                    //c.Genome = g;
+                    c.ComparativeSpecies = new List<ComparativeSpecies>();
+
+                    int x = 0;
+                    foreach (var species in new string[] { "dog", "mouse", "cat" })
+                    {
+                        ComparativeSpecies cs = new ComparativeSpecies();
+                        cs.SpeciesName = string.Format("{0}", species);
+                        //cs.Chromosome = c;
+                        cs.AncestorRegions = new List<AncestorRegion>();
+
+                        for (int k = 0; k < 10; k++)
+                        {
+                            AncestorRegion r = new AncestorRegion();
+                            //r.ComparativeSpecies = cs;
+                            r.Start = k * 10e6 + 100000 * x + j * 10000 + i * 500;
+                            r.End = r.Start + (k + 1) * 1000000 + 100000 * x;
+                            r.Label = string.Format("{0}", k);
+
+                            ((List<AncestorRegion>)cs.AncestorRegions).Add(r);
+                        }
+
+                        ((List<ComparativeSpecies>)c.ComparativeSpecies).Add(cs);
+                        x++;
+                    }
+
+                    ((List<Chromosome>)g.Chromosomes).Add(c);
+                }
+
+                genomes.Add(g);
+            }
+
+            return genomes;
+
+            /*
+            var genomes = new List<Genome>();
+
+            for (int i = 1; i <=4; i++)
+            {
+                Genome g = new Genome();
+                g.Name = "G" + i;
+                g.Chromosomes = new List<Chromosome>();
+
+                for (int j=1; j <= 5; j++)
+                {
+                    Chromosome c = new Chromosome();
+                    c.Name = string.Format("Chr:{0}.{1}", i, j);
+                    c.ComparativeSpecies = new List<ComparativeSpecies>();
+
+                    int x = 0;
+                    foreach (var species in new string[] { "dog", "mouse", "cat"})
+                    {
+                        ComparativeSpecies cs = new ComparativeSpecies();
+                        cs.SpeciesName = string.Format("{0}:{1}", c.Name, species);
+                        cs.AncestorRegions = new List<AncestorRegion>();
+
+                        for (int k = 0; k < 10; k++)
+                        {
+                            AncestorRegion r = new AncestorRegion();
+                            r.Start = k*100 + 10*x;
+                            r.End = r.Start + (k+1)*10 + 10*x;
+                            r.Label = string.Format("{0}{1}{2}", i, j, k);
+
+                            ((List<AncestorRegion>)cs.AncestorRegions).Add(r);
+                        }
+
+                        ((List<ComparativeSpecies>)c.ComparativeSpecies).Add(cs);
+                        x++;
+                    }
+
+                    ((List<Chromosome>)g.Chromosomes).Add(c);
+                }
+            
+                genomes.Add(g);
+            }
+
+            return genomes;
+             */
+        }
+
+        private void OnScaleValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (layoutTransformer == null) return;
+
+            if (xbScaleLock.IsChecked == true)
+            {
+                sliderX.ValueChanged -= OnScaleValueChanged;
+                sliderY.ValueChanged -= OnScaleValueChanged;
+
+                if (ReferenceEquals(sender, sliderX))
+                    sliderY.Value = sliderX.Value;
+                else
+                    sliderX.Value = sliderY.Value;
+
+                sliderX.ValueChanged += OnScaleValueChanged;
+                sliderY.ValueChanged += OnScaleValueChanged;
+            }
+
+            layoutTransformer.ApplyLayoutTransform();
+        }
+
+        private void OnResetScaleClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            sliderX.Value = sliderY.Value = 1;
+            layoutTransformer.ApplyLayoutTransform();
         }
     }
 
@@ -228,6 +380,17 @@ namespace EvolutionHighwayApp.Views
                 return nx.CompareTo(ny);
 
             return x.CompareTo(y);
+        }
+    }
+
+    public static class Extensions
+    {
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            foreach (var item in source)
+            {
+                action(item);
+            }
         }
     }
 }

@@ -8,5 +8,7 @@ namespace EvolutionHighwayModel
     {
         [DataMember] public string SpeciesName { get; set; }
         [DataMember] public IEnumerable<AncestorRegion> AncestorRegions { get; set; }
+
+        public Chromosome Chromosome { get; set; }
     }
 }

@@ -26,7 +26,7 @@
                 </toolkit:LayoutTransformer>
 
                 <Border Grid.Row="1" Width="24" BorderBrush="Black" BorderThickness="1" Margin="0,5,0,5">
-                    <eh:AncestorRegionsViewer/>
+                    <eh:AncestorRegionsViewer DataContext="{Binding Path=AncestorRegions}"/>
                 </Border>
 
                 <toolkit:LayoutTransformer Grid.Row="2" VerticalAlignment="Top">
@@ -41,7 +41,7 @@
     </UserControl.Resources>
     
     <ItemsControl x:Name="comparativeSpeciesViewer" 
-                  ItemsSource="{Binding Path=ComparativeSpecies}" 
+                  ItemsSource="{Binding}" 
                   ItemTemplate="{StaticResource comparativeSpeciesTemplate}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

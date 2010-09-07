@@ -9,6 +9,8 @@ namespace EvolutionHighwayModel
         [DataMember] public double End { get; set; }
         [DataMember] public string Label { get; set; }
 
+        public ComparativeSpecies ComparativeSpecies { get; set; }
+
         public double Span
         {
             get { return End - Start; }

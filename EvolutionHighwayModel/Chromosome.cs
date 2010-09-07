@@ -8,5 +8,7 @@ namespace EvolutionHighwayModel
     {
         [DataMember] public string Name { get; set; }
         [DataMember] public IEnumerable<ComparativeSpecies> ComparativeSpecies { get; set; }
+
+        public Genome Genome { get; set; }
     }
 }

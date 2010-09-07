@@ -15,14 +15,15 @@
         </converters:AlternationConverter>
         
         <DataTemplate x:Key="genomeTemplate">
-            <eh:ChromosomesViewer Background="{Binding Path=AlternationIndex,ElementName=genomesViewer,Converter={StaticResource backgroundConverter}}"
-                                  Margin="5,0,5,0"/>
+            <eh:ChromosomesViewer x:Name="chromosomesViewer"
+                                  Background="{Binding Path=AlternationIndex,ElementName=genomesViewer,Converter={StaticResource backgroundConverter}}"
+                                  DataContext="{Binding Path=Chromosomes}" Margin="5,0,5,0"/>
         </DataTemplate>
     </UserControl.Resources>
 
     <eh:AlternatingItemsControl x:Name="genomesViewer" 
-                  ItemsSource="{Binding}" 
-                  ItemTemplate="{StaticResource genomeTemplate}">
+                                ItemsSource="{Binding}" 
+                                ItemTemplate="{StaticResource genomeTemplate}">
         <eh:AlternatingItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel Orientation="Horizontal"/>
