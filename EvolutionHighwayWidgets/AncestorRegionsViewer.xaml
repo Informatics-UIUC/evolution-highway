@@ -5,8 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets" 
     xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters" 
-    mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400">
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
     
     <UserControl.Resources>
         <converters:ScaleConverter x:Key="scaleConverter"/>
@@ -19,11 +18,24 @@
                 <ToolTipService.ToolTip>
                     <ToolTip>
                         <ToolTip.Content>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Genome.Name}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Name}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Path=ComparativeSpecies.SpeciesName}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Path=Label}" HorizontalAlignment="Center"/>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Genome.Name}"/>
+                                    <TextBlock Text=" Chromosome "/>
+                                    <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Name}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding Path=ComparativeSpecies.SpeciesName}" />
+                                    <TextBlock Text=" : "/>
+                                    <TextBlock Text="{Binding Path=Label}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding Path=Start}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding Path=End}"/>
+                                    <TextBlock Text=" : "/>
+                                    <TextBlock Text="{Binding Path=Span}"/>
+                                </StackPanel>
                             </StackPanel>
                         </ToolTip.Content>
                     </ToolTip>

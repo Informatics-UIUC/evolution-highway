@@ -7,8 +7,7 @@
            xmlns:tklayout="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit" 
            xmlns:tkctrl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit" 
            xmlns:eh="clr-namespace:EvolutionHighwayWidgets;assembly=EvolutionHighwayWidgets" 
-           mc:Ignorable="d"
-           d:DesignWidth="640" d:DesignHeight="480"
+           mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
            Title="SynBlocks Viewer">
     
     <Grid x:Name="LayoutRoot">
@@ -50,34 +49,56 @@
                     </tklayout:AccordionItem>
                 </tklayout:Accordion>
 
-                <Border BorderBrush="Black" BorderThickness="1" Margin="0,20,0,5" HorizontalAlignment="Left"
-                        Width="{Binding ElementName=accordion,Path=ActualWidth}">
-                    <Grid Margin="5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                <StackPanel Margin="0,20,0,5" HorizontalAlignment="Left"
+                            Width="{Binding ElementName=accordion,Path=ActualWidth}">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Scale X:" HorizontalAlignment="Right"/>
-                        <Slider x:Name="sliderX" Grid.Row="0" Grid.Column="1"
-                                Minimum="0" Maximum="6" Value="1" ValueChanged="OnScaleValueChanged"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Scale X:" HorizontalAlignment="Right"/>
+                            <Slider x:Name="sliderX" Grid.Row="0" Grid.Column="1"
+                                    Minimum="0" Maximum="6" Value="1" ValueChanged="OnScaleValueChanged"/>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Scale Y:" HorizontalAlignment="Right"/>
-                        <Slider x:Name="sliderY" Grid.Row="1" Grid.Column="1" 
-                                Minimum="0" Maximum="6" Value="1" ValueChanged="OnScaleValueChanged"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Scale Y:" HorizontalAlignment="Right"/>
+                            <Slider x:Name="sliderY" Grid.Row="1" Grid.Column="1" 
+                                    Minimum="0" Maximum="6" Value="1" ValueChanged="OnScaleValueChanged"/>
 
-                        <Button Grid.Row="3" Grid.Column="0" Margin="0,5,0,0"
-                                Content="Reset" Click="OnResetScaleClick"/>
-                        <CheckBox x:Name="xbScaleLock" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Margin="0,5,0,0"
-                                  Content="Lock" VerticalAlignment="Center"/>
-                    </Grid>
-                </Border>
+                            <Button Grid.Row="3" Grid.Column="0" Margin="0,5,0,0"
+                                    Content="Reset" Click="OnResetScaleClick"/>
+                            <CheckBox x:Name="xbScaleLock" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Margin="0,5,0,0"
+                                      Content="Lock" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border x:Name="dataBorder" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,0">
+                        <Grid Margin="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Data scale:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtDataScale" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+
+                            <Button Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,0"
+                                    Content="Apply" Click="OnDataScaleApplyClick"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
             

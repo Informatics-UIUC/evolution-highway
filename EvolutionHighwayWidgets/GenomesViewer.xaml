@@ -5,8 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets" 
     xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters"
-    mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400">
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
     
     <UserControl.Resources>
         <converters:AlternationConverter x:Key="backgroundConverter">

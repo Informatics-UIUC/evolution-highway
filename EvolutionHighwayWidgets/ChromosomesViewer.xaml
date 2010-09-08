@@ -5,8 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets" 
     xmlns:tklayout="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit" 
-    mc:Ignorable="d"
-    d:DesignHeight="300" d:DesignWidth="400">
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
     
     <Grid.Resources>
         <DataTemplate x:Key="chromosomeTemplate">
@@ -21,15 +20,8 @@
                     <TextBlock Text="{Binding Path=Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
 
-<!--                <tklayout:LayoutTransformer x:Name="layoutTransformer">-->
-<!--                    <tklayout:LayoutTransformer.LayoutTransform>-->
-<!--                        <ScaleTransform ScaleX="{Binding ElementName=sliderX,Path=Value}"-->
-<!--                                        ScaleY="{Binding ElementName=sliderY,Path=Value}"/>-->
-<!--                    </tklayout:LayoutTransformer.LayoutTransform>-->
-
-                    <eh:ComparativeSpeciesViewer Grid.Row="1" HorizontalAlignment="Center" 
+                <eh:ComparativeSpeciesViewer Grid.Row="1" HorizontalAlignment="Center" 
                                              DataContext="{Binding Path=ComparativeSpecies}"/>
-<!--                </tklayout:LayoutTransformer>-->
             </Grid>
         </DataTemplate>
     </Grid.Resources>

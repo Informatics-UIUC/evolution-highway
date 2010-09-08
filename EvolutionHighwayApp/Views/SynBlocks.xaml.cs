@@ -8,6 +8,7 @@ using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using EvolutionHighwayModel;
+using EvolutionHighwayWidgets.Converters;
 
 namespace EvolutionHighwayApp.Views
 {
@@ -216,6 +217,8 @@ namespace EvolutionHighwayApp.Views
                                                 }).ToList()
                                 }).ToList();
 
+                    var bpMax = 0d;
+
                     data.ForEach(gen =>
                                  gen.Chromosomes.ForEach(chr =>
                                     {
@@ -224,9 +227,15 @@ namespace EvolutionHighwayApp.Views
                                             {
                                                 spc.Chromosome = chr;
                                                 spc.AncestorRegions.ForEach(ar =>
-                                                        ar.ComparativeSpecies = spc);
+                                                    {
+                                                        ar.ComparativeSpecies = spc;
+                                                        bpMax = Math.Max(bpMax, ar.End);
+                                                    });
                                             });
                                     }));
+
+                    ScaleConverter.Scale = bpMax/1000;
+                    txtDataScale.Text = ScaleConverter.Scale.ToString();
 
                     genomesViewer.DataContext = data;
                 }
@@ -239,10 +248,10 @@ namespace EvolutionHighwayApp.Views
                 lstSpecies.IsEnabled = true;
             };
 
-//            biViewer.IsBusy = true;
-//            lstGenomes.IsEnabled = false;
-//            lstChromosomes.IsEnabled = false;
-//            lstSpecies.IsEnabled = false;
+            biViewer.IsBusy = true;
+            lstGenomes.IsEnabled = false;
+            lstChromosomes.IsEnabled = false;
+            lstSpecies.IsEnabled = false;
 
             bw.RunWorkerAsync();
         }
@@ -367,6 +376,21 @@ namespace EvolutionHighwayApp.Views
         {
             sliderX.Value = sliderY.Value = 1;
             layoutTransformer.ApplyLayoutTransform();
+        }
+
+        private void OnDataScaleApplyClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var btn = (Button) sender;
+            btn.IsEnabled = false;
+            txtDataScale.IsEnabled = false;
+
+            ScaleConverter.Scale = Double.Parse(txtDataScale.Text);
+            var data = genomesViewer.DataContext;
+            genomesViewer.DataContext = null;
+            genomesViewer.DataContext = data;
+
+            btn.IsEnabled = true;
+            txtDataScale.IsEnabled = true;
         }
     }
 
