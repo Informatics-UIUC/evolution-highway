@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.ServiceModel;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using EvolutionHighwayModel;
 using EvolutionHighwayWidgets.Converters;
 
@@ -14,8 +17,7 @@ namespace EvolutionHighwayApp.Views
 {
     public partial class SynBlocks : Page
     {
-        private readonly IEHDataService _serviceProxy = 
-            EHDataService.CreateServiceProxy(new EndpointAddress("http://leovip027.ncsa.uiuc.edu:8080"));
+        private IEHDataService _serviceProxy;
 
         private List<Genome> _genomes;
         private ILookup<string, Genome> _genomeNameLookup;
@@ -24,41 +26,76 @@ namespace EvolutionHighwayApp.Views
 
 //        private List<Genome> _genomes = GetFakeGenomes();
 
+
         public SynBlocks()
         {
             InitializeComponent();
+        }
 
-            biGenomes.IsBusy = true;
+        private void OnPageLoaded(object sender, RoutedEventArgs e)
+        {
+            var dataSourcesSrc = Application.Current.Resources["dataSourceConfigUrl"].ToString();
+            var webClient = new WebClient();
+            webClient.OpenReadCompleted += delegate(object o, OpenReadCompletedEventArgs ea)
+                                           {
+                                               if (ea.Error != null)
+                                               {
+                                                   MessageBox.Show(string.Format("Cannot load {0}:\n{1}", dataSourcesSrc, ea.Error.Message));
+                                                   return;
+                                               }
 
-            if (_genomes == null || _genomes.Count == 0)
-            _serviceProxy.BeginListGenomes(
-                asyncResult =>
-                    {
-                        _genomes = _serviceProxy.EndListGenomes(asyncResult);
-                        _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
-                        _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
-
-                        Dispatcher.BeginInvoke(() =>
-                            {
-                                lstGenomes.ItemsSource = from genome in _genomes
-                                                         select genome.Name;
-                                biGenomes.IsBusy = false;
-                                accordion.SelectAll();
-                            }
-                        );
-                    }
-            );
-
-//            _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
-//            _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
-//            lstGenomes.ItemsSource = from genome in _genomes
-//                                     select genome.Name;
-//            biGenomes.IsBusy = false;
+                                               using (var s = ea.Result)
+                                               {
+                                                   var docDataSources = XDocument.Load(s);
+                                                   var xmlDataSources = docDataSources.XPathSelectElements("//datasource");
+                                                   cbDataSources.ItemsSource = from ds in xmlDataSources 
+                                                                               where ds.Attribute("name") != null && ds.Attribute("serviceAddress") != null
+                                                                               select new Tuple<string, string>(ds.Attribute("name").Value, ds.Attribute("serviceAddress").Value);
+                                               }
+                                           };
+            webClient.OpenReadAsync(new Uri(dataSourcesSrc, UriKind.RelativeOrAbsolute));
         }
 
         // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+        }
+
+        private void OnDataSourceSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _serviceProxy = EHDataService.CreateServiceProxy(new EndpointAddress(cbDataSources.SelectedValue.ToString()));
+
+            biGenomes.IsBusy = true;
+
+            _genomes = null;
+            lstGenomes.ItemsSource = null;
+            lstChromosomes.ItemsSource = null;
+            lstSpecies.ItemsSource = null;
+
+            if (_genomes == null || _genomes.Count == 0)
+                _serviceProxy.BeginListGenomes(
+                    asyncResult =>
+                        {
+                            _genomes = _serviceProxy.EndListGenomes(asyncResult);
+                            _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
+                            _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
+
+                            Dispatcher.BeginInvoke(() =>
+                                                       {
+                                                           lstGenomes.ItemsSource = from genome in _genomes
+                                                                                    select genome.Name;
+                                                           biGenomes.IsBusy = false;
+                                                           accordion.SelectAll();
+                                                       }
+                                );
+                        }
+                    );
+
+            //            _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
+            //            _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
+            //            lstGenomes.ItemsSource = from genome in _genomes
+            //                                     select genome.Name;
+            //            biGenomes.IsBusy = false;
         }
 
         private void OnGenomesSelectionChanged(object sender, SelectionChangedEventArgs e)

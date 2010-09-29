@@ -10,22 +10,22 @@ namespace EvolutionHighwayApp
     [ServiceContract]
     public interface IEHDataService
     {
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/EHService/genomes")]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/genomes")]
         [OperationContract(Name = "ListGenomes", AsyncPattern = true)]
         IAsyncResult BeginListGenomes(AsyncCallback callback, object state = null);
         List<Genome> EndListGenomes(IAsyncResult asyncResult);
 
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/EHService/genomes/{genome}/chromosomes")]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/genomes/{genome}/chromosomes")]
         [OperationContract(Name = "ListChromosomesForGenome", AsyncPattern = true)]
         IAsyncResult BeginListChromosomes(string genome, AsyncCallback callback, object state = null);
         List<Chromosome> EndListChromosomes(IAsyncResult asyncResult);
 
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/EHService/genomes/{genome}/chromosomes/{chromosome}/species")]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/genomes/{genome}/chromosomes/{chromosome}/species")]
         [OperationContract(Name = "ListSpeciesForChromosome", AsyncPattern = true)]
         IAsyncResult BeginListSpecies(string genome, string chromosome, AsyncCallback callback, object state = null);
         List<ComparativeSpecies> EndListSpecies(IAsyncResult asyncResult);
 
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/EHService/genomes/{genome}/chromosomes/{chromosome}/species/{species}/synblocks")]
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/genomes/{genome}/chromosomes/{chromosome}/species/{species}/synblocks")]
         [OperationContract(Name = "ListSynBlocksForSpecies", AsyncPattern = true)]
         IAsyncResult BeginListSynblocks(string genome, string chromosome, string species, AsyncCallback callback, object state = null);
         List<AncestorRegion> EndListSynblocks(IAsyncResult asyncResult);

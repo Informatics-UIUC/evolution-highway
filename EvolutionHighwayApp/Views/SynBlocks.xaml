@@ -8,7 +8,8 @@
            xmlns:tkctrl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit" 
            xmlns:eh="clr-namespace:EvolutionHighwayWidgets;assembly=EvolutionHighwayWidgets" 
            mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
-           Title="SynBlocks Viewer">
+           Title="SynBlocks Viewer"
+           Loaded="OnPageLoaded">
     
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
@@ -22,7 +23,23 @@
 
         <ScrollViewer Grid.Row="0" Grid.Column="0" Width="195"
                       HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <StackPanel HorizontalAlignment="Left">
+                <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,0,20" 
+                        Width="{Binding ElementName=accordion,Path=ActualWidth}">
+                    <Grid Margin="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Text="Select data source:"/>
+                        <ComboBox x:Name="cbDataSources" Grid.Row="1"
+                                  DisplayMemberPath="Item1" 
+                                  SelectedValuePath="Item2"
+                                  SelectionChanged="OnDataSourceSelectionChanged"/>
+                    </Grid>
+                </Border>
+
                 <tklayout:Accordion x:Name="accordion" SelectionMode="ZeroOrMore">
                     <tklayout:AccordionItem Header="Reference Genome" HorizontalContentAlignment="Stretch">
                         <tkctrl:BusyIndicator x:Name="biGenomes" BusyContent="Loading genomes..." DisplayAfter="0">

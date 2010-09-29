@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 
 namespace EvolutionHighwayApp
 {
@@ -16,18 +7,21 @@ namespace EvolutionHighwayApp
     {
         public App()
         {
-            this.Startup += this.Application_Startup;
-            this.UnhandledException += this.Application_UnhandledException;
+            this.Startup += this.OnApplicationStartup;
+            this.UnhandledException += OnApplicationUnhandledException;
 
             InitializeComponent();
         }
 
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private void OnApplicationStartup(object sender, StartupEventArgs e)
         {
             this.RootVisual = new MainPage();
+
+            foreach (var data in e.InitParams)
+                this.Resources.Add(data.Key, data.Value);
         }
 
-        private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+        private static void OnApplicationUnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
             // If the app is running outside of the debugger then report the exception using
             // a ChildWindow control.
