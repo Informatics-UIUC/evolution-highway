@@ -36,6 +36,10 @@
                                     <TextBlock Text=" : "/>
                                     <TextBlock Text="{Binding Path=Span}"/>
                                 </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="Sign: "/>
+                                    <TextBlock Text="{Binding Path=Sign}"/>
+                                </StackPanel>
                             </StackPanel>
                         </ToolTip.Content>
                     </ToolTip>

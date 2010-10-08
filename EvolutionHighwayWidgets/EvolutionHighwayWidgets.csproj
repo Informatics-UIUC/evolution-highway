@@ -69,6 +69,7 @@
     <Compile Include="Converters\AlternationConverter.cs" />
     <Compile Include="Converters\DebuggingConverter.cs" />
     <Compile Include="Converters\ScaleConverter.cs" />
+    <Compile Include="Converters\SignToBrushConverter.cs" />
     <Compile Include="Converters\TopMarginConverter.cs" />
     <Compile Include="GenomesViewer.xaml.cs">
       <DependentUpon>GenomesViewer.xaml</DependentUpon>
