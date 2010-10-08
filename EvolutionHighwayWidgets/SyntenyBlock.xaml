@@ -7,11 +7,11 @@
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
 
     <UserControl.Resources>
-        <converters:SignToBrushConverter x:Key="signToBrushConverter">
-            <SolidColorBrush converters:SignToBrushConverter.Sign="-1" Color="LightPink"/>
-            <SolidColorBrush converters:SignToBrushConverter.Sign="0" Color="LightGray"/>
-            <SolidColorBrush converters:SignToBrushConverter.Sign="1" Color="LightBlue"/>
-        </converters:SignToBrushConverter>
+        <converters:SignConverter x:Key="signToBrushConverter">
+            <SolidColorBrush converters:SignConverter.Sign="-1" Color="LightPink"/>
+            <SolidColorBrush converters:SignConverter.Sign="0" Color="LightGray"/>
+            <SolidColorBrush converters:SignConverter.Sign="1" Color="LightBlue"/>
+        </converters:SignConverter>
     </UserControl.Resources>
     
     <Border BorderBrush="{x:Null}" Background="{Binding Path=Sign,Converter={StaticResource signToBrushConverter}}">

@@ -9,16 +9,16 @@ using System.Windows.Markup;
 namespace EvolutionHighwayWidgets.Converters
 {
     [ContentProperty("Values")]
-    public class SignToBrushConverter: IValueConverter
+    public class SignConverter: IValueConverter
     {
         public static readonly DependencyProperty ValuesProperty =
-            DependencyProperty.Register("Values", typeof(Collection<DependencyObject>), typeof(SignToBrushConverter), null);
+            DependencyProperty.Register("Values", typeof(Collection<DependencyObject>), typeof(SignConverter), null);
 
         public Collection<DependencyObject> Values { get; set; }
 
         #region Sign attached property definition
         public static readonly DependencyProperty SignProperty =
-            DependencyProperty.RegisterAttached("Sign", typeof(int), typeof(SignToBrushConverter), null);
+            DependencyProperty.RegisterAttached("Sign", typeof(int), typeof(SignConverter), null);
 
         public static void SetSign(DependencyObject obj, int sign)
         {
@@ -31,7 +31,7 @@ namespace EvolutionHighwayWidgets.Converters
         }
         #endregion
 
-        public SignToBrushConverter()
+        public SignConverter()
         {
             Values = new Collection<DependencyObject>();
         }

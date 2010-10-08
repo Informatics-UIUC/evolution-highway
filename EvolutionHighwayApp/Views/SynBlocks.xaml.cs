@@ -34,6 +34,14 @@ namespace EvolutionHighwayApp.Views
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
         {
+            if (!Application.Current.Resources.Contains("dataSourceConfigUrl"))
+            {
+                MessageBox.Show(
+                    "dataSourceConfigUrl not specified. Please make sure your HTML includes a Silverlight 'initParams' "+
+                    "parameter that sets 'dataSourceConfigUrl' to point to the URL of the data sources config file.");
+                return;
+            }
+
             var dataSourcesSrc = Application.Current.Resources["dataSourceConfigUrl"].ToString();
             var webClient = new WebClient();
             webClient.OpenReadCompleted += delegate(object o, OpenReadCompletedEventArgs ea)
