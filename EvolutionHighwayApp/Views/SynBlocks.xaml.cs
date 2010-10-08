@@ -66,6 +66,7 @@ namespace EvolutionHighwayApp.Views
             _serviceProxy = EHDataService.CreateServiceProxy(new EndpointAddress(cbDataSources.SelectedValue.ToString()));
 
             biGenomes.IsBusy = true;
+            accordion.SelectAll();
 
             _genomes = null;
             lstGenomes.ItemsSource = null;
@@ -85,7 +86,6 @@ namespace EvolutionHighwayApp.Views
                                                            lstGenomes.ItemsSource = from genome in _genomes
                                                                                     select genome.Name;
                                                            biGenomes.IsBusy = false;
-                                                           accordion.SelectAll();
                                                        }
                                 );
                         }
