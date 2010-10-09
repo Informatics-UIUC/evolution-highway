@@ -8,8 +8,8 @@
 
     <UserControl.Resources>
         <converters:SignConverter x:Key="signToBrushConverter">
+            <SolidColorBrush converters:SignConverter.Sign="{x:Null}" Color="LightGray"/>
             <SolidColorBrush converters:SignConverter.Sign="-1" Color="LightPink"/>
-            <SolidColorBrush converters:SignConverter.Sign="0" Color="LightGray"/>
             <SolidColorBrush converters:SignConverter.Sign="1" Color="LightBlue"/>
         </converters:SignConverter>
     </UserControl.Resources>

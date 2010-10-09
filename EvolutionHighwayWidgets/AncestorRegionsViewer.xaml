@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <converters:ScaleConverter x:Key="scaleConverter"/>
         <converters:TopMarginConverter x:Key="topMarginConverter"/>
+        <converters:SignVisibilityConverter x:Key="signVisibilityConverter"/>
         
         <DataTemplate x:Key="ancestorRegionsTemplate">
             <eh:SyntenyBlock Grid.Row="0" VerticalAlignment="Top"
@@ -36,7 +37,8 @@
                                     <TextBlock Text=" : "/>
                                     <TextBlock Text="{Binding Path=Span}"/>
                                 </StackPanel>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                            Visibility="{Binding Path=Sign,Converter={StaticResource signVisibilityConverter}}">
                                     <TextBlock Text="Sign: "/>
                                     <TextBlock Text="{Binding Path=Sign}"/>
                                 </StackPanel>
