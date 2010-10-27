@@ -34,6 +34,8 @@ namespace EvolutionHighwayApp.Views
         public SynBlocks()
         {
             InitializeComponent();
+
+            scrollViewer.SetIsMouseWheelScrollingEnabled(true);
         }
 
         private void OnPageLoaded(object sender, RoutedEventArgs e)
