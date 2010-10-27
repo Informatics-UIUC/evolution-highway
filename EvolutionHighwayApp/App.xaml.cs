@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace EvolutionHighwayApp
@@ -7,25 +8,26 @@ namespace EvolutionHighwayApp
     {
         public App()
         {
-            this.Startup += this.OnApplicationStartup;
-            this.UnhandledException += OnApplicationUnhandledException;
+            Startup += OnApplicationStartup;
+            UnhandledException += OnApplicationUnhandledException;
 
             InitializeComponent();
         }
 
         private void OnApplicationStartup(object sender, StartupEventArgs e)
         {
-            this.RootVisual = new MainPage();
+            RootVisual = new MainPage();
+            MouseWheelService.Enable(RootVisual);
 
             foreach (var data in e.InitParams)
-                this.Resources.Add(data.Key, data.Value);
+                Resources.Add(data.Key, data.Value);
         }
 
         private static void OnApplicationUnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
             // If the app is running outside of the debugger then report the exception using
             // a ChildWindow control.
-            if (!System.Diagnostics.Debugger.IsAttached)
+            if (!Debugger.IsAttached)
             {
                 // NOTE: This will allow the application to continue running after an exception has been thrown
                 // but not handled. 

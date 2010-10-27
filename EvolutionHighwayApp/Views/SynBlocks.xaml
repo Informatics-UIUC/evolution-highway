@@ -120,7 +120,7 @@
         </ScrollViewer>
             
         <tkctrl:BusyIndicator Grid.Row="0" Grid.Column="1" x:Name="biViewer" BusyContent="Loading synteny blocks...">
-            <ScrollViewer Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <tklayout:LayoutTransformer x:Name="layoutTransformer">
                     <tklayout:LayoutTransformer.LayoutTransform>
                         <ScaleTransform ScaleX="{Binding ElementName=sliderX,Path=Value}"
