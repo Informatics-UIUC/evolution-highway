@@ -311,7 +311,7 @@ namespace EvolutionHighwayApp.Views
             bw.RunWorkerAsync();
         }
 
-
+#if SIMULATION
         public static List<Genome> GetFakeGenomes()
         {
             var genomes = new List<Genome>();
@@ -405,6 +405,7 @@ namespace EvolutionHighwayApp.Views
             return genomes;
              */
         }
+#endif
 
         private void OnScaleValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
         {
