@@ -19,12 +19,16 @@ namespace EvolutionHighwayApp.Views
     {
         private IEHDataService _serviceProxy;
 
+#if !SIMULATION
         private List<Genome> _genomes;
+#endif
         private ILookup<string, Genome> _genomeNameLookup;
 
         private static readonly ChromosomeNameComparer ChromosomeNameComparer = new ChromosomeNameComparer();
 
-//        private List<Genome> _genomes = GetFakeGenomes();
+#if SIMULATION
+        private List<Genome> _genomes = GetFakeGenomes();
+#endif
 
 
         public SynBlocks()
@@ -71,11 +75,12 @@ namespace EvolutionHighwayApp.Views
 
         private void OnDataSourceSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _serviceProxy = EHDataService.CreateServiceProxy(new EndpointAddress(cbDataSources.SelectedValue.ToString()));
-
             biGenomes.IsBusy = true;
             accordion.SelectAll();
 
+#if !SIMULATION
+            _serviceProxy = EHDataService.CreateServiceProxy(new EndpointAddress(cbDataSources.SelectedValue.ToString()));
+            
             _genomes = null;
             lstGenomes.ItemsSource = null;
             lstChromosomes.ItemsSource = null;
@@ -98,12 +103,15 @@ namespace EvolutionHighwayApp.Views
                                 );
                         }
                     );
+#endif
 
-            //            _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
-            //            _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
-            //            lstGenomes.ItemsSource = from genome in _genomes
-            //                                     select genome.Name;
-            //            biGenomes.IsBusy = false;
+#if SIMULATION
+            _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
+            _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
+            lstGenomes.ItemsSource = from genome in _genomes
+                                     select genome.Name;
+            biGenomes.IsBusy = false;
+#endif
         }
 
         private void OnGenomesSelectionChanged(object sender, SelectionChangedEventArgs e)
