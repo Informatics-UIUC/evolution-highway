@@ -86,23 +86,34 @@ namespace EvolutionHighwayApp.Views
             lstChromosomes.ItemsSource = null;
             lstSpecies.ItemsSource = null;
 
-            if (_genomes == null || _genomes.Count == 0)
-                _serviceProxy.BeginListGenomes(
-                    asyncResult =>
-                        {
-                            _genomes = _serviceProxy.EndListGenomes(asyncResult);
-                            _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
-                            _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
+            _serviceProxy.BeginGetChromosomeLengths(
+                ar =>
+                {
+                    var scl = _serviceProxy.EndGetChromosomeLengths(ar);
+                    ComparativeSpecies.ChromosomeLengths.Clear();
+                    scl.ForEach(l =>
+                        ComparativeSpecies.ChromosomeLengths.Add(new Tuple<string, string>(l.Species, l.Chromosome), l.Length));
+                    if (_genomes == null || _genomes.Count == 0)
+                        _serviceProxy.BeginListGenomes(
+                            asyncResult =>
+                            {
+                                _genomes = _serviceProxy.EndListGenomes(asyncResult);
+                                _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
+                                _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
 
-                            Dispatcher.BeginInvoke(() =>
-                                                       {
-                                                           lstGenomes.ItemsSource = from genome in _genomes
-                                                                                    select genome.Name;
-                                                           biGenomes.IsBusy = false;
-                                                       }
+                                Dispatcher.BeginInvoke(() =>
+                                    {
+                                        lstGenomes.ItemsSource = from genome in _genomes
+                                                                 select genome.Name;
+                                        biGenomes.IsBusy = false;
+                                    }
                                 );
-                        }
-                    );
+                            }
+                        );
+                }
+            );
+
+
 #endif
 
 #if SIMULATION
@@ -291,6 +302,8 @@ namespace EvolutionHighwayApp.Views
                     txtDataScale.Text = ScaleConverter.Scale.ToString();
 
                     genomesViewer.DataContext = data;
+
+                    OnShowLinesCheckedChanged(null, null);
                 }
                 else
                     genomesViewer.DataContext = null;
@@ -307,6 +320,26 @@ namespace EvolutionHighwayApp.Views
             lstSpecies.IsEnabled = false;
 
             bw.RunWorkerAsync();
+        }
+
+        private void OnShowLinesCheckedChanged(object sender, RoutedEventArgs e)
+        {
+            var data = (List<Genome>)genomesViewer.DataContext;
+            if (data == null) return;
+
+            data.ForEach(
+                gen => gen.Chromosomes.ForEach(
+                    chr => chr.ComparativeSpecies.ForEach(
+                        spc => spc.AncestorRegions.ForEach(
+                            ar =>
+                            {
+                                ar.LineVisibility = cbShowLines.IsChecked.GetValueOrDefault(false) ? 
+                                    Visibility.Visible : Visibility.Collapsed;
+                            }
+                        )
+                    )
+                )
+            );
         }
 
 #if SIMULATION

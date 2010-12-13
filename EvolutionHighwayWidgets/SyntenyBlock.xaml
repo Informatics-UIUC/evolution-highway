@@ -12,12 +12,19 @@
             <SolidColorBrush converters:SignConverter.Sign="-1" Color="LightPink"/>
             <SolidColorBrush converters:SignConverter.Sign="1" Color="LightBlue"/>
         </converters:SignConverter>
+
+        <converters:ScaleConverter x:Key="scaleConverter"/>
     </UserControl.Resources>
-    
-    <Border BorderBrush="{x:Null}" Background="{Binding Path=Sign,Converter={StaticResource signToBrushConverter}}">
-        <Viewbox Stretch="Uniform" MaxHeight="15">
-            <TextBlock Text="{Binding Path=Label,Mode=OneWay}" FontFamily="Trebuchet MS"
+
+    <Grid>
+        <Border BorderBrush="{x:Null}" Background="{Binding Path=Sign,Converter={StaticResource signToBrushConverter}}">
+            <Viewbox Stretch="Uniform" MaxHeight="15">
+                <TextBlock Text="{Binding Path=Label,Mode=OneWay}" FontFamily="Trebuchet MS"
                        TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Viewbox>
-    </Border>
+            </Viewbox>
+        </Border>
+
+        <Line X1="{Binding Path=X1,Mode=OneWay}" Y1="0" X2="{Binding Path=X2,Mode=OneWay}" Y2="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}"
+              Stroke="Black" StrokeThickness="1" Visibility="{Binding Path=LineVisibility,Mode=OneWay}"/>
+    </Grid>
 </UserControl>

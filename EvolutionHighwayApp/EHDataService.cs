@@ -29,6 +29,11 @@ namespace EvolutionHighwayApp
         [OperationContract(Name = "ListSynBlocksForSpecies", AsyncPattern = true)]
         IAsyncResult BeginListSynblocks(string genome, string chromosome, string species, AsyncCallback callback, object state = null);
         List<AncestorRegion> EndListSynblocks(IAsyncResult asyncResult);
+
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/speciesChromosomeLengths")]
+        [OperationContract(Name = "GetSpeciesChromosomeLengths", AsyncPattern = true)]
+        IAsyncResult BeginGetChromosomeLengths(AsyncCallback callback, object state = null);
+        List<SpeciesChromosomeLengths> EndGetChromosomeLengths(IAsyncResult asyncResult);
     }
 
     public class EHDataService

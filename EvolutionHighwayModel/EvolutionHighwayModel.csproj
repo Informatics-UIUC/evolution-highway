@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="AncestorRegion.cs" />
     <Compile Include="Chromosome.cs" />
+    <Compile Include="SpeciesChromosomeLengths.cs" />
     <Compile Include="ComparativeSpecies.cs" />
     <Compile Include="Genome.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

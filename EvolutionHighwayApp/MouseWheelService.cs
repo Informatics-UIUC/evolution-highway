@@ -38,7 +38,7 @@ namespace EvolutionHighwayApp
             _currentPoint = e.GetPosition(null);
         }
 
-        private static void OnWheelTurned(Object sender, HtmlEventArgs args)
+        private static void OnWheelTurned(object sender, HtmlEventArgs args)
         {
             double delta = 0;
             var e = args.EventObject;
