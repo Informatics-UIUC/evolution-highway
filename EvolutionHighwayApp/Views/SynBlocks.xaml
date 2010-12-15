@@ -65,9 +65,17 @@
                         </tkctrl:BusyIndicator>
                     </tklayout:AccordionItem>
                 </tklayout:Accordion>
-                
-                <CheckBox x:Name="cbShowLines" Margin="0,20,0,5" Content="Show Lines" FlowDirection="RightToLeft" 
-                          Checked="OnShowLinesCheckedChanged" Unchecked="OnShowLinesCheckedChanged"/>
+
+                <CheckBox x:Name="cbShowLines" Margin="0,20,0,5" Content="Show Block Orientation" FlowDirection="RightToLeft" 
+                          Checked="OnShowLinesCheckedChanged" Unchecked="OnShowLinesCheckedChanged">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Width="300">
+                            <ToolTip.Content>
+                                <TextBlock Text="Diagonal lines within each block (from top left to bottom right) show the orientation and position of this block in the comparative genome" TextWrapping="Wrap"/>
+                            </ToolTip.Content>
+                        </ToolTip>
+                    </ToolTipService.ToolTip>
+                </CheckBox>
 
                 <StackPanel Margin="0,20,0,5" HorizontalAlignment="Left"
                             Width="{Binding ElementName=accordion,Path=ActualWidth}">

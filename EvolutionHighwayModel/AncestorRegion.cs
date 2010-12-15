@@ -44,10 +44,11 @@ namespace EvolutionHighwayModel
         {
             get
             {
+                var start = (Sign == -1) ? ModEnd : ModStart;
                 var spcChrLength = new Tuple<string, string>(ComparativeSpecies.SpeciesName, Chromosome);
                 var chromosomeLength = ComparativeSpecies.ChromosomeLengths[spcChrLength];
-                var x1 = (ModStart.HasValue && ModEnd.HasValue && ComparativeSpecies.ChromosomeLengths.ContainsKey(spcChrLength) && chromosomeLength > 0) ? 
-                    24 * ModStart.Value / chromosomeLength : 0;
+                var x1 = (start.HasValue && ComparativeSpecies.ChromosomeLengths.ContainsKey(spcChrLength) && chromosomeLength > 0) ? 
+                    24 * start.Value / chromosomeLength : 0;
                 return x1;
             }
         }
@@ -56,10 +57,11 @@ namespace EvolutionHighwayModel
         {
             get
             {
+                var end = (Sign == -1) ? ModStart : ModEnd;
                 var spcChrLength = new Tuple<string, string>(ComparativeSpecies.SpeciesName, Chromosome);
                 var chromosomeLength = ComparativeSpecies.ChromosomeLengths[spcChrLength];
-                var x2 = (ModStart.HasValue && ModEnd.HasValue && ComparativeSpecies.ChromosomeLengths.ContainsKey(spcChrLength) && chromosomeLength > 0) ?
-                    24 * ModEnd.Value / chromosomeLength : 0;
+                var x2 = (end.HasValue && ComparativeSpecies.ChromosomeLengths.ContainsKey(spcChrLength) && chromosomeLength > 0) ?
+                    24 * end.Value / chromosomeLength : 0;
                 return x2;
             }
         }
