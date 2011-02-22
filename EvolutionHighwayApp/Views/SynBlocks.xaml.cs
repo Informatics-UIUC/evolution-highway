@@ -250,6 +250,7 @@ namespace EvolutionHighwayApp.Views
                                                    var ancestorRegions = _serviceProxy.EndListSynblocks(asyncResult);
                                                    //ancestorRegions.ForEach(ar => ar.ComparativeSpecies = species);
                                                    species.AncestorRegions = ancestorRegions;
+                                                   species.Length = ancestorRegions.Max(ar => ar.End);
                                                    ((ManualResetEvent) asyncResult.AsyncState).Set();
                                                }, mre).IsCompleted
                                   where !completed
@@ -287,6 +288,7 @@ namespace EvolutionHighwayApp.Views
                                  gen.Chromosomes.ForEach(chr =>
                                     {
                                         chr.Genome = gen;
+                                        chr.Length = chr.ComparativeSpecies.Max(sp => sp.Length);
                                         chr.ComparativeSpecies.ForEach(spc =>
                                             {
                                                 spc.Chromosome = chr;
@@ -298,7 +300,7 @@ namespace EvolutionHighwayApp.Views
                                             });
                                     }));
 
-                    ScaleConverter.Scale = bpMax/1000;
+                    ScaleConverter.Scale = bpMax/500;
                     txtDataScale.Text = ScaleConverter.Scale.ToString();
 
                     genomesViewer.DataContext = data;

@@ -14,5 +14,7 @@ namespace EvolutionHighwayModel
             new Dictionary<Tuple<string, string>, double>();
 
         public Chromosome Chromosome { get; set; }
+
+        public double Length { get; set; }
     }
 }

@@ -16,7 +16,7 @@
         <DataTemplate x:Key="genomeTemplate">
             <eh:ChromosomesViewer x:Name="chromosomesViewer"
                                   Background="{Binding Path=AlternationIndex,ElementName=genomesViewer,Converter={StaticResource backgroundConverter}}"
-                                  DataContext="{Binding Path=Chromosomes}" Margin="5,0,5,0"/>
+                                  DataContext="{Binding Path=Chromosomes}" Margin="20,0,20,0"/>
         </DataTemplate>
     </UserControl.Resources>
 

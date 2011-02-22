@@ -5,9 +5,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit"  
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets"
+    xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
     
     <UserControl.Resources>
+        <converters:ScaleConverter x:Key="scaleConverter"/>
+        
         <DataTemplate x:Key="comparativeSpeciesTemplate">
             <Grid>
                 <Grid.RowDefinitions>
@@ -24,7 +27,8 @@
                                VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
                 </toolkit:LayoutTransformer>
 
-                <Border Grid.Row="1" Width="24" BorderBrush="Black" BorderThickness="1" Margin="0,5,0,5">
+                <Border Grid.Row="1" Width="24" Height="{Binding Path=Chromosome.Length,Converter={StaticResource scaleConverter}}"
+                        BorderBrush="Black" BorderThickness="1" Margin="0,5,0,5">
                     <eh:AncestorRegionsViewer DataContext="{Binding Path=AncestorRegions}"/>
                 </Border>
 

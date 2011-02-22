@@ -10,5 +10,7 @@ namespace EvolutionHighwayModel
         [DataMember] public IEnumerable<ComparativeSpecies> ComparativeSpecies { get; set; }
 
         public Genome Genome { get; set; }
+
+        public double Length { get; set; }
     }
 }
