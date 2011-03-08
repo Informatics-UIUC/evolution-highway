@@ -1,4 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.IsolatedStorage;
+using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -16,10 +21,36 @@ namespace EvolutionHighwayApp
 
         private void OnApplicationStartup(object sender, StartupEventArgs e)
         {
+            IDictionary<String, String> initParams;
+
+            // When running outside the browser, retrieve initParams from isolated storage.
+            if (Application.Current.IsRunningOutOfBrowser)
+            {
+                using (var file = IsolatedStorageFile.GetUserStoreForApplication())
+                using (var stream = new IsolatedStorageFileStream("initParams.txt", FileMode.Open, file))
+                {
+                    // The serializer requires a reference to System.Runtime.Serialization.dll.
+                    var serializer = new DataContractSerializer(typeof(Dictionary<String, String>));
+                    initParams = (Dictionary<String, String>)serializer.ReadObject(stream);
+                }
+            }
+            // Otherwise, save initParams to isolated storage.
+            else
+            {
+                initParams = e.InitParams;
+
+                using (var file = IsolatedStorageFile.GetUserStoreForApplication())
+                using (var stream = new IsolatedStorageFileStream("initParams.txt", FileMode.Create, file))
+                {
+                    var serializer = new DataContractSerializer(typeof(Dictionary<string, string>));
+                    serializer.WriteObject(stream, initParams);
+                }
+            }
+
             RootVisual = new MainPage();
             MouseWheelService.Enable(RootVisual);
 
-            foreach (var data in e.InitParams)
+            foreach (var data in initParams)
                 Resources.Add(data.Key, data.Value);
         }
 
