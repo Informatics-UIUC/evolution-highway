@@ -79,22 +79,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core">
-      <HintPath>..\..\..\External\Castle.Windsor.v2.5.3\Silverlight4\Castle.Core.dll</HintPath>
+      <HintPath>..\Lib\Castle.Windsor.v2.5.3\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor">
-      <HintPath>..\..\..\External\Castle.Windsor.v2.5.3\Silverlight4\Castle.Windsor.dll</HintPath>
+      <HintPath>..\Lib\Castle.Windsor.v2.5.3\Castle.Windsor.dll</HintPath>
     </Reference>
     <Reference Include="ImageTools">
-      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.dll</HintPath>
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.dll</HintPath>
     </Reference>
     <Reference Include="ImageTools.IO.Jpeg">
-      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.IO.Jpeg.dll</HintPath>
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.IO.Jpeg.dll</HintPath>
     </Reference>
     <Reference Include="ImageTools.IO.Png">
-      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.IO.Png.dll</HintPath>
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.IO.Png.dll</HintPath>
     </Reference>
     <Reference Include="ImageTools.Utils">
-      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.Utils.dll</HintPath>
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.Utils.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
@@ -120,12 +120,14 @@
     <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.XPath, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="VIBlend.Silverlight.Menu">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\VIBlend\SilverlightControls v.4.0.0\VIBlend.Silverlight.Menu.dll</HintPath>
+      <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Menu.dll</HintPath>
     </Reference>
     <Reference Include="VIBlend.Silverlight.Theme.Office2010Silver">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\VIBlend\SilverlightControls v.4.0.0\VIBlend.Silverlight.Theme.Office2010Silver.dll</HintPath>
+      <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Theme.Office2010Silver.dll</HintPath>
     </Reference>
-    <Reference Include="VIBlend.Silverlight.Utilities, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5f65d588f3a56fc4" />
+    <Reference Include="VIBlend.Silverlight.Utilities">
+      <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Utilities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
