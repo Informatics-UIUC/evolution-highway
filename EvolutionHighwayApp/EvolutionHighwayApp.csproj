@@ -78,8 +78,29 @@
     <NoConfig>true</NoConfig>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\..\..\External\Castle.Windsor.v2.5.3\Silverlight4\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\..\..\External\Castle.Windsor.v2.5.3\Silverlight4\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools">
+      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Jpeg">
+      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.IO.Jpeg.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Png">
+      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.IO.Png.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Utils">
+      <HintPath>..\..\..\External\ImageTools 0.30\bin\SL4\ImageTools.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
     <Reference Include="System.Json, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Observable, Version=1.0.0.204, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Reactive, Version=1.0.2856.204, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Runtime.Serialization.Json, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.ServiceModel" />
@@ -98,14 +119,31 @@
     <Reference Include="System.Windows.Controls.Navigation" />
     <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.XPath, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="VIBlend.Silverlight.Menu">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\VIBlend\SilverlightControls v.4.0.0\VIBlend.Silverlight.Menu.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.Silverlight.Theme.Office2010Silver">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\VIBlend\SilverlightControls v.4.0.0\VIBlend.Silverlight.Theme.Office2010Silver.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.Silverlight.Utilities, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5f65d588f3a56fc4" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DebugHelper.cs" />
-    <Compile Include="EHDataService.cs" />
-    <Compile Include="MouseWheelService.cs" />
+    <Compile Include="Infrastructure\IoC.cs" />
+    <Compile Include="Infrastructure\MVP\BindingModel.cs" />
+    <Compile Include="Infrastructure\MVP\Presenter.cs" />
+    <Compile Include="Infrastructure\MVP\PropertyValidation.cs" />
+    <Compile Include="Infrastructure\MVP\View.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Utils\DebugHelper.cs" />
+    <Compile Include="Infrastructure\WebServices\EHDataService.cs" />
+    <Compile Include="Infrastructure\Events\EventAggregator.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Infrastructure\Events\IEventPublisher.cs" />
+    <Compile Include="Infrastructure\Commands\MenuCommand.cs" />
+    <Compile Include="Utils\MouseWheelService.cs" />
     <Compile Include="Views\ErrorWindow.xaml.cs">
       <DependentUpon>ErrorWindow.xaml</DependentUpon>
     </Compile>
@@ -122,7 +160,7 @@
     <Compile Include="Views\SynBlocks.xaml.cs">
       <DependentUpon>SynBlocks.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WebServicesExtension.cs" />
+    <Compile Include="Infrastructure\WebServices\WebServicesExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -158,6 +196,10 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{E1ECC132-7B53-45AC-AEAF-590761E92DDA}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EvolutionHighwayModel\EvolutionHighwayModel.csproj">
       <Project>{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}</Project>
       <Name>EvolutionHighwayModel</Name>
@@ -170,6 +212,7 @@
   <ItemGroup>
     <None Include="Properties\OutOfBrowserSettings.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

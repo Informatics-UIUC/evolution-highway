@@ -7,7 +7,7 @@ using System.Windows.Browser;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace EvolutionHighwayApp
+namespace EvolutionHighwayApp.Utils
 {
     public static class MouseWheelService
     {

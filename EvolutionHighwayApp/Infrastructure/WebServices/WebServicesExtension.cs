@@ -10,7 +10,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.Xml;
 
-namespace EvolutionHighwayApp
+namespace EvolutionHighwayApp.Infrastructure.WebServices
 {
     public class WebMessageEncodingBindingElement : MessageEncodingBindingElement
     {

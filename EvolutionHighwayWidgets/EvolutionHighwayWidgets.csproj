@@ -84,17 +84,20 @@
     </Compile>
     <Compile Include="Converters\AlternationConverter.cs" />
     <Compile Include="Converters\DebuggingConverter.cs" />
-    <Compile Include="Converters\ScaleConverter.cs" />
     <Compile Include="Converters\SignConverter.cs" />
-    <Compile Include="Converters\SignVisibilityConverter.cs" />
+    <Compile Include="Converters\NullableVisibilityConverter.cs" />
     <Compile Include="Converters\TopMarginConverter.cs" />
     <Compile Include="GenomesViewer.xaml.cs">
       <DependentUpon>GenomesViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScaleAxis.xaml.cs">
+      <DependentUpon>ScaleAxis.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SyntenyBlock.xaml.cs">
       <DependentUpon>SyntenyBlock.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\Clip.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AncestorRegionsViewer.xaml">
@@ -113,10 +116,24 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ScaleAxis.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SyntenyBlock.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{E1ECC132-7B53-45AC-AEAF-590761E92DDA}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EvolutionHighwayModel\EvolutionHighwayModel.csproj">
+      <Project>{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}</Project>
+      <Name>EvolutionHighwayModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

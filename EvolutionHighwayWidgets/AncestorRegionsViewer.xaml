@@ -5,30 +5,29 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets" 
     xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters" 
+    xmlns:common="clr-namespace:EvolutionHighwayWidgets.Converters;assembly=Common" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
     
     <UserControl.Resources>
-        <converters:ScaleConverter x:Key="scaleConverter"/>
+        <common:ScaleConverter x:Key="scaleConverter"/>
         <converters:TopMarginConverter x:Key="topMarginConverter"/>
-        <converters:SignVisibilityConverter x:Key="signVisibilityConverter"/>
+        <converters:NullableVisibilityConverter x:Key="nullableVisibilityConverter"/>
         
         <DataTemplate x:Key="ancestorRegionsTemplate">
             <eh:SyntenyBlock Grid.Row="0" VerticalAlignment="Top"
                              Margin="{Binding Path=Start,Mode=OneWay,Converter={StaticResource topMarginConverter}}"
-                             Height="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}">
+                             Height="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}"
+                             Cursor="Hand"
+                             MouseLeftButtonUp="OnSyntenyBlockMouseLeftButtonUp">
                 <ToolTipService.ToolTip>
                     <ToolTip>
                         <ToolTip.Content>
                             <StackPanel>
+                                <TextBlock Text="{Binding Path=Label}" HorizontalAlignment="Center" FontWeight="Bold"/>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Genome.Name}"/>
                                     <TextBlock Text=" Chromosome "/>
                                     <TextBlock Text="{Binding Path=ComparativeSpecies.Chromosome.Name}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <TextBlock Text="{Binding Path=ComparativeSpecies.SpeciesName}" />
-                                    <TextBlock Text=" : "/>
-                                    <TextBlock Text="{Binding Path=Label}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <TextBlock Text="{Binding Path=Start}"/>
@@ -37,8 +36,21 @@
                                     <TextBlock Text=" : "/>
                                     <TextBlock Text="{Binding Path=Span}"/>
                                 </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding Path=ComparativeSpecies.SpeciesName}"/>
+                                    <TextBlock Text=" Chromosome "/>
+                                    <TextBlock Text="{Binding Path=Chromosome}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+                                            Visibility="{Binding Path=ModSpan,Converter={StaticResource nullableVisibilityConverter}}">
+                                    <TextBlock Text="{Binding Path=ModStart}"/>
+                                    <TextBlock Text=" - "/>
+                                    <TextBlock Text="{Binding Path=ModEnd}"/>
+                                    <TextBlock Text=" : "/>
+                                    <TextBlock Text="{Binding Path=ModSpan}"/>
+                                </StackPanel>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                                            Visibility="{Binding Path=Sign,Converter={StaticResource signVisibilityConverter}}">
+                                            Visibility="{Binding Path=Sign,Converter={StaticResource nullableVisibilityConverter}}">
                                     <TextBlock Text="Sign: "/>
                                     <TextBlock Text="{Binding Path=Sign}"/>
                                 </StackPanel>

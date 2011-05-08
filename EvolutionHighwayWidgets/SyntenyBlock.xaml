@@ -3,7 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters"
+    xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters" 
+    xmlns:common="clr-namespace:EvolutionHighwayWidgets.Converters;assembly=Common" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
 
     <UserControl.Resources>
@@ -13,7 +14,7 @@
             <SolidColorBrush converters:SignConverter.Sign="1" Color="LightBlue"/>
         </converters:SignConverter>
 
-        <converters:ScaleConverter x:Key="scaleConverter"/>
+        <common:ScaleConverter x:Key="scaleConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -25,6 +26,6 @@
         </Border>
 
         <Line X1="{Binding Path=X1,Mode=OneWay}" Y1="0" X2="{Binding Path=X2,Mode=OneWay}" Y2="{Binding Path=Span,Mode=OneWay,Converter={StaticResource scaleConverter}}"
-              Stroke="Black" StrokeThickness="1" Visibility="{Binding Path=LineVisibility,Mode=OneWay}"/>
+              Stroke="#80131313" StrokeThickness="0.75" Visibility="{Binding Path=LineVisibility,Mode=OneWay}"/>
     </Grid>
 </UserControl>

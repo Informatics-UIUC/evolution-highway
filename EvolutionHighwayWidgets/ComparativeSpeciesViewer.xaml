@@ -6,50 +6,190 @@
     xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit"  
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets"
     xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters"
-    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
+    xmlns:utils="clr-namespace:EvolutionHighwayWidgets.Utils" 
+    xmlns:common="clr-namespace:EvolutionHighwayWidgets.Converters;assembly=Common" 
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
+    x:Name="comparativeSpeciesViewer">
     
     <UserControl.Resources>
-        <converters:ScaleConverter x:Key="scaleConverter"/>
-        
+        <common:ScaleConverter x:Key="scaleConverter"/>
+        <converters:TopMarginConverter x:Key="topMarginConverter"/>
+        <converters:DebuggingConverter x:Key="debuggingConverter"/>
+
         <DataTemplate x:Key="comparativeSpeciesTemplate">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-
-                <toolkit:LayoutTransformer Grid.Row="0" VerticalAlignment="Bottom">
-                    <toolkit:LayoutTransformer.LayoutTransform>
-                        <RotateTransform Angle="270"/>
-                    </toolkit:LayoutTransformer.LayoutTransform>
-                    <TextBlock Text="{Binding Path=SpeciesName}" 
-                               VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                </toolkit:LayoutTransformer>
-
-                <Border Grid.Row="1" Width="24" Height="{Binding Path=Chromosome.Length,Converter={StaticResource scaleConverter}}"
-                        BorderBrush="Black" BorderThickness="1" Margin="0,5,0,5">
-                    <eh:AncestorRegionsViewer DataContext="{Binding Path=AncestorRegions}"/>
-                </Border>
-
-                <toolkit:LayoutTransformer Grid.Row="2" VerticalAlignment="Top">
-                    <toolkit:LayoutTransformer.LayoutTransform>
-                        <RotateTransform Angle="270"/>
-                    </toolkit:LayoutTransformer.LayoutTransform>
-                    <TextBlock Text="{Binding Path=SpeciesName}" 
-                               VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
-                </toolkit:LayoutTransformer>
-            </Grid>
+                <eh:AncestorRegionsViewer Width="24" Height="{Binding Path=Chromosome.Length,ElementName=comparativeSpeciesViewer,Converter={StaticResource scaleConverter}}"
+                                          DataContext="{Binding Path=AncestorRegions}"/>
         </DataTemplate>
     </UserControl.Resources>
     
-    <ItemsControl x:Name="comparativeSpeciesViewer" 
-                  ItemsSource="{Binding}" 
-                  ItemTemplate="{StaticResource comparativeSpeciesTemplate}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <VirtualizingStackPanel Orientation="Horizontal"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Text="Mbp" FontSize="7"/>
+        <eh:ScaleAxis Grid.Row="1" Grid.Column="0"
+                      MinorTickMarks="5000000" MajorTickMarks="25000000" 
+                      Size="{Binding Path=Chromosome.Length,ElementName=comparativeSpeciesViewer,Mode=OneWay}"/>
+        
+        <ItemsControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" 
+                      ItemsSource="{Binding}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <toolkit:LayoutTransformer VerticalAlignment="Bottom" Width="24">
+                        <toolkit:LayoutTransformer.LayoutTransform>
+                            <RotateTransform Angle="270"/>
+                        </toolkit:LayoutTransformer.LayoutTransform>
+                        <TextBlock Text="{Binding Path=SpeciesName}" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    </toolkit:LayoutTransformer>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Grid Grid.Row="1" Grid.Column="1" 
+              Background="White" Clip="{Binding Path=Chromosome.ClipRegion,ElementName=comparativeSpeciesViewer,Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <ItemsControl ItemsSource="{Binding}" 
+                          ItemTemplate="{StaticResource comparativeSpeciesTemplate}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel x:Name="comparativeSpecies" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding Path=Chromosome.CentromereRegions,ElementName=comparativeSpeciesViewer}"
+                          Visibility="{Binding Path=Chromosome.CentromereVisibility,ElementName=comparativeSpeciesViewer}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Grid.Row="0" VerticalAlignment="Top" Width="{Binding ElementName=comparativeSpecies,Path=ActualWidth,Mode=OneWay}"
+                                    Margin="{Binding Path=Start, Converter={StaticResource topMarginConverter}}" 
+                                    Height="{Binding Path=Span, Converter={StaticResource scaleConverter}}"
+                                    Fill="Black">
+                            <ToolTipService.ToolTip>
+                                <ToolTip>
+                                    <ToolTip.Content>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding Path=Chromosome.Genome.Name,ElementName=comparativeSpeciesViewer}"/>
+                                                <TextBlock Text=" Chromosome "/>
+                                                <TextBlock Text="{Binding Path=Chromosome.Name,ElementName=comparativeSpeciesViewer}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding Path=Start}"/>
+                                                <TextBlock Text=" - "/>
+                                                <TextBlock Text="{Binding Path=End}"/>
+                                                <TextBlock Text=" : "/>
+                                                <TextBlock Text="{Binding Path=Span}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </ToolTip.Content>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <ItemsControl ItemsSource="{Binding Path=Chromosome.HeterochromatinRegions,ElementName=comparativeSpeciesViewer}"
+                          Visibility="{Binding Path=Chromosome.HeterochromatinVisibility,ElementName=comparativeSpeciesViewer}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Grid.Row="0" VerticalAlignment="Top" Width="{Binding ElementName=comparativeSpecies,Path=ActualWidth,Mode=OneWay}"
+                                    Margin="{Binding Path=Start, Converter={StaticResource topMarginConverter}}" 
+                                    Height="{Binding Path=Span, Converter={StaticResource scaleConverter}}">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="2,2" EndPoint="6,6" SpreadMethod="Repeat" MappingMode="Absolute">
+                                    <GradientStop Color="Black" Offset="0"/>
+                                    <GradientStop Color="#00FFFFFF" Offset="0.339"/>
+                                    <GradientStop Color="#00FFFFFF" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+
+                            <ToolTipService.ToolTip>
+                                <ToolTip>
+                                    <ToolTip.Content>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding Path=Chromosome.Genome.Name,ElementName=comparativeSpeciesViewer}"/>
+                                                <TextBlock Text=" Chromosome "/>
+                                                <TextBlock Text="{Binding Path=Chromosome.Name,ElementName=comparativeSpeciesViewer}"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding Path=Start}"/>
+                                                <TextBlock Text=" - "/>
+                                                <TextBlock Text="{Binding Path=End}"/>
+                                                <TextBlock Text=" : "/>
+                                                <TextBlock Text="{Binding Path=Span}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </ToolTip.Content>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Rectangle>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Path Stroke="Black" StrokeThickness="1"
+                  Data="{Binding Path=Chromosome.ClipRegion,ElementName=comparativeSpeciesViewer,Mode=OneWay}"/>
+
+        </Grid>
+
+        <ItemsControl Grid.Row="2" Grid.Column="1" Margin="0,5,0,0"
+                      ItemsSource="{Binding}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <toolkit:LayoutTransformer VerticalAlignment="Top" Width="24">
+                        <toolkit:LayoutTransformer.LayoutTransform>
+                            <RotateTransform Angle="270"/>
+                        </toolkit:LayoutTransformer.LayoutTransform>
+                        <TextBlock Text="{Binding Path=SpeciesName}" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    </toolkit:LayoutTransformer>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
 </UserControl>

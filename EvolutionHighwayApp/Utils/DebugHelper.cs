@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows.Browser;
 
-namespace EvolutionHighwayApp
+namespace EvolutionHighwayApp.Utils
 {
     public class DebugHelper
     {

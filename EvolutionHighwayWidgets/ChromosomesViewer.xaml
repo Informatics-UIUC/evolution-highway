@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets" 
+    xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters"
     xmlns:tklayout="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
     
@@ -20,7 +21,7 @@
                     <TextBlock Text="{Binding Path=Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
 
-                <eh:ComparativeSpeciesViewer Grid.Row="1" HorizontalAlignment="Center" 
+                <eh:ComparativeSpeciesViewer Grid.Row="1" HorizontalAlignment="Center" Chromosome="{Binding Path=Content,RelativeSource={RelativeSource TemplatedParent}}"
                                              DataContext="{Binding Path=ComparativeSpecies}"/>
             </Grid>
         </DataTemplate>

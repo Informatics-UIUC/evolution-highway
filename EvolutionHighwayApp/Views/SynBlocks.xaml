@@ -5,11 +5,23 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
            xmlns:tklayout="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit" 
-           xmlns:tkctrl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit" 
+           xmlns:tkctrl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
+           xmlns:viblend="clr-namespace:VIBlend.Silverlight.Controls;assembly=VIBlend.Silverlight.Menu"
            xmlns:eh="clr-namespace:EvolutionHighwayWidgets;assembly=EvolutionHighwayWidgets" 
-           mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
+           xmlns:app="clr-namespace:EvolutionHighwayApp" mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
            Title="SynBlocks Viewer"
            Loaded="OnPageLoaded">
+    
+    <navigation:Page.Resources>
+        <ResourceDictionary>
+            <app:Settings x:Key="appSettings"/>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/VIBlend.Silverlight.Theme.Office2010Silver;component/Menu.xaml"/>
+                <ResourceDictionary Source="/VIBlend.Silverlight.Theme.Office2010Silver;component/MenuItem.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </navigation:Page.Resources>
     
     <Grid x:Name="LayoutRoot">
         <Grid.ColumnDefinitions>
@@ -18,10 +30,40 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="0" Grid.Column="0" Width="195"
+        <viblend:Menu x:Name="Menu" Grid.Row="0" Grid.ColumnSpan="2" DataContext="{StaticResource appSettings}"
+                      AnimationType="Bounds" Style="{StaticResource Office2010SilverMenuStyle}" 
+                      Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+            <viblend:MenuItem Style="{StaticResource Office2010SilverMenuItemStyle}" Padding="5,3,5,0" Text="File">
+                <viblend:MenuItem Style="{StaticResource Office2010SilverMenuItemStyle}" 
+                                  Padding="5" Text="Capture Screen"
+                                  Click="OnCaptureScreenMenuItemClick"/>
+            </viblend:MenuItem>
+            <viblend:MenuItem Style="{StaticResource Office2010SilverMenuItemStyle}" Padding="5,3,5,0" Text="View">
+                <viblend:MenuItem Style="{StaticResource Office2010SilverMenuItemStyle}" 
+                                  Padding="5" AllowCheckState="True" IsChecked="{Binding ShowCentromere,Mode=TwoWay}" Text="Centromere"
+                                  Click="OnShowCentromereMenuItemClick"/>
+                <viblend:MenuItem Style="{StaticResource Office2010SilverMenuItemStyle}" 
+                                  Padding="5" AllowCheckState="True" IsChecked="{Binding ShowHeterochromatin,Mode=TwoWay}" Text="Heterochromatin"
+                                  Click="OnShowHeterochromatinMenuItemClick"/>
+                <viblend:MenuItem Style="{StaticResource Office2010SilverMenuItemStyle}" 
+                                  Padding="5" AllowCheckState="True" IsChecked="{Binding ShowBlockOrientation,Mode=TwoWay}" Text="Block Orientation"
+                                  Click="OnShowBlockOrientationMenuItemClick">
+                    <ToolTipService.ToolTip>
+                        <ToolTip Width="300">
+                            <ToolTip.Content>
+                                <TextBlock Text="Diagonal lines within each block (from top left to bottom right) show the orientation and position of this block in the comparative genome" TextWrapping="Wrap"/>
+                            </ToolTip.Content>
+                        </ToolTip>
+                    </ToolTipService.ToolTip>
+                </viblend:MenuItem>
+            </viblend:MenuItem>
+        </viblend:Menu>
+        
+        <ScrollViewer Grid.Row="1" Grid.Column="0" Width="195"
                       HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
             <StackPanel HorizontalAlignment="Left">
                 <Border BorderBrush="Black" BorderThickness="1" Margin="0,0,0,20" 
@@ -65,17 +107,6 @@
                         </tkctrl:BusyIndicator>
                     </tklayout:AccordionItem>
                 </tklayout:Accordion>
-
-                <CheckBox x:Name="cbShowLines" Margin="0,20,0,5" Content="Show Block Orientation" FlowDirection="RightToLeft" 
-                          Checked="OnShowLinesCheckedChanged" Unchecked="OnShowLinesCheckedChanged">
-                    <ToolTipService.ToolTip>
-                        <ToolTip Width="300">
-                            <ToolTip.Content>
-                                <TextBlock Text="Diagonal lines within each block (from top left to bottom right) show the orientation and position of this block in the comparative genome" TextWrapping="Wrap"/>
-                            </ToolTip.Content>
-                        </ToolTip>
-                    </ToolTipService.ToolTip>
-                </CheckBox>
 
                 <StackPanel Margin="0,20,0,5" HorizontalAlignment="Left"
                             Width="{Binding ElementName=accordion,Path=ActualWidth}">
@@ -130,11 +161,12 @@
             </StackPanel>
         </ScrollViewer>
             
-        <tkctrl:BusyIndicator Grid.Row="0" Grid.Column="1" x:Name="biViewer" BusyContent="Loading synteny blocks...">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <tkctrl:BusyIndicator Grid.Row="1" Grid.Column="1" x:Name="biViewer" BusyContent="Loading synteny blocks...">
+            <ScrollViewer x:Name="scrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                 <tklayout:LayoutTransformer x:Name="layoutTransformer">
                     <tklayout:LayoutTransformer.LayoutTransform>
-                        <ScaleTransform ScaleX="{Binding ElementName=sliderX,Path=Value}"
+                        <ScaleTransform x:Name="scaleTransform"
+                                        ScaleX="{Binding ElementName=sliderX,Path=Value}"
                                         ScaleY="{Binding ElementName=sliderY,Path=Value}"/>    
                     </tklayout:LayoutTransformer.LayoutTransform>
                     

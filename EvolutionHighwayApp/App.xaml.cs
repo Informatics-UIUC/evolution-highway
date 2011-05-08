@@ -6,6 +6,10 @@ using System.IO.IsolatedStorage;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Controls;
+using EvolutionHighwayApp.Utils;
+using ImageTools.IO;
+using ImageTools.IO.Jpeg;
+using ImageTools.IO.Png;
 
 namespace EvolutionHighwayApp
 {
@@ -46,6 +50,9 @@ namespace EvolutionHighwayApp
                     serializer.WriteObject(stream, initParams);
                 }
             }
+
+            Encoders.AddEncoder<PngEncoder>();
+            Encoders.AddEncoder<JpegEncoder>();
 
             RootVisual = new MainPage();
             MouseWheelService.Enable(RootVisual);

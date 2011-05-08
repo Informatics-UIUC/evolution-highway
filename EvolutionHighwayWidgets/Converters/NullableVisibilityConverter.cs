@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace EvolutionHighwayWidgets.Converters
 {
-    public class SignVisibilityConverter: IValueConverter
+    public class NullableVisibilityConverter: IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

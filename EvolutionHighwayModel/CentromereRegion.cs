@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 
 namespace EvolutionHighwayModel
 {
     [DataContract]
-    public class ComparativeSpecies
+    public class CentromereRegion : AncestralRegion
     {
-        [DataMember] public string SpeciesName { get; set; }
-        [DataMember] public IEnumerable<AncestorRegion> AncestorRegions { get; set; }
-
         public Chromosome Chromosome { get; set; }
     }
 }

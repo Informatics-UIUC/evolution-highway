@@ -7,17 +7,23 @@ using System.ServiceModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using EvolutionHighwayApp.Infrastructure.WebServices;
+using EvolutionHighwayApp.Utils;
 using EvolutionHighwayModel;
 using EvolutionHighwayWidgets.Converters;
+using VIBlend.Silverlight.Controls;
+using ImageTools;
 
 namespace EvolutionHighwayApp.Views
 {
     public partial class SynBlocks : Page
     {
         private IEHDataService _serviceProxy;
+
 
 #if !SIMULATION
         private List<Genome> _genomes;
@@ -29,7 +35,6 @@ namespace EvolutionHighwayApp.Views
 #if SIMULATION
         private List<Genome> _genomes = GetFakeGenomes();
 #endif
-
 
         public SynBlocks()
         {
@@ -86,34 +91,23 @@ namespace EvolutionHighwayApp.Views
             lstChromosomes.ItemsSource = null;
             lstSpecies.ItemsSource = null;
 
-            _serviceProxy.BeginGetChromosomeLengths(
-                ar =>
-                {
-                    var scl = _serviceProxy.EndGetChromosomeLengths(ar);
-                    ComparativeSpecies.ChromosomeLengths.Clear();
-                    scl.ForEach(l =>
-                        ComparativeSpecies.ChromosomeLengths.Add(new Tuple<string, string>(l.Species, l.Chromosome), l.Length));
-                    if (_genomes == null || _genomes.Count == 0)
-                        _serviceProxy.BeginListGenomes(
-                            asyncResult =>
-                            {
-                                _genomes = _serviceProxy.EndListGenomes(asyncResult);
-                                _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
-                                _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
+            if (_genomes == null || _genomes.Count == 0)
+                _serviceProxy.BeginListGenomes(
+                    asyncResult =>
+                    {
+                        _genomes = _serviceProxy.EndListGenomes(asyncResult);
+                        _genomes.Sort((a, b) => a.Name.CompareTo(b.Name));
+                        _genomeNameLookup = _genomes.ToLookup(g => g.Name, g => g);
 
-                                Dispatcher.BeginInvoke(() =>
-                                    {
-                                        lstGenomes.ItemsSource = from genome in _genomes
-                                                                 select genome.Name;
-                                        biGenomes.IsBusy = false;
-                                    }
-                                );
+                        Dispatcher.BeginInvoke(() =>
+                            {
+                                lstGenomes.ItemsSource = from genome in _genomes
+                                                         select genome.Name;
+                                biGenomes.IsBusy = false;
                             }
                         );
-                }
-            );
-
-
+                    }
+                );
 #endif
 
 #if SIMULATION
@@ -199,7 +193,37 @@ namespace EvolutionHighwayApp.Views
                                   where !completed 
                                   select mre;
 
-                waitHandles.All(w => w.WaitOne());
+                var waitHandlesCentromere = from genomeName in lstGenomes.SelectedItems.Cast<string>()
+                                            let genome = _genomeNameLookup[genomeName].First()
+                                            from chromosome in genome.Chromosomes
+                                            where e.AddedItems.Contains(chromosome.Name) && chromosome.CentromereRegions == null
+                                            let mre = new ManualResetEvent(false)
+                                            let completed = _serviceProxy.BeginListCentromere(genome.Name, chromosome.Name,
+                                                         asyncResult =>
+                                                         {
+                                                             var centromereRegions = _serviceProxy.EndListCentromere(asyncResult);
+                                                             chromosome.CentromereRegions = centromereRegions;
+                                                             ((ManualResetEvent)asyncResult.AsyncState).Set();
+                                                         }, mre).IsCompleted
+                                            where !completed
+                                            select mre;
+
+                var waitHandlesHeterochromatin = from genomeName in lstGenomes.SelectedItems.Cast<string>()
+                                                 let genome = _genomeNameLookup[genomeName].First()
+                                                 from chromosome in genome.Chromosomes
+                                                 where e.AddedItems.Contains(chromosome.Name) && chromosome.HeterochromatinRegions == null
+                                                 let mre = new ManualResetEvent(false)
+                                                 let completed = _serviceProxy.BeginListHeterochromatin(genome.Name, chromosome.Name,
+                                                              asyncResult =>
+                                                              {
+                                                                  var heterochromatinRegions = _serviceProxy.EndListHeterochromatin(asyncResult);
+                                                                  chromosome.HeterochromatinRegions = heterochromatinRegions;
+                                                                  ((ManualResetEvent)asyncResult.AsyncState).Set();
+                                                              }, mre).IsCompleted
+                                                 where !completed
+                                                 select mre;
+
+                waitHandles.Union(waitHandlesCentromere).Union(waitHandlesHeterochromatin).All(w => w.WaitOne());
             };
 
             bw.RunWorkerCompleted += (s, ea) =>
@@ -250,13 +274,36 @@ namespace EvolutionHighwayApp.Views
                                                    var ancestorRegions = _serviceProxy.EndListSynblocks(asyncResult);
                                                    //ancestorRegions.ForEach(ar => ar.ComparativeSpecies = species);
                                                    species.AncestorRegions = ancestorRegions;
-                                                   species.Length = ancestorRegions.Max(ar => ar.End);
                                                    ((ManualResetEvent) asyncResult.AsyncState).Set();
                                                }, mre).IsCompleted
                                   where !completed
                                   select mre;
 
-                waitHandles.All(w => w.WaitOne());
+                IEnumerable<ManualResetEvent> waitHandlesGetSpcChrLenghts;
+                
+                lock (SpeciesChromosomeLengths.ChromosomeLengths)
+                {
+                    waitHandlesGetSpcChrLenghts = from species in lstSpecies.SelectedItems.Cast<string>()
+                                                  where !SpeciesChromosomeLengths.ChromosomeLengths.ContainsKey(species)
+                                                  let mre = new ManualResetEvent(false)
+                                                  let completed = _serviceProxy.BeginGetSpeciesChromosomesLength(species,
+                                                               asyncResult =>
+                                                               {
+                                                                   var speciesChrLengths = _serviceProxy.EndGetSpeciesChromosomesLength(asyncResult);
+                                                                   var chrLengthDict = new Dictionary<string, double>(speciesChrLengths.Count);
+                                                                   speciesChrLengths.ForEach(scl => chrLengthDict.Add(scl.Chromosome, scl.Length));
+
+                                                                   lock (SpeciesChromosomeLengths.ChromosomeLengths)
+                                                                   {
+                                                                       SpeciesChromosomeLengths.ChromosomeLengths.Add(species, chrLengthDict);
+                                                                   }
+                                                                   ((ManualResetEvent)asyncResult.AsyncState).Set();
+                                                               }, mre).IsCompleted
+                                                  where !completed
+                                                  select mre;
+                }
+
+                waitHandles.Union(waitHandlesGetSpcChrLenghts).All(w => w.WaitOne());
             };
 
             bw.RunWorkerCompleted += (s, ea) =>
@@ -275,10 +322,17 @@ namespace EvolutionHighwayApp.Views
                                         select new Chromosome
                                                 {
                                                     Name = chromosome.Name,
+                                                    Length = chromosome.Length,
                                                     ComparativeSpecies =
                                                         (from species in chromosome.ComparativeSpecies
                                                         where lstSpecies.SelectedItems.Contains(species.SpeciesName)
-                                                        select species).ToList()
+                                                        select species).ToList(),
+                                                    CentromereRegions =
+                                                        (from cr in chromosome.CentromereRegions
+                                                         select cr).ToList(),
+                                                    HeterochromatinRegions = 
+                                                        (from hc in chromosome.HeterochromatinRegions
+                                                         select hc).ToList()
                                                 }).ToList()
                                 }).ToList();
 
@@ -288,16 +342,23 @@ namespace EvolutionHighwayApp.Views
                                  gen.Chromosomes.ForEach(chr =>
                                     {
                                         chr.Genome = gen;
-                                        chr.Length = chr.ComparativeSpecies.Max(sp => sp.Length);
                                         chr.ComparativeSpecies.ForEach(spc =>
                                             {
                                                 spc.Chromosome = chr;
                                                 spc.AncestorRegions.ForEach(ar =>
                                                     {
                                                         ar.ComparativeSpecies = spc;
-                                                        bpMax = Math.Max(bpMax, ar.End);
                                                     });
                                             });
+                                        chr.CentromereRegions.ForEach(cr =>
+                                            {
+                                                cr.Chromosome = chr;
+                                            });
+                                        chr.HeterochromatinRegions.ForEach(hc =>
+                                            {
+                                                hc.Chromosome = chr;
+                                            });
+                                        bpMax = Math.Max(bpMax, chr.Length);
                                     }));
 
                     ScaleConverter.Scale = bpMax/500;
@@ -305,7 +366,10 @@ namespace EvolutionHighwayApp.Views
 
                     genomesViewer.DataContext = data;
 
-                    OnShowLinesCheckedChanged(null, null);
+                    var settings = (Settings) Resources["appSettings"];
+                    OnShowCentromereMenuItemClick(new MenuItem {IsChecked = settings.ShowCentromere}, null);
+                    OnShowHeterochromatinMenuItemClick(new MenuItem {IsChecked = settings.ShowHeterochromatin}, null);
+                    OnShowBlockOrientationMenuItemClick(new MenuItem {IsChecked = settings.ShowBlockOrientation}, null);
                 }
                 else
                     genomesViewer.DataContext = null;
@@ -322,26 +386,6 @@ namespace EvolutionHighwayApp.Views
             lstSpecies.IsEnabled = false;
 
             bw.RunWorkerAsync();
-        }
-
-        private void OnShowLinesCheckedChanged(object sender, RoutedEventArgs e)
-        {
-            var data = (List<Genome>)genomesViewer.DataContext;
-            if (data == null) return;
-
-            data.ForEach(
-                gen => gen.Chromosomes.ForEach(
-                    chr => chr.ComparativeSpecies.ForEach(
-                        spc => spc.AncestorRegions.ForEach(
-                            ar =>
-                            {
-                                ar.LineVisibility = cbShowLines.IsChecked.GetValueOrDefault(false) ? 
-                                    Visibility.Visible : Visibility.Collapsed;
-                            }
-                        )
-                    )
-                )
-            );
         }
 
 #if SIMULATION
@@ -440,7 +484,7 @@ namespace EvolutionHighwayApp.Views
         }
 #endif
 
-        private void OnScaleValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
+        private void OnScaleValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (layoutTransformer == null) return;
 
@@ -461,13 +505,13 @@ namespace EvolutionHighwayApp.Views
             layoutTransformer.ApplyLayoutTransform();
         }
 
-        private void OnResetScaleClick(object sender, System.Windows.RoutedEventArgs e)
+        private void OnResetScaleClick(object sender, RoutedEventArgs e)
         {
             sliderX.Value = sliderY.Value = 1;
             layoutTransformer.ApplyLayoutTransform();
         }
 
-        private void OnDataScaleApplyClick(object sender, System.Windows.RoutedEventArgs e)
+        private void OnDataScaleApplyClick(object sender, RoutedEventArgs e)
         {
             var btn = (Button) sender;
             btn.IsEnabled = false;
@@ -481,6 +525,88 @@ namespace EvolutionHighwayApp.Views
             btn.IsEnabled = true;
             txtDataScale.IsEnabled = true;
         }
+
+        private void OnShowCentromereMenuItemClick(object sender, EventArgs e)
+        {
+            var data = (List<Genome>)genomesViewer.DataContext;
+            if (data == null) return;
+
+            var showCentromereChecked = ((MenuItem)sender).IsChecked;
+
+            data.ForEach(
+                gen => gen.Chromosomes.ForEach(
+                    chr =>
+                    {
+                        chr.CentromereVisibility =
+                            showCentromereChecked ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                )
+            );
+        }
+
+        private void OnShowHeterochromatinMenuItemClick(object sender, EventArgs e)
+        {
+            var data = (List<Genome>) genomesViewer.DataContext;
+            if (data == null) return;
+
+            var showHeterochromatinChecked = ((MenuItem) sender).IsChecked;
+
+            data.ForEach(
+                gen => gen.Chromosomes.ForEach(
+                    chr =>
+                    {
+                        chr.HeterochromatinVisibility =
+                            showHeterochromatinChecked ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                )
+            );
+        }
+
+        private void OnShowBlockOrientationMenuItemClick(object sender, EventArgs e)
+        {
+            var data = (List<Genome>)genomesViewer.DataContext;
+            if (data == null) return;
+
+            var showBlockOrientationChecked = ((MenuItem) sender).IsChecked;
+
+            data.ForEach(
+                gen => gen.Chromosomes.ForEach(
+                    chr => chr.ComparativeSpecies.ForEach(
+                        spc => spc.AncestorRegions.ForEach(
+                            ar =>
+                            {
+                                ar.LineVisibility = showBlockOrientationChecked ?
+                                    Visibility.Visible : Visibility.Collapsed;
+                            }
+                        )
+                    )
+                )
+            );
+        }
+
+        private void OnCaptureScreenMenuItemClick(object sender, EventArgs e)
+        {
+            // create a WriteableBitmap
+            var bitmap = new WriteableBitmap((int)(genomesViewer.ActualWidth * scaleTransform.ScaleX), (int)(genomesViewer.ActualHeight * scaleTransform.ScaleY));
+
+            // render the visual element to the WriteableBitmap
+            bitmap.Render(genomesViewer, scaleTransform);
+
+            // request an redraw of the bitmap
+            bitmap.Invalidate();
+
+            // prompt for a location to save it
+            var dialog = new SaveFileDialog {DefaultExt = ".png", Filter = "PNG Files|*.png|JPEG Files|*.jpg|All Files|*.*"};
+            if (dialog.ShowDialog() == true)
+            {
+                // the "using" block ensures the stream is cleaned up when we are finished
+                using (var stream = dialog.OpenFile())
+                {
+                    // encode the stream
+                    bitmap.ToImage().WriteToStream(stream, dialog.SafeFileName);
+                }
+            }
+        }
     }
 
     internal class ChromosomeNameComparer : IComparer<string>
@@ -493,17 +619,6 @@ namespace EvolutionHighwayApp.Views
                 return nx.CompareTo(ny);
 
             return x.CompareTo(y);
-        }
-    }
-
-    public static class Extensions
-    {
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
-        {
-            foreach (var item in source)
-            {
-                action(item);
-            }
         }
     }
 }

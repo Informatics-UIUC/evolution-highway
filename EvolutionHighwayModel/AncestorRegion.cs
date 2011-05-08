@@ -1,17 +1,12 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Shapes;
 
 namespace EvolutionHighwayModel
 {
     [DataContract]
-    public class AncestorRegion : INotifyPropertyChanged
+    public class AncestorRegion : AncestralRegion, INotifyPropertyChanged
     {
-        [DataMember] public double Start { get; set; }
-        [DataMember] public double End { get; set; }
         [DataMember] public string Label { get; set; }
         [DataMember] public int? Sign { get; set; }
         [DataMember] public double? ModStart { get; set; }
@@ -20,9 +15,9 @@ namespace EvolutionHighwayModel
 
         public ComparativeSpecies ComparativeSpecies { get; set; }
 
-        public double Span
+        public double? ModSpan
         {
-            get { return End - Start; }
+            get { return (ModStart.HasValue && ModEnd.HasValue) ? ModEnd - ModStart : null; }
         }
 
         private Visibility _lineVisibility;
@@ -45,9 +40,8 @@ namespace EvolutionHighwayModel
             get
             {
                 var start = (Sign == -1) ? ModEnd : ModStart;
-                var spcChrLength = new Tuple<string, string>(ComparativeSpecies.SpeciesName, Chromosome);
-                var chromosomeLength = ComparativeSpecies.ChromosomeLengths[spcChrLength];
-                var x1 = (start.HasValue && ComparativeSpecies.ChromosomeLengths.ContainsKey(spcChrLength) && chromosomeLength > 0) ? 
+                var chromosomeLength = SpeciesChromosomeLengths.ChromosomeLengths[ComparativeSpecies.SpeciesName][Chromosome];
+                var x1 = (start.HasValue && chromosomeLength > 0) ? 
                     24 * start.Value / chromosomeLength : 0;
                 return x1;
             }
@@ -58,9 +52,8 @@ namespace EvolutionHighwayModel
             get
             {
                 var end = (Sign == -1) ? ModStart : ModEnd;
-                var spcChrLength = new Tuple<string, string>(ComparativeSpecies.SpeciesName, Chromosome);
-                var chromosomeLength = ComparativeSpecies.ChromosomeLengths[spcChrLength];
-                var x2 = (end.HasValue && ComparativeSpecies.ChromosomeLengths.ContainsKey(spcChrLength) && chromosomeLength > 0) ?
+                var chromosomeLength = SpeciesChromosomeLengths.ChromosomeLengths[ComparativeSpecies.SpeciesName][Chromosome];
+                var x2 = (end.HasValue && chromosomeLength > 0) ?
                     24 * end.Value / chromosomeLength : 0;
                 return x2;
             }

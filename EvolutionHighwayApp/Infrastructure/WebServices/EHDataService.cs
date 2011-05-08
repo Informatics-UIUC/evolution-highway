@@ -5,7 +5,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using EvolutionHighwayModel;
 
-namespace EvolutionHighwayApp
+namespace EvolutionHighwayApp.Infrastructure.WebServices
 {
     [ServiceContract]
     public interface IEHDataService
@@ -25,15 +25,25 @@ namespace EvolutionHighwayApp
         IAsyncResult BeginListSpecies(string genome, string chromosome, AsyncCallback callback, object state = null);
         List<ComparativeSpecies> EndListSpecies(IAsyncResult asyncResult);
 
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/genomes/{genome}/chromosomes/{chromosome}/centromere")]
+        [OperationContract(Name = "ListCentromereForChromosome", AsyncPattern = true)]
+        IAsyncResult BeginListCentromere(string genome, string chromosome, AsyncCallback callback, object state = null);
+        List<CentromereRegion> EndListCentromere(IAsyncResult asyncResult);
+
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/genomes/{genome}/chromosomes/{chromosome}/heterochromatin")]
+        [OperationContract(Name = "ListHeterochromatinForChromosome", AsyncPattern = true)]
+        IAsyncResult BeginListHeterochromatin(string genome, string chromosome, AsyncCallback callback, object state = null);
+        List<HeterochromatinRegion> EndListHeterochromatin(IAsyncResult asyncResult);
+
         [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/genomes/{genome}/chromosomes/{chromosome}/species/{species}/synblocks")]
         [OperationContract(Name = "ListSynBlocksForSpecies", AsyncPattern = true)]
         IAsyncResult BeginListSynblocks(string genome, string chromosome, string species, AsyncCallback callback, object state = null);
         List<AncestorRegion> EndListSynblocks(IAsyncResult asyncResult);
 
-        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/speciesChromosomeLengths")]
-        [OperationContract(Name = "GetSpeciesChromosomeLengths", AsyncPattern = true)]
-        IAsyncResult BeginGetChromosomeLengths(AsyncCallback callback, object state = null);
-        List<SpeciesChromosomeLengths> EndGetChromosomeLengths(IAsyncResult asyncResult);
+        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/species/{species}/chromosomesLength")]
+        [OperationContract(Name = "GetSpeciesChromosomesLength", AsyncPattern = true)]
+        IAsyncResult BeginGetSpeciesChromosomesLength(string species, AsyncCallback callback, object state = null);
+        List<SpeciesChromosomeLengths> EndGetSpeciesChromosomesLength(IAsyncResult asyncResult);
     }
 
     public class EHDataService

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayWidgets", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayModel", "EvolutionHighwayModel\EvolutionHighwayModel.csproj", "{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{E1ECC132-7B53-45AC-AEAF-590761E92DDA}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -44,6 +46,12 @@ Global
 		{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}.Simulation|Any CPU.ActiveCfg = Simulation|Any CPU
 		{4647B7F6-11C1-4FF7-92F8-8B35192A4CDF}.Simulation|Any CPU.Build.0 = Simulation|Any CPU
+		{E1ECC132-7B53-45AC-AEAF-590761E92DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1ECC132-7B53-45AC-AEAF-590761E92DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1ECC132-7B53-45AC-AEAF-590761E92DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1ECC132-7B53-45AC-AEAF-590761E92DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1ECC132-7B53-45AC-AEAF-590761E92DDA}.Simulation|Any CPU.ActiveCfg = Release|Any CPU
+		{E1ECC132-7B53-45AC-AEAF-590761E92DDA}.Simulation|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

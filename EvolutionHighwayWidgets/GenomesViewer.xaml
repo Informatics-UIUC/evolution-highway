@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:eh="clr-namespace:EvolutionHighwayWidgets" 
     xmlns:converters="clr-namespace:EvolutionHighwayWidgets.Converters"
+    Background="White"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
     
     <UserControl.Resources>
@@ -20,7 +21,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <eh:AlternatingItemsControl x:Name="genomesViewer" 
+    <eh:AlternatingItemsControl x:Name="genomesViewer"
                                 ItemsSource="{Binding}" 
                                 ItemTemplate="{StaticResource genomeTemplate}">
         <eh:AlternatingItemsControl.ItemsPanel>
