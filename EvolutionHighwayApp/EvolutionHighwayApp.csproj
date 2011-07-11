@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7518F77C-DE17-4A43-8483-BCBA208A4E95}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EvolutionHighwayApp</RootNamespace>
+    <AssemblyName>EvolutionHighwayApp</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>EvolutionHighwayApp.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>EvolutionHighwayApp.App</SilverlightAppEntry>
+    <TestPageFileName>EvolutionHighwayAppTestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+    <ValidateXaml>true</ValidateXaml>
+    <EnableOutOfBrowser>true</EnableOutOfBrowser>
+    <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <LinkedServerProject>
+    </LinkedServerProject>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\Lib\Castle.Windsor.v2.5.3\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor">
+      <HintPath>..\Lib\Castle.Windsor.v2.5.3\Castle.Windsor.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools">
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Jpeg">
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.IO.Jpeg.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.IO.Png">
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.IO.Png.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageTools.Utils">
+      <HintPath>..\Lib\ImageTools.v0.30\ImageTools.Utils.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Silverlight.Controls.ToolTips">
+      <HintPath>..\Lib\ToolTipService.v2.1.1\Silverlight.Controls.ToolTips.dll</HintPath>
+    </Reference>
+    <Reference Include="System.CoreEx, Version=1.0.2856.204, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\Lib\Reactive.Extensions.v1.0.2856.0\System.CoreEx.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive, Version=1.0.2856.204, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\Lib\Reactive.Extensions.v1.0.2856.0\System.Interactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Json, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Observable, Version=1.0.0.204, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\Lib\Reactive.Extensions.v1.0.2856.0\System.Observable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive, Version=1.0.2856.204, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\Lib\Reactive.Extensions.v1.0.2856.0\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.ServiceModel.Web.Extensions, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+    <Reference Include="System.Windows.Controls" />
+    <Reference Include="System.Windows.Controls.Navigation" />
+    <Reference Include="System.Xml.Linq, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.XPath, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="VIBlend.Silverlight.Menu">
+      <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Menu.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.Silverlight.Theme.Office2010Silver">
+      <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Theme.Office2010Silver.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.Silverlight.Utilities">
+      <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Utilities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppSettings.cs" />
+    <Compile Include="Converters\BoolToOrientationConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\DebuggingConverter.cs" />
+    <Compile Include="Converters\DoubleToTopMarginConverter.cs" />
+    <Compile Include="Converters\NullableToVisibilityConverter.cs" />
+    <Compile Include="Converters\NumberToPrettyTextConverter.cs" />
+    <Compile Include="Converters\OrientationToAngleConverter.cs" />
+    <Compile Include="Converters\ScaleConverter.cs" />
+    <Compile Include="Dtos\CompGenomeDto.cs" />
+    <Compile Include="Dtos\FeatureDensityDto.cs" />
+    <Compile Include="Dtos\FeatureDto.cs" />
+    <Compile Include="Dtos\GenomeDto.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Infrastructure\MVVM\ModelBase.cs" />
+    <Compile Include="Models\BlockOrientation.cs" />
+    <Compile Include="Models\CentromereRegion.cs" />
+    <Compile Include="Models\Chromosome.cs" />
+    <Compile Include="Models\FeatureDensity.cs" />
+    <Compile Include="Models\HeterochromatinRegion.cs" />
+    <Compile Include="Models\RefChromosome.cs" />
+    <Compile Include="Models\CompGenome.cs" />
+    <Compile Include="Models\Genome.cs" />
+    <Compile Include="Models\RefGenome.cs" />
+    <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\SelectableItem.cs" />
+    <Compile Include="Models\SyntenyRegion.cs" />
+    <Compile Include="State\Repository.cs" />
+    <Compile Include="State\SelectionsController.cs" />
+    <Compile Include="Utils\ControlExtensions.cs" />
+    <Compile Include="Utils\LinearGradientBrushInterpolator.cs" />
+    <Compile Include="Utils\SmartObservableCollection.cs" />
+    <Compile Include="ViewModels\CentromereRegionCollectionViewModel.cs" />
+    <Compile Include="ViewModels\CentromereRegionViewModel.cs" />
+    <Compile Include="ViewModels\CompGenomeCollectionViewModel.cs" />
+    <Compile Include="AppSetup.cs" />
+    <Compile Include="Dtos\CentromereRegionDto.cs" />
+    <Compile Include="Dtos\CompChrLengthDto.cs" />
+    <Compile Include="Dtos\HeterochromatinRegionDto.cs" />
+    <Compile Include="Events\Events.cs" />
+    <Compile Include="Infrastructure\Commands\Command.cs" />
+    <Compile Include="Infrastructure\EventBus\EventAggregator.cs" />
+    <Compile Include="Infrastructure\EventBus\IEventPublisher.cs" />
+    <Compile Include="Infrastructure\Extensions\Extensions.cs" />
+    <Compile Include="Infrastructure\IoC.cs" />
+    <Compile Include="Infrastructure\MVVM\ViewModelBase.cs" />
+    <Compile Include="ViewModels\CompGenomeNamesViewModel.cs" />
+    <Compile Include="ViewModels\CompGenomeSelectorViewModel.cs" />
+    <Compile Include="ViewModels\HeterochromatinRegionCollectionViewModel.cs" />
+    <Compile Include="ViewModels\HeterochromatinRegionViewModel.cs" />
+    <Compile Include="ViewModels\RefChromosomeCollectionViewModel.cs" />
+    <Compile Include="ViewModels\RefChromosomeSelectorViewModel.cs" />
+    <Compile Include="ViewModels\DataSourceSelectorViewModel.cs" />
+    <Compile Include="ViewModels\RefGenomeSelectorViewModel.cs" />
+    <Compile Include="ViewModels\MenuViewModel.cs" />
+    <Compile Include="ServiceLayer\EHDataService.cs" />
+    <Compile Include="Infrastructure\WebServices\WebServicesRestExtension.cs" />
+    <Compile Include="Dtos\SyntenyRegionDto.cs" />
+    <Compile Include="Dtos\ChromosomeDto.cs" />
+    <Compile Include="Dtos\RegionDto.cs" />
+    <Compile Include="Pages\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ErrorWindow.xaml.cs">
+      <DependentUpon>ErrorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Home.xaml.cs">
+      <DependentUpon>Home.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SynBlocks.xaml.cs">
+      <DependentUpon>SynBlocks.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="ViewModels\RefGenomeCollectionViewModel.cs" />
+    <Compile Include="ViewModels\SyntenyBlockCollectionViewModel.cs" />
+    <Compile Include="ViewModels\SyntenyBlockViewModel.cs" />
+    <Compile Include="Views\CentromereRegionCollectionViewer.xaml.cs">
+      <DependentUpon>CentromereRegionCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CentromereRegionViewer.xaml.cs">
+      <DependentUpon>CentromereRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CompGenomeNamesViewer.xaml.cs">
+      <DependentUpon>CompGenomeNamesViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HeterochromatinRegionCollectionViewer.xaml.cs">
+      <DependentUpon>HeterochromatinRegionCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HeterochromatinRegionViewer.xaml.cs">
+      <DependentUpon>HeterochromatinRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RefChromosomeCollectionViewer.xaml.cs">
+      <DependentUpon>RefChromosomeCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CompGenomeCollectionViewer.xaml.cs">
+      <DependentUpon>CompGenomeCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RefGenomeCollectionViewer.xaml.cs">
+      <DependentUpon>RefGenomeCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RefChromosomeSelector.xaml.cs">
+      <DependentUpon>RefChromosomeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CompGenomeSelector.xaml.cs">
+      <DependentUpon>CompGenomeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataSourceSelector.xaml.cs">
+      <DependentUpon>DataSourceSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RefGenomeSelector.xaml.cs">
+      <DependentUpon>RefGenomeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Menu.xaml.cs">
+      <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SyntenyBlockViewer.xaml.cs">
+      <DependentUpon>SyntenyBlockViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SyntenyBlockCollectionViewer.xaml.cs">
+      <DependentUpon>SyntenyBlockCollectionViewer.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Pages\About.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\ErrorWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\Home.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\SynBlocks.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\GlobalResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CentromereRegionCollectionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CentromereRegionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CompGenomeNamesViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HeterochromatinRegionCollectionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HeterochromatinRegionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RefChromosomeCollectionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CompGenomeCollectionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RefGenomeCollectionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RefChromosomeSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CompGenomeSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataSourceSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RefGenomeSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SyntenyBlockViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SyntenyBlockCollectionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="Assets\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\OutOfBrowserSettings.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

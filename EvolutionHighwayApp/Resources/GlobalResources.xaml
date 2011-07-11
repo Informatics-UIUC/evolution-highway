@@ -1,0 +1,14 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:EvolutionHighwayApp.Converters">
+
+    <converters:DebuggingConverter x:Key="DebuggingConverter"/>
+    <converters:BoolToOrientationConverter x:Key="BoolToOrientationConverter"/>
+    <converters:OrientationToAngleConverter x:Key="OrientationToAngleConverter"/>
+    <converters:ScaleConverter x:Key="ScaleConverter"/>
+    <converters:DoubleToTopMarginConverter x:Key="DoubleToTopMarginConverter"/>
+    <converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter"/>
+    <converters:NumberToPrettyTextConverter x:Key="NumberToPrettyTextConverter"/>
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+</ResourceDictionary>

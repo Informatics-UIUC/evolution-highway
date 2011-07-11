@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="EvolutionHighwayApp.Views.CompGenomeCollectionViewer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:toolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+    xmlns:local="clr-namespace:EvolutionHighwayApp.Utils" 
+    xmlns:views="clr-namespace:EvolutionHighwayApp.Views" 
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
+    x:Name="_compGenomeCollectionViewer">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Text="Mbp" FontSize="7"/>
+
+        <views:CompGenomeNamesViewer Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" Height="55"
+                                     CompGenomes="{Binding DataContext.CompGenomes,ElementName=_compGenomeCollectionViewer}" 
+                                     NamesWidth="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
+                                     NamesAlignment="Bottom"/>
+
+        <Grid Grid.Row="1" Grid.Column="1" 
+              Background="White" Clip="{Binding ClipRegion}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ItemsControl ItemsSource="{Binding CompGenomes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:SyntenyBlockCollectionViewer Width="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
+                                                            Height="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"
+                                                            CompGenome="{Binding Content,RelativeSource={RelativeSource TemplatedParent}}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <views:CentromereRegionCollectionViewer RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+                                                    Visibility="{Binding DataContext.AppSettings.ShowCentromere,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
+
+            <views:HeterochromatinRegionCollectionViewer RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+                                                         Visibility="{Binding DataContext.AppSettings.ShowHeterochromatin,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
+
+            <Path Stroke="Black" StrokeThickness="1" Data="{Binding ClipRegion}"/>
+        </Grid>
+
+        <views:CompGenomeNamesViewer Grid.Row="2" Grid.Column="1" Margin="0,5,0,0"
+                                     CompGenomes="{Binding DataContext.CompGenomes,ElementName=_compGenomeCollectionViewer}"
+                                     NamesWidth="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
+                                     NamesAlignment="Top"/>
+
+        <toolkit:TreeMap Grid.Row="1" Grid.Column="2" Margin="10,0,0,0"
+                         ItemsSource="{Binding RefChromosome.FeatureDensityData[AdjacencyScore]}"
+                         Visibility="{Binding AppSettings.ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}">
+            <toolkit:TreeMap.Resources>
+                <LinearGradientBrush x:Key="TreeMapBrush" StartPoint="0.05,0" EndPoint="0.95,0">
+                    <GradientStop Offset="0" Color="#F7FCF5"/>
+                    <GradientStop Offset="0.5" Color="#74C476"/>
+                    <GradientStop Offset="1" Color="#00441B"/>
+                </LinearGradientBrush>
+            </toolkit:TreeMap.Resources>
+            <toolkit:TreeMap.Interpolators>
+                <local:LinearGradientBrushInterpolator TargetName="TreeMapBorder" TargetProperty="Background"
+                                                       TemplateBrush="{StaticResource TreeMapBrush}"
+                                                       DataRangeBinding="{Binding Score}"/>
+            </toolkit:TreeMap.Interpolators>
+            <toolkit:TreeMap.ItemDefinition>
+                <toolkit:TreeMapItemDefinition ValueBinding="{Binding Score}">
+                    <DataTemplate>
+                        <Border x:Name="TreeMapBorder" Background="Transparent" 
+                                BorderBrush="Black" BorderThickness="1"
+                                ToolTipService.ToolTip="{Binding ToolTip}">
+<!--                            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" -->
+<!--                                            Content="{Binding Score,Converter={StaticResource NumberToPrettyTextConverter},ConverterParameter=2}"/>-->
+                        </Border>
+                    </DataTemplate>
+                </toolkit:TreeMapItemDefinition>
+            </toolkit:TreeMap.ItemDefinition>
+        </toolkit:TreeMap>
+    </Grid>
+</UserControl>
