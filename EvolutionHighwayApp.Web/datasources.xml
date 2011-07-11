@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<datasources>
-  <datasource name="EH" serviceAddress="http://leovip031.ncsa.uiuc.edu:8080/EvolutionHighway/"/>
-  <datasource name="TA" serviceAddress="http://leovip031.ncsa.uiuc.edu:8080/TA/"/>
-</datasources>
