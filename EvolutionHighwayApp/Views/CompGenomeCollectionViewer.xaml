@@ -8,8 +8,8 @@
     xmlns:views="clr-namespace:EvolutionHighwayApp.Views" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
     x:Name="_compGenomeCollectionViewer">
-    
-    <Grid>
+
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -93,5 +93,11 @@
                 </toolkit:TreeMapItemDefinition>
             </toolkit:TreeMap.ItemDefinition>
         </toolkit:TreeMap>
+
+        <views:Sparkline x:Name="MySparkLine" Canvas.ZIndex="10" Grid.Row="1" Grid.Column="2"  
+                                ItemsSource="{Binding RefChromosome.FeatureDensityData[AdjacencyScore]}"
+                                Visibility="{Binding AppSettings.ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}">
+        </views:Sparkline>
+        
     </Grid>
 </UserControl>

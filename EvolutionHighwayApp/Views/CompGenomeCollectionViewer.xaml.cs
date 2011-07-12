@@ -41,6 +41,14 @@ namespace EvolutionHighwayApp.Views
 
             DataContext = IoC.Container.Resolve<CompGenomeCollectionViewModel>();
             Unloaded += delegate { ViewModel.Dispose(); IoC.Container.Release(ViewModel); };
+
+            LayoutRoot.SizeChanged += new System.Windows.SizeChangedEventHandler(LayoutRoot_SizeChanged);
         }
+
+        void LayoutRoot_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        {           
+            MySparkLine.SetWidthHeight(MySparkLine.ActualWidth, MySparkLine.ActualHeight);
+        }
+
     }
 }
