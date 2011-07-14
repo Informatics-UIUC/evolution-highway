@@ -19,6 +19,8 @@ namespace EvolutionHighwayApp.ViewModels
             set { NotifyPropertyChanged(() => CentromereRegion, ref _centromereRegion, value); }
         }
 
+        public AppSettings AppSettings { get; private set; }
+
         #endregion
 
         private readonly IDisposable _displaySizeChangedObserver;
@@ -26,6 +28,8 @@ namespace EvolutionHighwayApp.ViewModels
 
         public CentromereRegionViewModel()
         {
+            AppSettings = IoC.Container.Resolve<AppSettings>();
+
             _displaySizeChangedObserver = IoC.Container.Resolve<IEventPublisher>().GetEvent<DisplaySizeChangedEvent>()
                 .ObserveOnDispatcher()
                 .Subscribe(e => NotifyPropertyChanged(() => CentromereRegion));

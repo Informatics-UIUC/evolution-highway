@@ -8,7 +8,7 @@
     Margin="{Binding CentromereRegion.Start, Converter={StaticResource DoubleToTopMarginConverter}}" 
     Height="{Binding CentromereRegion.Span, Converter={StaticResource ScaleConverter}}">
 
-    <Rectangle Fill="Black"/>
+    <Rectangle Fill="{Binding AppSettings.CentromereBgColor,Converter={StaticResource ColorToBrushConverter}}"/>
     
     <tooltip:ToolTipService.ToolTip>
         <tooltip:ToolTip InitialDelay="00:00:01" DisplayTime="Forever" Background="Beige">

@@ -29,7 +29,7 @@ namespace EvolutionHighwayApp.Views
         {
             var focusedElement = FocusManager.GetFocusedElement() as FrameworkElement;
 
-            if (focusedElement is RadioButton || focusedElement is Thumb)
+            if (focusedElement is RadioButton || focusedElement is Thumb || focusedElement is ComboBox)
             {
                 args.Item.Menu.Focus();
                 args.Cancel = true;

@@ -12,8 +12,8 @@
         <Rectangle.Fill>
             <LinearGradientBrush StartPoint="2,2" EndPoint="6,6" SpreadMethod="Repeat" MappingMode="Absolute">
                 <GradientStop Color="Black" Offset="0"/>
-                <GradientStop Color="#00FFFFFF" Offset="0.339"/>
-                <GradientStop Color="#00FFFFFF" Offset="1"/>
+                <GradientStop Color="{Binding AppSettings.HeterochromatinBgColor}" Offset="0.339"/>
+                <GradientStop Color="{Binding AppSettings.HeterochromatinBgColor}" Offset="1"/>
             </LinearGradientBrush>
         </Rectangle.Fill>
     </Rectangle>

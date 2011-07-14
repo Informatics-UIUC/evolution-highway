@@ -1,4 +1,5 @@
-﻿using EvolutionHighwayApp.Infrastructure.MVVM;
+﻿using EvolutionHighwayApp.Infrastructure;
+using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Models;
 
 namespace EvolutionHighwayApp.ViewModels
@@ -14,6 +15,13 @@ namespace EvolutionHighwayApp.ViewModels
             set { NotifyPropertyChanged(() => CompGenome, ref _compGenome, value); }
         }
 
+        public AppSettings AppSettings { get; private set; }
+
         #endregion
+
+        public SyntenyBlockCollectionViewModel()
+        {
+            AppSettings = IoC.Container.Resolve<AppSettings>();
+        }
     }
 }

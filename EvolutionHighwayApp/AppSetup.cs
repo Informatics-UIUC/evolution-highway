@@ -27,6 +27,10 @@ namespace EvolutionHighwayApp
 
             IoC.Container.Resolve<IEventPublisher>().GetEvent<DataSourceChangedEvent>()
                 .Subscribe(e => ScaleConverter.DataMaximum = default(double));
+
+            CompGenomeNameFormatToStringConverter.NameFormat = IoC.Container.Resolve<AppSettings>().CompGenomeNameFormat;
+            IoC.Container.Resolve<IEventPublisher>().GetEvent<CompGenomeNameFormatChangedEvent>()
+                .Subscribe(e => CompGenomeNameFormatToStringConverter.NameFormat = e.CompGenomeNameFormat);
         }
 
         private static void ContainerSetup()

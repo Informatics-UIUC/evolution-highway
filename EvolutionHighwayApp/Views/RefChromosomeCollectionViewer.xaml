@@ -24,6 +24,8 @@
                     
                     <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center">
                         <TextBlock Text="{Binding Path=RefGenome.Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Path=Length,Converter={StaticResource NumberToPrettyTextConverter}}"
+                                   HorizontalAlignment="Center" FontSize="9"/>
                         <TextBlock Text="{Binding Path=Name}" HorizontalAlignment="Center" FontWeight="Bold"/>
                     </StackPanel>
                     

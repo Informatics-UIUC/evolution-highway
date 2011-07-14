@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:EvolutionHighwayApp.Converters">
+    xmlns:converters="clr-namespace:EvolutionHighwayApp.Converters"
+    xmlns:color="clr-namespace:SilverlightColorPicker;assembly=SilverlightColorPicker">
 
     <converters:DebuggingConverter x:Key="DebuggingConverter"/>
     <converters:BoolToOrientationConverter x:Key="BoolToOrientationConverter"/>
@@ -11,4 +12,7 @@
     <converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter"/>
     <converters:NumberToPrettyTextConverter x:Key="NumberToPrettyTextConverter"/>
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <converters:CompGenomeNameFormatToBoolConverter x:Key="CompGenomeNameFormatToBoolConverter"/>
+    <converters:CompGenomeNameFormatToStringConverter x:Key="CompGenomeNameFormatToStringConverter"/>
+    <color:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
 </ResourceDictionary>

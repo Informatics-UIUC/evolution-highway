@@ -19,6 +19,8 @@ namespace EvolutionHighwayApp.ViewModels
             set { NotifyPropertyChanged(() => HeterochromatinRegion, ref _heterochromatinRegion, value); }
         }
 
+        public AppSettings AppSettings { get; private set; }
+
         #endregion
 
         private readonly IDisposable _displaySizeChangedObserver;
@@ -29,6 +31,8 @@ namespace EvolutionHighwayApp.ViewModels
             _displaySizeChangedObserver = IoC.Container.Resolve<IEventPublisher>().GetEvent<DisplaySizeChangedEvent>()
                 .ObserveOnDispatcher()
                 .Subscribe(e => NotifyPropertyChanged(() => HeterochromatinRegion));
+
+            AppSettings = IoC.Container.Resolve<AppSettings>();
         }
 
         public void Dispose()

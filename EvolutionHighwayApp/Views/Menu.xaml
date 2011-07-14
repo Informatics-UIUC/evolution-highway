@@ -56,6 +56,33 @@
                                   IsChecked="{Binding AppSettings.ShowAdjacencyScore, Mode=TwoWay}"
                                   Text="Adjacency Score"/>
             </viblend:MenuItem>
+            <viblend:MenuItem Text="Label">
+                <viblend:MenuItem AllowCheckState="True"
+                                  IsChecked="{Binding CompGenomeNameFormat, Mode=TwoWay,
+                                             Converter={StaticResource CompGenomeNameFormatToBoolConverter}, 
+                                             ConverterParameter=Genome}"
+                                  Text="Show Genome"/>
+                <viblend:MenuItem AllowCheckState="True"
+                                  IsChecked="{Binding CompGenomeNameFormat, Mode=TwoWay,
+                                             Converter={StaticResource CompGenomeNameFormatToBoolConverter}, 
+                                             ConverterParameter=Species}"
+                                  Text="Show Build"/>
+                <viblend:MenuItem AllowCheckState="True"
+                                  IsChecked="{Binding CompGenomeNameFormat, Mode=TwoWay,
+                                             Converter={StaticResource CompGenomeNameFormatToBoolConverter}, 
+                                             ConverterParameter=Custom}"
+                                  Text="Show Custom"/>
+                <viblend:MenuItem IsSeparator="True"/>
+                <viblend:MenuItem>
+                    <viblend:MenuItem.Header>
+                        <StackPanel Margin="25,0,10,0" Orientation="Vertical">
+                            <TextBlock Text="Label Size" Margin="4,5,0,2"/>
+                            <Slider Minimum="5" Maximum="200" SmallChange="5" LargeChange="10" 
+                                    Value="{Binding AppSettings.LabelSize, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </viblend:MenuItem.Header>
+                </viblend:MenuItem>
+            </viblend:MenuItem>
             <viblend:MenuItem IsSeparator="True"/>
             <viblend:MenuItem Text="Scale">
                 <viblend:MenuItem>
@@ -79,6 +106,7 @@
                 <viblend:MenuItem IsSeparator="True"/>
                 <viblend:MenuItem Text="Reset" Command="{Binding ResetZoomCommand}"/>
             </viblend:MenuItem>
+            <viblend:MenuItem Text="Full Screen" Command="{Binding ViewFullScreenCommand}"/>
         </viblend:MenuItem>
 
         <viblend:MenuItem Padding="5,3,5,0" Text="Options">
@@ -152,6 +180,8 @@
                     </viblend:MenuItem>
                 </viblend:MenuItem>
             </viblend:MenuItem>
+            
+            <viblend:MenuItem Text="Colors" Command="{Binding ShowColorOptionsWindowCommand}"/>
         </viblend:MenuItem>
     </viblend:Menu>
 </UserControl>

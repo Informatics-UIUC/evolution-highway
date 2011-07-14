@@ -10,7 +10,7 @@
         <ItemsControl ItemsSource="{Binding CompGenome.SyntenyBlocks}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Grid>
+                    <Grid Background="{Binding AppSettings.GenomeInsideBgColor,Converter={StaticResource ColorToBrushConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>

@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using EvolutionHighwayApp.Events;
+using EvolutionHighwayApp.Infrastructure;
+using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Models;
 
@@ -31,5 +36,12 @@ namespace EvolutionHighwayApp.ViewModels
         }
 
         #endregion
+
+        public CompGenomeNamesViewModel()
+        {
+            IoC.Container.Resolve<IEventPublisher>().GetEvent<CompGenomeNameFormatChangedEvent>()
+                .ObserveOnDispatcher()
+                .Subscribe(e => NotifyPropertyChanged(() => CompGenomes));
+        }
     }
 }

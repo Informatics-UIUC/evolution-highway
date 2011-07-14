@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
+using System.Windows.Media;
+using EvolutionHighwayApp.Converters;
 using EvolutionHighwayApp.Models;
 
 namespace EvolutionHighwayApp.Events
@@ -26,6 +28,11 @@ namespace EvolutionHighwayApp.Events
     public class ShowAdjacencyScoreEvent
     {
         public bool ShowAdjacencyScore { get; set; }
+    }
+
+    public class CompGenomeNameFormatChangedEvent
+    {
+        public int CompGenomeNameFormat { get; set; }
     }
 
     #region Layout events
@@ -113,10 +120,24 @@ namespace EvolutionHighwayApp.Events
         public double DisplaySize { get; set; }
     }
 
+    public class LabelSizeChangedEvent
+    {
+        public int LabelSize { get; set; }
+    }
+
     public class BlockWidthChangedEvent
     {
         public double BlockWidth { get; set; }
     }
+
+    public abstract class ColorChangedEvent
+    {
+        public Color Color { get; set; }        
+    }
+
+    public class HeterochromatinBgColorChangedEvent : ColorChangedEvent { }
+    public class CentromereBgColorChangedEvent : ColorChangedEvent { }
+    public class GenomeInsideBgColorChangedEvent : ColorChangedEvent { }
 
     #endregion
 
