@@ -5,13 +5,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400">
-
-    <Grid x:Name="Canvas"  Margin="0" Canvas.ZIndex="100"   HorizontalAlignment="Left" VerticalAlignment="Top"  RenderTransformOrigin="0.0,0.0">
-    <Grid.RenderTransform>
-        <TransformGroup>
-            <!--<RotateTransform Angle="90"/>-->
-            <!--<ScaleTransform ScaleY="-1"/>-->
-        </TransformGroup>
-    </Grid.RenderTransform>
+    <!--Margin="0" Canvas.ZIndex="100"   HorizontalAlignment="Left" VerticalAlignment="Top"-->
+    <Grid x:Name="Canvas" Background="LightGray"  RenderTransformOrigin="0.0,0.0">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <!--<RotateTransform Angle="90"/>-->
+                <!-- FIXME BORIS WHICH  END IS CORRECT ?-->
+                <!--<ScaleTransform ScaleY="-1"/>-->
+            </TransformGroup>
+        </Grid.RenderTransform>
     </Grid>
 </UserControl>

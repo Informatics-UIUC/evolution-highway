@@ -31,10 +31,13 @@ namespace EvolutionHighwayApp.Views
         private Point? _latestAddedPoint;
         private double _my_width = 0.0f;
         private double _my_height = 0.0f;
-        private double _start_buffer = 1.0f;
-        private double _end_buff = 7.0f;
+        //private double _start_buffer = 1.0f;
+       // private double _end_buffer = 7.0f;
+        private double _hack_height = 0.0f;
         private double _last_w = 0;
         private double _last_h = 0;
+        private double _point_size = 1.0f;
+        private double _polyline_thickness = 0.5f;
 
         #region ITEM SOURCE HANDLER
         internal class WeakEventListener<TInstance, TSource, TEventArgs> where TInstance : class
@@ -187,6 +190,8 @@ namespace EvolutionHighwayApp.Views
 
         #endregion
 
+        
+
         public static DependencyProperty ObjectSeriesProperty = DependencyProperty.Register("ObjectSeries", typeof(ObjectSeries), typeof(Sparkline), new PropertyMetadata(new ObjectSeries(), OnObjectSeriesPropertyChanged));
         public static DependencyProperty StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", typeof(double), typeof(Sparkline), new PropertyMetadata(0.5));
         public static DependencyProperty LineMarginProperty = DependencyProperty.Register("LineMargin", typeof(Thickness), typeof(Sparkline), new PropertyMetadata(new Thickness(0)));
@@ -247,19 +252,20 @@ namespace EvolutionHighwayApp.Views
             InitializeComponent();
 
             ObjectSeries = new ObjectSeries();
-            
+            _visibility = System.Windows.Visibility.Visible;
             InitializePolyline();
-            PointRadius = 1.50f;
+            PointRadius = _point_size;
             
         }
 
-        public void SetWidthHeight(double w, double h)
+        //FIX ME (I KNOW SILLY HACK)
+        public void SetWidthHeight(double w, double h, double hack_h)
         {         
             Canvas.Width = w;
             Canvas.Height = h;
-
+            _hack_height = hack_h;
             _my_width = w;
-            _my_height = h - _start_buffer - _end_buff;
+            _my_height = h;// -50.0f; // -_start_buffer - _end_buffer;
             ResetObjectSeries();
         }
 
@@ -299,6 +305,7 @@ namespace EvolutionHighwayApp.Views
             }
         }
      
+        //FIX ME
         private void ResetObjectSeries()
         {
             try
@@ -307,12 +314,14 @@ namespace EvolutionHighwayApp.Views
                 if (_my_width == 0 || _my_height == 0)
                     return;
 
-                if (_my_width == _last_w || _my_height == _last_h)
-                    return;
+                //if (_my_width == _last_w || _my_height == _last_h)
+                //    return;
 
                 _last_w = _my_width;
                 _last_h = _my_height;
-               
+
+                InitializePolyline();
+
                 Canvas.Children.Clear();
                 Canvas.Children.Add(_polyline);
                 
@@ -340,8 +349,8 @@ namespace EvolutionHighwayApp.Views
             {              
                 _polyline.Points.Add(point);
                 _latestAddedPoint = point;
-                _polyline.Stroke = new SolidColorBrush(Colors.Black);  
-                _polyline.StrokeThickness = 0.2f;
+                _polyline.Stroke = new SolidColorBrush(Colors.Black);
+                _polyline.StrokeThickness = _polyline_thickness;
                 
                 if (PointRadius > 0.0)
                     Canvas.Children.Add(DrawDot(point, tool_tip));
@@ -374,18 +383,33 @@ namespace EvolutionHighwayApp.Views
             return path;
         }
       
+        //FIX ME
         private Point GetPoint(ObjectValue timeValue)
         {
 
             double x_pos = timeValue.Score * _my_width;
             x_pos -= (1.0f * PointRadius);
             double y_pos = (timeValue.RefStart / timeValue.Length) * _my_height;
-            y_pos += _start_buffer;
+            //y_pos += _start_buffer;
+            //y_pos -= _hack_height;
             y_pos -= (1.0f * PointRadius);
 
             return new Point(x_pos,y_pos);          
         }
 
+        private Visibility _visibility;
+        public event EventHandler VisibilityChanged;
+        protected virtual void OnVisibilityChanged()
+        {
+            base.Visibility = this.Visibility;
+            if (_visibility == Visibility.Visible)
+            {
+                ResetObjectSeries();
+            }
+
+            if (this.VisibilityChanged != null)
+                this.VisibilityChanged(this, new EventArgs());
+        }
     }
 
     public class ObjectValue
