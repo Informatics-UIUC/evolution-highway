@@ -19,6 +19,9 @@ namespace EvolutionHighwayApp.Converters
             if (parts.Length > 1 && (NameFormat & (int)CompGenomeNameFormat.Species) > 0) result.Add(parts[1]);
             if (parts.Length > 2 && (NameFormat & (int)CompGenomeNameFormat.Custom) > 0) result.Add(parts[2]);
 
+            if (result.Count == 0)
+                return null;
+
             return result.Aggregate((s, e) => s + ":" + e).Trim(':');
         }
 
