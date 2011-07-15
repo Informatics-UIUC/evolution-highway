@@ -212,6 +212,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="ViewModels\RefGenomeCollectionViewModel.cs" />
+    <Compile Include="ViewModels\ScaleAxisViewModel.cs" />
     <Compile Include="ViewModels\SyntenyBlockCollectionViewModel.cs" />
     <Compile Include="ViewModels\SyntenyBlockViewModel.cs" />
     <Compile Include="Views\CentromereRegionCollectionViewer.xaml.cs">
@@ -255,6 +256,9 @@
     </Compile>
     <Compile Include="Views\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScaleAxis.xaml.cs">
+      <DependentUpon>ScaleAxis.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Sparkline.xaml.cs">
       <DependentUpon>Sparkline.xaml</DependentUpon>
@@ -344,6 +348,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ScaleAxis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
