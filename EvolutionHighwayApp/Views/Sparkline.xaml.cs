@@ -36,8 +36,10 @@ namespace EvolutionHighwayApp.Views
         private double _hack_height = 0.0f;
         private double _last_w = 0;
         private double _last_h = 0;
-        private double _point_size = 1.0f;
+        private double _point_size = 2.250f;
         private double _polyline_thickness = 0.5f;
+        private double _refEnd_length = 1.0f;
+
 
         #region ITEM SOURCE HANDLER
         internal class WeakEventListener<TInstance, TSource, TEventArgs> where TInstance : class
@@ -169,11 +171,13 @@ namespace EvolutionHighwayApp.Views
                 var test2 = from p in test orderby p.RefStart ascending select p;
                 double min2 = (from obj2 in (List<FeatureDensity>)test select obj2.RefStart).Min();
                 double max2 = (from obj2 in (List<FeatureDensity>)test select obj2.RefEnd).Max();
-                
-                double length2 = max2 - min2;
+
+                double length2 = max2; // max2 - min2;
+                _refEnd_length = max2; // length2;
                 
                 ObjectSeries.Clear();
-                
+                //KEEP? ObjectSeries.Add(new ObjectValue() { RefStart = 0, Length = 0, Score = 0, Tooltip = "" });
+
                 foreach (FeatureDensity fd in test2)
                 {
                      ObjectSeries.AddObjectValue(fd.Score, fd.RefStart, length2, fd.ToolTip);
@@ -252,10 +256,19 @@ namespace EvolutionHighwayApp.Views
             InitializeComponent();
 
             ObjectSeries = new ObjectSeries();
+            //ObjectSeries.Add(new ObjectValue() { RefStart = 0, Length = 0, Score = 0, Tooltip = "" });
+            Canvas.SizeChanged += new SizeChangedEventHandler(Canvas_SizeChanged);
+
             _visibility = System.Windows.Visibility.Visible;
             InitializePolyline();
             PointRadius = _point_size;
             
+        }
+
+        void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ResetObjectSeries();
+
         }
 
         //FIX ME (I KNOW SILLY HACK)
@@ -297,7 +310,7 @@ namespace EvolutionHighwayApp.Views
             switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
-                    foreach (var timeValue in e.NewItems.OfType<ObjectValue>()) DrawObjectValue(timeValue);
+                    //KEEP foreach (var timeValue in e.NewItems.OfType<ObjectValue>()) DrawObjectValue(timeValue);
                     break;           
                 default:
                     ResetObjectSeries();
@@ -310,6 +323,9 @@ namespace EvolutionHighwayApp.Views
         {
             try
             {
+                _my_width = Canvas.Width;
+                _my_height = Canvas.Height;
+
 
                 if (_my_width == 0 || _my_height == 0)
                     return;
@@ -317,14 +333,21 @@ namespace EvolutionHighwayApp.Views
                 //if (_my_width == _last_w || _my_height == _last_h)
                 //    return;
 
+                if (_my_height == _last_h)
+                    return;
+
                 _last_w = _my_width;
                 _last_h = _my_height;
 
                 InitializePolyline();
 
+                //Canvas.Width = _my_width;
+                //Canvas.Height = _my_height;
                 Canvas.Children.Clear();
                 Canvas.Children.Add(_polyline);
-                
+
+                //_refEnd_length = (from obj2 in (ObjectSeries) select obj2.Length).Max();
+
                 foreach (var timeValue in ObjectSeries)
                 {
                     DrawObjectValue(timeValue);
@@ -389,10 +412,14 @@ namespace EvolutionHighwayApp.Views
 
             double x_pos = timeValue.Score * _my_width;
             x_pos -= (1.0f * PointRadius);
-            double y_pos = (timeValue.RefStart / timeValue.Length) * _my_height;
+            //double y_pos = (timeValue.RefStart / timeValue.Length) * _my_height;
+            double y_pos = (timeValue.RefStart / _refEnd_length) * _my_height;
+
+            System.Diagnostics.Debug.WriteLine("Sparkline GetPoint: {0} ", _my_height);
             //y_pos += _start_buffer;
             //y_pos -= _hack_height;
             y_pos -= (1.0f * PointRadius);
+            //System.Diagnostics.Debug.WriteLine("Sparkline GetPoint: {0} {1} {2} {3} {4} ", x_pos, y_pos, timeValue.RefStart, timeValue.Length, _refEnd_length);
 
             return new Point(x_pos,y_pos);          
         }

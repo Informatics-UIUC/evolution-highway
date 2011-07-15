@@ -53,6 +53,11 @@ namespace EvolutionHighwayApp.Views
         void LayoutRoot_LayoutUpdated(object sender, System.EventArgs e)
         {
             //throw new System.NotImplementedException();
+            AppSettings asdd = IoC.Container.Resolve<AppSettings>();
+            double hack_sc = asdd.DisplaySize;
+            //System.Diagnostics.Debug.WriteLine("LayoutRoot_LayoutUpdated: {0} {1}", hack_sc, LayoutRoot.RowDefinitions[1].ActualHeight);
+           // MySparkLine.SetWidthHeight(BlockWidth, hack_sc, 0); //Layout
+
         }
 
         //FIX ME BORIS I KNOW ITS BAD, JUST A TEMPORARY MEASURE
@@ -68,8 +73,10 @@ namespace EvolutionHighwayApp.Views
            // MySparkLine.SetWidthHeight(BlockWidth, LayoutRoot.RowDefinitions[1].ActualHeight, LayoutRoot.RowDefinitions[0].ActualHeight);
             // MySparkLine.SetWidthHeight(BlockWidth, LayoutRoot.RowDefinitions[1].ActualHeight);
            // MySparkLine.SetWidthHeight(BlockWidth, MySparkLine.ActualHeight - LayoutRoot.RowDefinitions[0].ActualHeight);
-           // MySparkLine.SetWidthHeight(BlockWidth, hack_sc, 0); //LayoutRoot.RowDefinitions[0].ActualHeight);
-            MySparkLine.SetWidthHeight(BlockWidth, LayoutRoot.RowDefinitions[1].ActualHeight, 0); //LayoutRoot.RowDefinitions[0].ActualHeight);
+           MySparkLine.SetWidthHeight(BlockWidth, hack_sc, 0); //LayoutRoot.RowDefinitions[0].ActualHeight);
+           // MySparkLine.SetWidthHeight(BlockWidth, LayoutRoot.RowDefinitions[1].ActualHeight, 0); //LayoutRoot.RowDefinitions[0].ActualHeight);
+           // System.Diagnostics.Debug.WriteLine("LayoutRoot_SizeChanged: {0} {1}", hack_sc, LayoutRoot.RowDefinitions[1].ActualHeight);
+
 
         }
 
