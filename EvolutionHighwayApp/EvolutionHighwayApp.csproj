@@ -184,6 +184,7 @@
     <Compile Include="ViewModels\CompGenomeSelectorViewModel.cs" />
     <Compile Include="ViewModels\HeterochromatinRegionCollectionViewModel.cs" />
     <Compile Include="ViewModels\HeterochromatinRegionViewModel.cs" />
+    <Compile Include="ViewModels\MySparklineViewModel.cs" />
     <Compile Include="ViewModels\RefChromosomeCollectionViewModel.cs" />
     <Compile Include="ViewModels\RefChromosomeSelectorViewModel.cs" />
     <Compile Include="ViewModels\DataSourceSelectorViewModel.cs" />
@@ -232,6 +233,9 @@
     </Compile>
     <Compile Include="Views\HeterochromatinRegionViewer.xaml.cs">
       <DependentUpon>HeterochromatinRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MySparkline.xaml.cs">
+      <DependentUpon>MySparkline.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RefChromosomeCollectionViewer.xaml.cs">
       <DependentUpon>RefChromosomeCollectionViewer.xaml</DependentUpon>
@@ -316,6 +320,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HeterochromatinRegionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MySparkline.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

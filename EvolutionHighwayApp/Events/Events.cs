@@ -138,6 +138,10 @@ namespace EvolutionHighwayApp.Events
     public class HeterochromatinBgColorChangedEvent : ColorChangedEvent { }
     public class CentromereBgColorChangedEvent : ColorChangedEvent { }
     public class GenomeInsideBgColorChangedEvent : ColorChangedEvent { }
+    public class FeatureDensityBgColorChangedEvent : ColorChangedEvent { }
+    public class FeatureDensityFillColorChangedEvent : ColorChangedEvent { }
+    public class SparklineColorChangedEvent : ColorChangedEvent { }
+    public class DataPointFillColorChangedEvent : ColorChangedEvent { }
 
     #endregion
 

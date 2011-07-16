@@ -6,6 +6,7 @@ using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Utils;
+using SilverlightColorPicker;
 
 namespace EvolutionHighwayApp
 {
@@ -223,7 +224,7 @@ namespace EvolutionHighwayApp
 
         public Color GenomeInsideBgColor
         {
-            get { return (Color)_appSettings.GetValueOrDefault("genomeInsideBgColor", Colors.White); }
+            get { return (Color) _appSettings.GetValueOrDefault("genomeInsideBgColor", Colors.White); }
             set
             {
                 var oldValue = GenomeInsideBgColor;
@@ -234,6 +235,70 @@ namespace EvolutionHighwayApp
                 _appSettings.Set("genomeInsideBgColor", value);
                 NotifyPropertyChanged(() => GenomeInsideBgColor);
                 EventPublisher.Publish(new GenomeInsideBgColorChangedEvent { Color = value });
+            }
+        }
+
+        public Color FeatureDensityBgColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("featureDensityBgColor", PredefinedColors.AllColors["AliceBlue"]); }
+            set
+            {
+                var oldValue = FeatureDensityBgColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetFeatureDensityBgColor: {0}", value);
+
+                _appSettings.Set("featureDensityBgColor", value);
+                NotifyPropertyChanged(() => FeatureDensityBgColor);
+                EventPublisher.Publish(new FeatureDensityBgColorChangedEvent { Color = value });
+            }
+        }
+
+        public Color FeatureDensityFillColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("featureDensityFillColor", Colors.Transparent); }
+            set
+            {
+                var oldValue = FeatureDensityFillColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetFeatureDensityFillColor: {0}", value);
+
+                _appSettings.Set("featureDensityFillColor", value);
+                NotifyPropertyChanged(() => FeatureDensityFillColor);
+                EventPublisher.Publish(new FeatureDensityFillColorChangedEvent { Color = value });
+            }
+        }
+
+        public Color SparklineColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("sparklineColor", Colors.Black); }
+            set
+            {
+                var oldValue = SparklineColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetSparklineColor: {0}", value);
+
+                _appSettings.Set("sparklineColor", value);
+                NotifyPropertyChanged(() => SparklineColor);
+                EventPublisher.Publish(new SparklineColorChangedEvent { Color = value });
+            }
+        }
+
+        public Color DataPointFillColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("dataPointFillColor", PredefinedColors.AllColors["LightSalmon"]); }
+            set
+            {
+                var oldValue = DataPointFillColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetDataPointFillColor: {0}", value);
+
+                _appSettings.Set("dataPointFillColor", value);
+                NotifyPropertyChanged(() => DataPointFillColor);
+                EventPublisher.Publish(new DataPointFillColorChangedEvent { Color = value });
             }
         }
     }
