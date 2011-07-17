@@ -51,7 +51,7 @@ namespace EvolutionHighwayApp.ViewModels
                 if (MaxScale == value) return;
                 _maxScale = value;
 
-                _height = Convert.ToInt32(Math.Floor((double)_scaleConverter.Convert(_maxScale, null, null, null)));
+                _height = Convert.ToInt32(Math.Floor((double)ScaleConverter.Convert(_maxScale, null, null, null)));
 
                 NotifyPropertyChanged(() => MaxScale);
                 NotifyPropertyChanged(() => MinorTicks);
@@ -72,7 +72,7 @@ namespace EvolutionHighwayApp.ViewModels
         #endregion
 
         private readonly IDisposable _displaySizeChangedObserver;
-        private readonly ScaleConverter _scaleConverter;
+        private static readonly ScaleConverter ScaleConverter = new ScaleConverter();
         private int _height;
 
         public ScaleAxisViewModel()
@@ -81,12 +81,10 @@ namespace EvolutionHighwayApp.ViewModels
                 .ObserveOnDispatcher()
                 .Subscribe(e =>
                                {
-                                   _height = Convert.ToInt32(Math.Floor((double)_scaleConverter.Convert(MaxScale, null, null, null)));
+                                   _height = Convert.ToInt32(Math.Floor((double)ScaleConverter.Convert(MaxScale, null, null, null)));
                                    NotifyPropertyChanged(() => MinorTicks);
                                    NotifyPropertyChanged(() => MajorTicks);
                                });
-
-            _scaleConverter = new ScaleConverter();
         }
 
 

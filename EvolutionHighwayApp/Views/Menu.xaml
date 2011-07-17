@@ -192,6 +192,10 @@
             </viblend:MenuItem>
             
             <viblend:MenuItem Text="Colors" Command="{Binding ShowColorOptionsWindowCommand}"/>
+            
+            <viblend:MenuItem IsSeparator="true"/>
+            
+            <viblend:MenuItem Text="Reset To Defaults" Command="{Binding ResetOptionsToDefaultsCommand}"/>
         </viblend:MenuItem>
     </viblend:Menu>
 </UserControl>

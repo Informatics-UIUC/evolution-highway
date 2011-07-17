@@ -30,6 +30,7 @@ namespace EvolutionHighwayApp.ViewModels
         public Command ResetZoomCommand { get; private set; }
         public Command ViewFullScreenCommand { get; private set; }
         public Command ShowColorOptionsWindowCommand { get; private set; }
+        public Command ResetOptionsToDefaultsCommand { get; private set; }
 
         #endregion
 
@@ -46,6 +47,14 @@ namespace EvolutionHighwayApp.ViewModels
             ResetZoomCommand = new Command(ResetZoom, canExecute => true);
             ViewFullScreenCommand = new Command(ViewFullScreen, canExecute => true);
             ShowColorOptionsWindowCommand = new Command(ShowColorOptionsWindow, canExecute => true);
+            ResetOptionsToDefaultsCommand = new Command(ResetOptionsToDefaults, canExecute => true);
+        }
+
+        private void ResetOptionsToDefaults(object obj)
+        {
+            if (MessageBox.Show("Are you sure you want to reset all options to their default values?", 
+                                "Reset To Defaults", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                AppSettings.ResetToDefaults();
         }
 
         private void ShowColorOptionsWindow(object obj)

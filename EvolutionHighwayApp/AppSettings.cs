@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -13,13 +14,61 @@ namespace EvolutionHighwayApp
     public class AppSettings : ViewModelBase
     {
         private readonly IsolatedStorageSettings _appSettings = IsolatedStorageSettings.ApplicationSettings;
+        private readonly Dictionary<string, object> _defaultValues;
 
         public AppSettings(IEventPublisher eventPublisher) 
-            : base(eventPublisher) { }
+            : base(eventPublisher)
+        {
+            _defaultValues = new Dictionary<string, object>
+                                 {
+                                     {"showCentromere", true},
+                                     {"showHeterochromatin", true},
+                                     {"showBlockOrientation", false},
+                                     {"showAdjacencyScore", false},
+                                     {"genomeLayout", Orientation.Horizontal},
+                                     {"chromosomeLayout", Orientation.Horizontal},
+                                     {"synBlocksLayout", Orientation.Vertical},
+                                     {"displaySize", 500d},
+                                     {"blockWidth", 24d},
+                                     {"compGenomeNameFormat", 7},
+                                     {"labelSize", 55},
+                                     {"centromereBgColor", Colors.Black},
+                                     {"heterochromatinBgColor", Colors.Transparent},
+                                     {"genomeInsideBgColor", Colors.White},
+                                     {"featureDensityBgColor", PredefinedColors.AllColors["AliceBlue"]},
+                                     {"featureDensityFillColor", Colors.Transparent},
+                                     {"sparklineColor", Colors.Black},
+                                     {"dataPointFillColor", PredefinedColors.AllColors["LightSalmon"]},
+                                     {"adjacencyFeatureWidth", 20}
+                                 };
+        }
+
+        public void ResetToDefaults()
+        {
+            ShowCentromere = (bool) _defaultValues["showCentromere"];
+            ShowHeterochromatin = (bool) _defaultValues["showHeterochromatin"];
+            ShowBlockOrientation = (bool) _defaultValues["showBlockOrientation"];
+            ShowAdjacencyScore = (bool) _defaultValues["showAdjacencyScore"];
+            GenomeLayout = (Orientation) _defaultValues["genomeLayout"];
+            ChromosomeLayout = (Orientation) _defaultValues["chromosomeLayout"];
+            SynBlocksLayout = (Orientation) _defaultValues["synBlocksLayout"];
+            DisplaySize = (double) _defaultValues["displaySize"];
+            BlockWidth = (double) _defaultValues["blockWidth"];
+            CompGenomeNameFormat = (int) _defaultValues["compGenomeNameFormat"];
+            LabelSize = (int) _defaultValues["labelSize"];
+            CentromereBgColor = (Color) _defaultValues["centromereBgColor"];
+            HeterochromatinBgColor = (Color) _defaultValues["heterochromatinBgColor"];
+            GenomeInsideBgColor = (Color) _defaultValues["genomeInsideBgColor"];
+            FeatureDensityBgColor = (Color) _defaultValues["featureDensityBgColor"];
+            FeatureDensityFillColor = (Color) _defaultValues["featureDensityFillColor"];
+            SparklineColor = (Color) _defaultValues["sparklineColor"];
+            DataPointFillColor = (Color) _defaultValues["dataPointFillColor"];
+            AdjacencyFeatureWidth = (int) _defaultValues["adjacencyFeatureWidth"];
+        }
 
         public bool ShowCentromere
         {
-            get { return (bool) _appSettings.GetValueOrDefault("showCentromere", true); }
+            get { return (bool) _appSettings.GetValueOrDefault("showCentromere", _defaultValues["showCentromere"]); }
             set
             {
                 var oldValue = ShowCentromere;
@@ -35,7 +84,7 @@ namespace EvolutionHighwayApp
 
         public bool ShowHeterochromatin
         {
-            get { return (bool) _appSettings.GetValueOrDefault("showHeterochromatin", true); }
+            get { return (bool) _appSettings.GetValueOrDefault("showHeterochromatin", _defaultValues["showHeterochromatin"]); }
             set
             {
                 var oldValue = ShowHeterochromatin;
@@ -51,7 +100,7 @@ namespace EvolutionHighwayApp
 
         public bool ShowBlockOrientation
         {
-            get { return (bool) _appSettings.GetValueOrDefault("showBlockOrientation", false); }
+            get { return (bool) _appSettings.GetValueOrDefault("showBlockOrientation", _defaultValues["showBlockOrientation"]); }
             set
             {
                 var oldValue = ShowBlockOrientation;
@@ -67,7 +116,7 @@ namespace EvolutionHighwayApp
 
         public bool ShowAdjacencyScore
         {
-            get { return (bool)_appSettings.GetValueOrDefault("showAdjacencyScore", false); }
+            get { return (bool)_appSettings.GetValueOrDefault("showAdjacencyScore", _defaultValues["showAdjacencyScore"]); }
             set
             {
                 var oldValue = ShowAdjacencyScore;
@@ -83,7 +132,7 @@ namespace EvolutionHighwayApp
 
         public Orientation GenomeLayout
         {
-            get { return (Orientation) _appSettings.GetValueOrDefault("genomeLayout", Orientation.Horizontal); }
+            get { return (Orientation) _appSettings.GetValueOrDefault("genomeLayout", _defaultValues["genomeLayout"]); }
             set
             {
                 var oldValue = GenomeLayout;
@@ -99,7 +148,7 @@ namespace EvolutionHighwayApp
 
         public Orientation ChromosomeLayout
         {
-            get { return (Orientation) _appSettings.GetValueOrDefault("chromosomeLayout", Orientation.Horizontal); }
+            get { return (Orientation) _appSettings.GetValueOrDefault("chromosomeLayout", _defaultValues["chromosomeLayout"]); }
             set
             {
                 var oldValue = ChromosomeLayout;
@@ -115,7 +164,7 @@ namespace EvolutionHighwayApp
 
         public Orientation SynBlocksLayout
         {
-            get { return (Orientation) _appSettings.GetValueOrDefault("synBlocksLayout", Orientation.Vertical); }
+            get { return (Orientation)_appSettings.GetValueOrDefault("synBlocksLayout", _defaultValues["synBlocksLayout"]); }
             set
             {
                 var oldValue = SynBlocksLayout;
@@ -131,7 +180,7 @@ namespace EvolutionHighwayApp
 
         public double DisplaySize
         {
-            get { return (double) _appSettings.GetValueOrDefault("displaySize", 500d); }
+            get { return (double)_appSettings.GetValueOrDefault("displaySize", _defaultValues["displaySize"]); }
             set
             {
                 Debug.WriteLine("SetDisplaySize: {0}", value);
@@ -144,7 +193,7 @@ namespace EvolutionHighwayApp
 
         public double BlockWidth
         {
-            get { return (double) _appSettings.GetValueOrDefault("blockWidth", 24d); }
+            get { return (double)_appSettings.GetValueOrDefault("blockWidth", _defaultValues["blockWidth"]); }
             set
             {
                 var oldValue = BlockWidth;
@@ -160,7 +209,7 @@ namespace EvolutionHighwayApp
 
         public int CompGenomeNameFormat
         {
-            get { return (int) _appSettings.GetValueOrDefault("compGenomeNameFormat", 7); }
+            get { return (int)_appSettings.GetValueOrDefault("compGenomeNameFormat", _defaultValues["compGenomeNameFormat"]); }
             set
             {
                 var oldValue = CompGenomeNameFormat;
@@ -176,7 +225,7 @@ namespace EvolutionHighwayApp
 
         public int LabelSize
         {
-            get { return (int) _appSettings.GetValueOrDefault("labelSize", 55); }
+            get { return (int)_appSettings.GetValueOrDefault("labelSize", _defaultValues["labelSize"]); }
             set
             {
                 var oldValue = LabelSize;
@@ -192,7 +241,7 @@ namespace EvolutionHighwayApp
 
         public Color CentromereBgColor
         {
-            get { return (Color)_appSettings.GetValueOrDefault("centromereBgColor", Colors.Black); }
+            get { return (Color)_appSettings.GetValueOrDefault("centromereBgColor", _defaultValues["centromereBgColor"]); }
             set
             {
                 var oldValue = CentromereBgColor;
@@ -208,7 +257,7 @@ namespace EvolutionHighwayApp
 
         public Color HeterochromatinBgColor
         {
-            get { return (Color) _appSettings.GetValueOrDefault("heterochromatinBgColor", Colors.Transparent); }
+            get { return (Color)_appSettings.GetValueOrDefault("heterochromatinBgColor", _defaultValues["heterochromatinBgColor"]); }
             set
             {
                 var oldValue = HeterochromatinBgColor;
@@ -224,7 +273,7 @@ namespace EvolutionHighwayApp
 
         public Color GenomeInsideBgColor
         {
-            get { return (Color) _appSettings.GetValueOrDefault("genomeInsideBgColor", Colors.White); }
+            get { return (Color)_appSettings.GetValueOrDefault("genomeInsideBgColor", _defaultValues["genomeInsideBgColor"]); }
             set
             {
                 var oldValue = GenomeInsideBgColor;
@@ -240,7 +289,7 @@ namespace EvolutionHighwayApp
 
         public Color FeatureDensityBgColor
         {
-            get { return (Color)_appSettings.GetValueOrDefault("featureDensityBgColor", PredefinedColors.AllColors["AliceBlue"]); }
+            get { return (Color)_appSettings.GetValueOrDefault("featureDensityBgColor", _defaultValues["featureDensityBgColor"]); }
             set
             {
                 var oldValue = FeatureDensityBgColor;
@@ -256,7 +305,7 @@ namespace EvolutionHighwayApp
 
         public Color FeatureDensityFillColor
         {
-            get { return (Color)_appSettings.GetValueOrDefault("featureDensityFillColor", Colors.Transparent); }
+            get { return (Color)_appSettings.GetValueOrDefault("featureDensityFillColor", _defaultValues["featureDensityFillColor"]); }
             set
             {
                 var oldValue = FeatureDensityFillColor;
@@ -272,7 +321,7 @@ namespace EvolutionHighwayApp
 
         public Color SparklineColor
         {
-            get { return (Color)_appSettings.GetValueOrDefault("sparklineColor", Colors.Black); }
+            get { return (Color)_appSettings.GetValueOrDefault("sparklineColor", _defaultValues["sparklineColor"]); }
             set
             {
                 var oldValue = SparklineColor;
@@ -288,7 +337,7 @@ namespace EvolutionHighwayApp
 
         public Color DataPointFillColor
         {
-            get { return (Color)_appSettings.GetValueOrDefault("dataPointFillColor", PredefinedColors.AllColors["LightSalmon"]); }
+            get { return (Color)_appSettings.GetValueOrDefault("dataPointFillColor", _defaultValues["dataPointFillColor"]); }
             set
             {
                 var oldValue = DataPointFillColor;
@@ -304,7 +353,7 @@ namespace EvolutionHighwayApp
 
         public int AdjacencyFeatureWidth
         {
-            get { return (int)_appSettings.GetValueOrDefault("adjacencyFeatureWidth", 20); }
+            get { return (int)_appSettings.GetValueOrDefault("adjacencyFeatureWidth", _defaultValues["adjacencyFeatureWidth"]); }
             set
             {
                 var oldValue = AdjacencyFeatureWidth;
