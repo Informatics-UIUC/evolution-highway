@@ -143,6 +143,11 @@ namespace EvolutionHighwayApp.Events
     public class SparklineColorChangedEvent : ColorChangedEvent { }
     public class DataPointFillColorChangedEvent : ColorChangedEvent { }
 
+    public class AdjacencyFeatureWidthChangedEvent
+    {
+        public int Width { get; set; }
+    }
+
     #endregion
 
     #region Loading events

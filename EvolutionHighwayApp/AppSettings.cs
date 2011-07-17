@@ -301,5 +301,21 @@ namespace EvolutionHighwayApp
                 EventPublisher.Publish(new DataPointFillColorChangedEvent { Color = value });
             }
         }
+
+        public int AdjacencyFeatureWidth
+        {
+            get { return (int)_appSettings.GetValueOrDefault("adjacencyFeatureWidth", 20); }
+            set
+            {
+                var oldValue = AdjacencyFeatureWidth;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetAdjacencyFeatureWidth: {0}", value);
+
+                _appSettings.Set("adjacencyFeatureWidth", value);
+                NotifyPropertyChanged(() => AdjacencyFeatureWidth);
+                EventPublisher.Publish(new AdjacencyFeatureWidthChangedEvent { Width = value });
+            }
+        }
     }
 }

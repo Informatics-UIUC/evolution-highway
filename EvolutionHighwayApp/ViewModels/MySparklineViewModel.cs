@@ -6,13 +6,15 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using EvolutionHighwayApp.Converters;
+using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure;
+using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Models;
 
 namespace EvolutionHighwayApp.ViewModels
 {
-    public class MySparklineViewModel : ModelBase
+    public class MySparklineViewModel : ModelBase, IDisposable
     {
         #region ViewModel Bindable Properties
 
@@ -26,6 +28,7 @@ namespace EvolutionHighwayApp.ViewModels
             {
                 NotifyPropertyChanged(() => SparklinePointCollection, ref _dataPoints, value);
                 NotifyPropertyChanged(() => SparklineDataPoints);
+                NotifyPropertyChanged(() => ShowAdjacencyScore);
             }
         }
 
@@ -53,35 +56,58 @@ namespace EvolutionHighwayApp.ViewModels
             get { return DataPoints == null ? null : DataPoints.Select(data => new FeatureDensityDataPoint(data, Size.Width)); }
         }
 
+        private bool _showAdjacencyScore;
+        public bool ShowAdjacencyScore
+        {
+            get { return _showAdjacencyScore && DataPoints != null && !DataPoints.IsEmpty(); }
+            set { NotifyPropertyChanged(() => ShowAdjacencyScore, ref _showAdjacencyScore, value); }
+        }
+
         #endregion
 
         private static readonly ScaleConverter ScaleConverter = new ScaleConverter();
+        private readonly IDisposable _showAdjacencyScoreChangedObserver;
 
         public MySparklineViewModel()
         {
             AppSettings = IoC.Container.Resolve<AppSettings>();
+            ShowAdjacencyScore = AppSettings.ShowAdjacencyScore;
+
+            _showAdjacencyScoreChangedObserver = IoC.Container.Resolve<IEventPublisher>().GetEvent<ShowAdjacencyScoreEvent>()
+                .ObserveOnDispatcher()
+                .Subscribe(e => ShowAdjacencyScore = e.ShowAdjacencyScore);
         }
 
         private PointCollection GetSparklinePointCollection()
         {
             if (DataPoints == null) return null;
 
-            var points = new PointCollection {new Point(0, 0)};
+            var points = new PointCollection();
 
-            foreach (var dataPoint in DataPoints)
+            for (var i = 0; i < DataPoints.Count; i++)
             {
+                var dataPoint = DataPoints[i];
                 var scaledStart = (double) ScaleConverter.Convert(dataPoint.RefStart, null, null, null);
                 var scaledEnd = (double) ScaleConverter.Convert(dataPoint.RefEnd, null, null, null);
                 var scoreOffset = dataPoint.Score*Size.Width;
 
+                if (i == 0)
+                    points.Add(new Point(0, scaledStart));
+
                 points.Add(new Point(scoreOffset, scaledStart));
                 if (dataPoint.RefStart != dataPoint.RefEnd)
                     points.Add(new Point(scoreOffset, scaledEnd));
+
+                if (i == DataPoints.Count - 1)
+                    points.Add(new Point(0, Math.Max(scaledStart, scaledEnd)));
             }
 
-            points.Add(new Point(0, Size.Height));
-
             return points;
+        }
+
+        public void Dispose()
+        {
+            _showAdjacencyScoreChangedObserver.Dispose();
         }
 
         public class FeatureDensityDataPoint
@@ -112,7 +138,7 @@ namespace EvolutionHighwayApp.ViewModels
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var adjustment = int.Parse(parameter.ToString());
+            var adjustment = double.Parse(parameter.ToString());
 
             return (double) value + adjustment;
         }

@@ -102,10 +102,10 @@
 
 
         <views:MySparkline Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" 
-                           Width="20"
+                           Width="{Binding DataContext.AppSettings.AdjacencyFeatureWidth,ElementName=_compGenomeCollectionViewer}"
                            Height="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"
                            DataPoints="{Binding DataContext.RefChromosome.FeatureDensityData[AdjacencyScore],ElementName=_compGenomeCollectionViewer}"
-                           Visibility="{Binding DataContext.AppSettings.ShowAdjacencyScore,ElementName=_compGenomeCollectionViewer,Converter={StaticResource BoolToVisibilityConverter}}"/>
+                           Visibility="{Binding ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}"/>
 
 <!--        <views:Sparkline Canvas.ZIndex="10" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" -->
 <!--                         ItemsSource="{Binding RefChromosome.FeatureDensityData[AdjacencyScore]}"-->

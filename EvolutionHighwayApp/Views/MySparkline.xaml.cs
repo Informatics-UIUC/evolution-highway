@@ -27,6 +27,7 @@ namespace EvolutionHighwayApp.Views
             InitializeComponent();
 
             DataContext = new MySparklineViewModel();
+            Unloaded += delegate { ViewModel.Dispose(); };
 
             SizeChanged += (o, e) => ViewModel.Size = e.NewSize;
         }

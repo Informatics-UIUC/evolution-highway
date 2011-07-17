@@ -54,7 +54,17 @@
             <viblend:MenuItem Text="Features">
                 <viblend:MenuItem AllowCheckState="True"
                                   IsChecked="{Binding AppSettings.ShowAdjacencyScore, Mode=TwoWay}"
-                                  Text="Adjacency Score"/>
+                                  Text="Adjacency Score">
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <StackPanel Margin="25,0,10,0" Orientation="Vertical">
+                                <TextBlock Text="Width" Margin="4,0,0,2"/>
+                                <Slider Minimum="6" Maximum="50" SmallChange="2" LargeChange="5"
+                                        Value="{Binding AppSettings.AdjacencyFeatureWidth, Mode=TwoWay}"/>
+                            </StackPanel>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                </viblend:MenuItem>
             </viblend:MenuItem>
             <viblend:MenuItem Text="Label">
                 <viblend:MenuItem AllowCheckState="True"
