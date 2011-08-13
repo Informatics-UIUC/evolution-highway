@@ -7,9 +7,9 @@
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
     Margin="{Binding SyntenyRegion.Start,Converter={StaticResource DoubleToTopMarginConverter}}" 
     Height="{Binding SyntenyRegion.Span,Converter={StaticResource ScaleConverter}}">
-    
+
     <Grid>
-        <Border BorderBrush="{x:Null}" Background="LightGray">
+        <Border BorderBrush="{x:Null}" Background="{Binding SyntenyRegion.Sign,Converter={StaticResource SignToBrushConverter}}">
             <Viewbox Stretch="Uniform" MaxHeight="15">
                 <TextBlock Text="{Binding SyntenyRegion.Label}" 
                            FontFamily="Trebuchet MS"

@@ -108,7 +108,8 @@
                     <viblend:MenuItem.Header>
                         <StackPanel Margin="25,0,10,0" Orientation="Vertical">
                             <TextBlock Text="Display Size" Margin="4,5,0,2"/>
-                            <Slider Minimum="50" Maximum="20000" SmallChange="50" LargeChange="2000" 
+                            <Slider Minimum="{Binding AppSettings.DisplaySizeMinimum}" Maximum="{Binding AppSettings.DisplaySizeMaximum}" 
+                                    SmallChange="{Binding AppSettings.DisplaySizeSmallChange}" LargeChange="{Binding AppSettings.DisplaySizeLargeChange}" 
                                     Value="{Binding AppSettings.DisplaySize, Mode=TwoWay}"/>
                         </StackPanel>
                     </viblend:MenuItem.Header>

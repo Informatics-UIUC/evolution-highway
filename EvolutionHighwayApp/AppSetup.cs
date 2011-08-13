@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Castle.MicroKernel.Registration;
 using EvolutionHighwayApp.Converters;
 using EvolutionHighwayApp.Events;
@@ -21,15 +22,29 @@ namespace EvolutionHighwayApp
             ContainerSetup();
             ImageEncoderSetup();
 
-            ScaleConverter.DisplayMaximum = IoC.Container.Resolve<AppSettings>().DisplaySize;
-            IoC.Container.Resolve<IEventPublisher>().GetEvent<DisplaySizeChangedEvent>()
+            var appSettings = IoC.Container.Resolve<AppSettings>();
+            var eventPublisher = IoC.Container.Resolve<IEventPublisher>();
+            var selections = IoC.Container.Resolve<SelectionsController>();
+
+            ScaleConverter.DisplayMaximum = appSettings.DisplaySize;
+            eventPublisher.GetEvent<DisplaySizeChangedEvent>()
                 .Subscribe(e => ScaleConverter.DisplayMaximum = e.DisplaySize);
 
-            IoC.Container.Resolve<IEventPublisher>().GetEvent<DataSourceChangedEvent>()
+            eventPublisher.GetEvent<DataSourceChangedEvent>()
                 .Subscribe(e => ScaleConverter.DataMaximum = default(double));
 
-            CompGenomeNameFormatToStringConverter.NameFormat = IoC.Container.Resolve<AppSettings>().CompGenomeNameFormat;
-            IoC.Container.Resolve<IEventPublisher>().GetEvent<CompGenomeNameFormatChangedEvent>()
+            eventPublisher.GetEvent<ResetZoomEvent>()
+                .Subscribe(e =>
+                               {
+                                   if (selections.SelectedCompGenomes.Count > 0)
+                                       ScaleConverter.DataMaximum = selections.SelectedCompGenomes.Keys.Max(c => c.Length);
+
+                                   appSettings.BlockWidth = 24d;
+                                   appSettings.DisplaySize = 500d;
+                               });
+
+            CompGenomeNameFormatToStringConverter.NameFormat = appSettings.CompGenomeNameFormat;
+            eventPublisher.GetEvent<CompGenomeNameFormatChangedEvent>()
                 .Subscribe(e => CompGenomeNameFormatToStringConverter.NameFormat = e.CompGenomeNameFormat);
         }
 
@@ -41,6 +56,7 @@ namespace EvolutionHighwayApp
                 Component.For<Repository>().LifeStyle.Singleton,
                 Component.For<SelectionsController>().LifeStyle.Singleton,
                 Component.For<MenuViewModel>().LifeStyle.Transient,
+                Component.For<ToolbarViewModel>().LifeStyle.Transient,
                 Component.For<DataSourceSelectorViewModel>().LifeStyle.Transient,
                 Component.For<RefGenomeSelectorViewModel>().LifeStyle.Transient,
                 Component.For<RefChromosomeSelectorViewModel>().LifeStyle.Transient,

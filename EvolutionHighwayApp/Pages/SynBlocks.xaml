@@ -28,7 +28,7 @@
             <StackPanel HorizontalAlignment="Left" Background="Beige">
                 <views:DataSourceSelector/>
 
-                <toolkit:Accordion x:Name="_accordion" SelectionMode="ZeroOrMore" Width="180">
+                <toolkit:Accordion x:Name="_accordion" SelectionMode="ZeroOrMore" Width="180" x:FieldModifier="private">
                     <toolkit:AccordionItem Header="Reference Genome" HorizontalContentAlignment="Stretch">
                         <views:RefGenomeSelector Height="150"/>
                     </toolkit:AccordionItem>
@@ -44,11 +44,20 @@
             </StackPanel>
         </ScrollViewer>
 
-        <tkctrl:BusyIndicator x:Name="_loadingIndicator" Grid.Row="1" Grid.Column="1" 
-                              BusyContent="Loading synteny blocks..." DisplayAfter="0">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <views:RefGenomeCollectionViewer/>
-            </ScrollViewer>
-        </tkctrl:BusyIndicator>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <views:Toolbar/>
+
+            <tkctrl:BusyIndicator x:Name="_loadingIndicator" x:FieldModifier="private" Grid.Row="1"
+                                  BusyContent="Loading synteny blocks..." DisplayAfter="0">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <views:RefGenomeCollectionViewer/>
+                </ScrollViewer>
+            </tkctrl:BusyIndicator>
+        </Grid>
     </Grid>
 </navigation:Page>

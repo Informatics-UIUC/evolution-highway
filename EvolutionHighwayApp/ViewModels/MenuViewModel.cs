@@ -72,12 +72,7 @@ namespace EvolutionHighwayApp.ViewModels
         private void ResetZoom(object param)
         {
             Debug.WriteLine("ResetZoom invoked");
-            
-            if (_selections.SelectedCompGenomes.Count > 0)
-                ScaleConverter.DataMaximum = _selections.SelectedCompGenomes.Keys.Max(c => c.Length);
-
-            AppSettings.BlockWidth = 24d;
-            AppSettings.DisplaySize = 500d;
+            EventPublisher.Publish(new ResetZoomEvent());
         }
 
         private void ViewFullScreen(object param)

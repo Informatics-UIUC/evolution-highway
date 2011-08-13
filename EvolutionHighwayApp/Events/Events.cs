@@ -115,6 +115,8 @@ namespace EvolutionHighwayApp.Events
         }
     }
 
+    public class ResetZoomEvent { }
+
     public class DisplaySizeChangedEvent
     {
         public double DisplaySize { get; set; }

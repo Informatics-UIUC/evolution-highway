@@ -66,6 +66,9 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\Lib\Castle.Windsor.v2.5.3\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.AgMenu.v8.2">
+      <HintPath>..\Lib\DevExpress.AgMenu\DevExpress.AgMenu.v8.2.dll</HintPath>
+    </Reference>
     <Reference Include="ImageTools">
       <HintPath>..\Lib\ImageTools.v0.30\ImageTools.dll</HintPath>
     </Reference>
@@ -141,6 +144,7 @@
     <Compile Include="Converters\NumberToPrettyTextConverter.cs" />
     <Compile Include="Converters\OrientationToAngleConverter.cs" />
     <Compile Include="Converters\ScaleConverter.cs" />
+    <Compile Include="Converters\SignConverter.cs" />
     <Compile Include="Dtos\CompGenomeDto.cs" />
     <Compile Include="Dtos\FeatureDensityDto.cs" />
     <Compile Include="Dtos\FeatureDto.cs" />
@@ -216,6 +220,7 @@
     <Compile Include="ViewModels\ScaleAxisViewModel.cs" />
     <Compile Include="ViewModels\SyntenyBlockCollectionViewModel.cs" />
     <Compile Include="ViewModels\SyntenyBlockViewModel.cs" />
+    <Compile Include="ViewModels\ToolbarViewModel.cs" />
     <Compile Include="Views\CentromereRegionCollectionViewer.xaml.cs">
       <DependentUpon>CentromereRegionCollectionViewer.xaml</DependentUpon>
     </Compile>
@@ -272,6 +277,9 @@
     </Compile>
     <Compile Include="Views\SyntenyBlockCollectionViewer.xaml.cs">
       <DependentUpon>SyntenyBlockCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Toolbar.xaml.cs">
+      <DependentUpon>Toolbar.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -375,6 +383,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Toolbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Resource Include="Assets\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -389,6 +401,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\OutOfBrowserSettings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ZoomIn.png" />
+    <Resource Include="Resources\Images\ZoomNormal.png" />
+    <Resource Include="Resources\Images\ZoomOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\LayoutHorizontal.png" />
+    <Resource Include="Resources\Images\LayoutVertical.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

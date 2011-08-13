@@ -14,5 +14,10 @@
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     <converters:CompGenomeNameFormatToBoolConverter x:Key="CompGenomeNameFormatToBoolConverter"/>
     <converters:CompGenomeNameFormatToStringConverter x:Key="CompGenomeNameFormatToStringConverter"/>
+    <converters:SignConverter x:Key="SignToBrushConverter">
+        <SolidColorBrush converters:SignConverter.Sign="{x:Null}" Color="LightGray"/>
+        <SolidColorBrush converters:SignConverter.Sign="-1" Color="LightPink"/>
+        <SolidColorBrush converters:SignConverter.Sign="1" Color="LightBlue"/>
+    </converters:SignConverter>
     <color:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
 </ResourceDictionary>

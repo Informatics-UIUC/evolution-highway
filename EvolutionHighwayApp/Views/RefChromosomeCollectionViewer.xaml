@@ -10,7 +10,7 @@
     <ItemsControl ItemsSource="{Binding RefChromosomes}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <VirtualizingStackPanel Orientation="{Binding AppSettings.ChromosomeLayout}"/>
+                <VirtualizingStackPanel Orientation="{Binding AppSettings.ChromosomeLayout}" Background="White"/>
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         

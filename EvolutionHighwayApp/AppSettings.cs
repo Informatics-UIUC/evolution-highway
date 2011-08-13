@@ -16,6 +16,12 @@ namespace EvolutionHighwayApp
         private readonly IsolatedStorageSettings _appSettings = IsolatedStorageSettings.ApplicationSettings;
         private readonly Dictionary<string, object> _defaultValues;
 
+        public static int DisplaySizeMinimum { get { return 50; } }
+        public static int DisplaySizeMaximum { get { return 20000; } }
+        public static int DisplaySizeSmallChange { get { return 50; } }
+        public static int DisplaySizeLargeChange { get { return 2000; } }
+
+
         public AppSettings(IEventPublisher eventPublisher) 
             : base(eventPublisher)
         {
