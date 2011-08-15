@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
@@ -184,10 +185,21 @@ namespace EvolutionHighwayApp.ViewModels
     {
         public int Compare(string x, string y)
         {
-            int nx, ny;
+            if (x.Contains("_")) x = x.Substring(0, x.IndexOf("_") - 1);
+            if (y.Contains("_")) y = y.Substring(0, y.IndexOf("_") - 1);
 
-            if (int.TryParse(x, out nx) && int.TryParse(y, out ny))
-                return nx.CompareTo(ny);
+            var digits = new Regex("^(\\d+)");
+
+            var match = digits.Match(x);
+            var nx = match.Success ? int.Parse(match.Value) : int.MaxValue;
+            var sx = match.Success ? x.Substring(match.Length) : x;
+
+            match = digits.Match(y);
+            var ny = match.Success ? int.Parse(match.Value) : int.MaxValue;
+            var sy = match.Success ? y.Substring(match.Length) : y;
+
+            if (nx != int.MaxValue && ny != int.MaxValue)
+                return nx != ny ? nx.CompareTo(ny) : sx.CompareTo(sy);
 
             return x.CompareTo(y);
         }
