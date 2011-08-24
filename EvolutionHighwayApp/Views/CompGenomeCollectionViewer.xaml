@@ -3,13 +3,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:toolkit="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-    xmlns:local="clr-namespace:EvolutionHighwayApp.Utils" 
     xmlns:views="clr-namespace:EvolutionHighwayApp.Views" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
     x:Name="_compGenomeCollectionViewer">
 
-    <Grid x:Name="LayoutRoot" ShowGridLines="False">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -35,7 +33,7 @@
                                      NamesWidth="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
                                      NamesAlignment="Bottom"/>
 
-        <Grid Grid.Row="1" Grid.Column="1" x:Name="MyTest"
+        <Grid Grid.Row="1" Grid.Column="1"
               Background="White" Clip="{Binding ClipRegion}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -71,47 +69,10 @@
                                      NamesWidth="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
                                      NamesAlignment="Top"/>
 
-<!--        <toolkit:TreeMap Grid.Row="1" Grid.Column="2" Margin="10,0,0,0"-->
-<!--                         ItemsSource="{Binding RefChromosome.FeatureDensityData[AdjacencyScore]}"-->
-<!--                         Visibility="{Binding AppSettings.ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}">-->
-<!--            <toolkit:TreeMap.Resources>-->
-<!--                <LinearGradientBrush x:Key="TreeMapBrush" StartPoint="0.05,0" EndPoint="0.95,0">-->
-<!--                    <GradientStop Offset="0" Color="#F7FCF5"/>-->
-<!--                    <GradientStop Offset="0.5" Color="#74C476"/>-->
-<!--                    <GradientStop Offset="1" Color="#00441B"/>-->
-<!--                </LinearGradientBrush>-->
-<!--            </toolkit:TreeMap.Resources>-->
-<!--            <toolkit:TreeMap.Interpolators>-->
-<!--                <local:LinearGradientBrushInterpolator TargetName="TreeMapBorder" TargetProperty="Background"-->
-<!--                                                       TemplateBrush="{StaticResource TreeMapBrush}"-->
-<!--                                                       DataRangeBinding="{Binding Score}"/>-->
-<!--            </toolkit:TreeMap.Interpolators>-->
-<!--            <toolkit:TreeMap.ItemDefinition>-->
-<!--                <toolkit:TreeMapItemDefinition ValueBinding="{Binding Score}">-->
-<!--                    <DataTemplate>-->
-<!--                        <Border x:Name="TreeMapBorder" Background="Transparent" -->
-<!--                                BorderBrush="Black" BorderThickness="1"-->
-<!--                                ToolTipService.ToolTip="{Binding ToolTip}">-->
-<!--~1~                            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Center" @1@-->
-<!--~1~                                            Content="{Binding Score,Converter={StaticResource NumberToPrettyTextConverter},ConverterParameter=2}"/>@1@-->
-<!--                        </Border>-->
-<!--                    </DataTemplate>-->
-<!--                </toolkit:TreeMapItemDefinition>-->
-<!--            </toolkit:TreeMap.ItemDefinition>-->
-<!--        </toolkit:TreeMap>-->
-
-
         <views:MySparkline Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" 
                            Width="{Binding DataContext.AppSettings.AdjacencyFeatureWidth,ElementName=_compGenomeCollectionViewer}"
                            Height="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"
                            DataPoints="{Binding DataContext.RefChromosome.FeatureDensityData[AdjacencyScore],ElementName=_compGenomeCollectionViewer}"
                            Visibility="{Binding ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}"/>
-
-<!--        <views:Sparkline Canvas.ZIndex="10" Grid.Row="1" Grid.Column="2" Margin="5,0,0,0" -->
-<!--                         ItemsSource="{Binding RefChromosome.FeatureDensityData[AdjacencyScore]}"-->
-<!--                         Length="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"-->
-<!--                         Visibility="{Binding DataContext.AppSettings.ShowAdjacencyScore,ElementName=_compGenomeCollectionViewer,Converter={StaticResource BoolToVisibilityConverter}}">-->
-<!--        </views:Sparkline>-->
-        
     </Grid>
 </UserControl>
