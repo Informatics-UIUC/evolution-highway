@@ -54,7 +54,8 @@
 
             <tkctrl:BusyIndicator x:Name="_loadingIndicator" x:FieldModifier="private" Grid.Row="1"
                                   BusyContent="Loading synteny blocks..." DisplayAfter="0">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer x:Name="_scrollViewer" x:FieldModifier="private" 
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <views:RefGenomeCollectionViewer/>
                 </ScrollViewer>
             </tkctrl:BusyIndicator>

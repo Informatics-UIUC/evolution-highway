@@ -269,9 +269,6 @@
     <Compile Include="Views\ScaleAxis.xaml.cs">
       <DependentUpon>ScaleAxis.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Sparkline.xaml.cs">
-      <DependentUpon>Sparkline.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\SyntenyBlockViewer.xaml.cs">
       <DependentUpon>SyntenyBlockViewer.xaml</DependentUpon>
     </Compile>
@@ -368,10 +365,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ScaleAxis.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Sparkline.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

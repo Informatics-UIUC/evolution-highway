@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Castle.MicroKernel.Registration;
 using EvolutionHighwayApp.Converters;
 using EvolutionHighwayApp.Events;
@@ -24,7 +23,6 @@ namespace EvolutionHighwayApp
 
             var appSettings = IoC.Container.Resolve<AppSettings>();
             var eventPublisher = IoC.Container.Resolve<IEventPublisher>();
-            var selections = IoC.Container.Resolve<SelectionsController>();
 
             ScaleConverter.DisplayMaximum = appSettings.DisplaySize;
             eventPublisher.GetEvent<DisplaySizeChangedEvent>()
@@ -32,16 +30,6 @@ namespace EvolutionHighwayApp
 
             eventPublisher.GetEvent<DataSourceChangedEvent>()
                 .Subscribe(e => ScaleConverter.DataMaximum = default(double));
-
-            eventPublisher.GetEvent<ResetZoomEvent>()
-                .Subscribe(e =>
-                               {
-                                   if (selections.SelectedCompGenomes.Count > 0)
-                                       ScaleConverter.DataMaximum = selections.SelectedCompGenomes.Keys.Max(c => c.Length);
-
-                                   appSettings.BlockWidth = 24d;
-                                   appSettings.DisplaySize = 500d;
-                               });
 
             CompGenomeNameFormatToStringConverter.NameFormat = appSettings.CompGenomeNameFormat;
             eventPublisher.GetEvent<CompGenomeNameFormatChangedEvent>()
