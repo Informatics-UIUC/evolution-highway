@@ -8,7 +8,7 @@
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400" 
     x:Name="_refGenomeViewer">
 
-    <ItemsControl ItemsSource="{Binding RefGenomes}">
+    <ItemsControl x:Name="_itemsControl" x:FieldModifier="private" ItemsSource="{Binding RefGenomes}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <VirtualizingStackPanel Orientation="{Binding AppSettings.GenomeLayout}"/>

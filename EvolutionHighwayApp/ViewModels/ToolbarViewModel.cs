@@ -56,7 +56,7 @@ namespace EvolutionHighwayApp.ViewModels
         {
             AppSettings.SynBlocksLayout = Orientation.Horizontal;
             AppSettings.GenomeLayout = Orientation.Vertical;
-            AppSettings.ChromosomeLayout = Orientation.Vertical;
+            AppSettings.ChromosomeLayout = Orientation.Horizontal;
         }
 
         private void GenomeOrientationVertical(object param)

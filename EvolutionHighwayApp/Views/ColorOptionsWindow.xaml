@@ -52,19 +52,19 @@
             <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.GenomeInsideBgColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="2"/>
 
-            <TextBlock Text="Feature Density Background:" Grid.Column="0" Grid.Row="3"/>
+            <TextBlock Text="Feature Background:" Grid.Column="0" Grid.Row="3"/>
             <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.FeatureDensityBgColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="3"/>
             
-            <TextBlock Text="Feature Density Fill Color:" Grid.Column="0" Grid.Row="4"/>
+            <TextBlock Text="Feature Fill Color:" Grid.Column="0" Grid.Row="4"/>
             <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.FeatureDensityFillColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="4"/>
 
-            <TextBlock Text="Sparkline Color:" Grid.Column="0" Grid.Row="5"/>
+            <TextBlock Text="Feature Sparkline Color:" Grid.Column="0" Grid.Row="5"/>
             <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.SparklineColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="5"/>
 
-            <TextBlock Text="Data Point Fill Color:" Grid.Column="0" Grid.Row="6"/>
+            <TextBlock Text="Feature Data Point Fill Color:" Grid.Column="0" Grid.Row="6"/>
             <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.DataPointFillColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="6"/>
         </Grid>
