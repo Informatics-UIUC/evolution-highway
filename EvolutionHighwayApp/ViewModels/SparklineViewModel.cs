@@ -14,7 +14,7 @@ using EvolutionHighwayApp.Models;
 
 namespace EvolutionHighwayApp.ViewModels
 {
-    public class MySparklineViewModel : ModelBase, IDisposable
+    public class SparklineViewModel : ModelBase, IDisposable
     {
         #region ViewModel Bindable Properties
 
@@ -68,7 +68,7 @@ namespace EvolutionHighwayApp.ViewModels
         private static readonly ScaleConverter ScaleConverter = new ScaleConverter();
         private readonly IDisposable _showAdjacencyScoreChangedObserver;
 
-        public MySparklineViewModel()
+        public SparklineViewModel()
         {
             AppSettings = IoC.Container.Resolve<AppSettings>();
             ShowAdjacencyScore = AppSettings.ShowAdjacencyScore;

@@ -185,8 +185,8 @@ namespace EvolutionHighwayApp.ViewModels
     {
         public int Compare(string x, string y)
         {
-            if (x.Contains("_")) x = x.Substring(0, x.IndexOf("_") - 1);
-            if (y.Contains("_")) y = y.Substring(0, y.IndexOf("_") - 1);
+            if (x.Contains("_")) x = x.Substring(0, x.IndexOf("_"));
+            if (y.Contains("_")) y = y.Substring(0, y.IndexOf("_"));
 
             var digits = new Regex("^(\\d+)");
 

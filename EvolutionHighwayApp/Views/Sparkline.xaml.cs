@@ -5,11 +5,11 @@ using EvolutionHighwayApp.ViewModels;
 
 namespace EvolutionHighwayApp.Views
 {
-    public partial class MySparkline
+    public partial class Sparkline
     {
         public static readonly DependencyProperty DataPointsProperty =
-            DependencyProperty.Register("DataPoints", typeof(List<FeatureDensity>), typeof(MySparkline),
-            new PropertyMetadata((d, e) => ((MySparkline)d).ViewModel.DataPoints = (List<FeatureDensity>)e.NewValue));
+            DependencyProperty.Register("DataPoints", typeof(List<FeatureDensity>), typeof(Sparkline),
+            new PropertyMetadata((d, e) => ((Sparkline)d).ViewModel.DataPoints = (List<FeatureDensity>)e.NewValue));
 
         public List<FeatureDensity> DataPoints
         {
@@ -17,16 +17,16 @@ namespace EvolutionHighwayApp.Views
             set { SetValue(DataPointsProperty, value); }
         }
 
-        private MySparklineViewModel ViewModel
+        private SparklineViewModel ViewModel
         {
-            get { return DataContext as MySparklineViewModel; }
+            get { return DataContext as SparklineViewModel; }
         }
 
-        public MySparkline()
+        public Sparkline()
         {
             InitializeComponent();
 
-            DataContext = new MySparklineViewModel();
+            DataContext = new SparklineViewModel();
             Unloaded += delegate { ViewModel.Dispose(); };
 
             SizeChanged += (o, e) => ViewModel.Size = e.NewSize;

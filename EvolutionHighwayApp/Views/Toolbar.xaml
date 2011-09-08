@@ -227,6 +227,17 @@
         </menu:AgMenuItem>
 
         <menu:AgMenuSeparator/>
+        
+        <menu:AgMenuItem>
+            <menu:AgMenuItem.Header>
+                <Slider Width="100"
+                        Minimum="50" Maximum="20000" 
+                        SmallChange="50" LargeChange="2000" 
+                        Value="{Binding AppSettings.DisplaySize, Mode=TwoWay}"/>
+            </menu:AgMenuItem.Header>
+        </menu:AgMenuItem>
+        
+        <menu:AgMenuSeparator/>
 
         <menu:AgMenuItem IsRadioItem="True" IsCheckable="True"
                          IsChecked="{Binding AppSettings.SynBlocksLayout, Mode=TwoWay,
