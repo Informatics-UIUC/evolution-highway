@@ -44,6 +44,7 @@ namespace EvolutionHighwayApp
                                      {"featureDensityBgColor", PredefinedColors.AllColors["AliceBlue"]},
                                      {"featureDensityFillColor", Colors.Transparent},
                                      {"sparklineColor", Colors.Black},
+                                     {"searchHighlightColor", PredefinedColors.AllColors["LightGreen"]},
                                      {"dataPointFillColor", PredefinedColors.AllColors["LightSalmon"]},
                                      {"adjacencyFeatureWidth", 20}
                                  };
@@ -69,6 +70,7 @@ namespace EvolutionHighwayApp
             FeatureDensityFillColor = (Color) _defaultValues["featureDensityFillColor"];
             SparklineColor = (Color) _defaultValues["sparklineColor"];
             DataPointFillColor = (Color) _defaultValues["dataPointFillColor"];
+            SearchHighlightColor = (Color) _defaultValues["searchHighlightColor"];
             AdjacencyFeatureWidth = (int) _defaultValues["adjacencyFeatureWidth"];
         }
 
@@ -354,6 +356,22 @@ namespace EvolutionHighwayApp
                 _appSettings.Set("dataPointFillColor", value);
                 NotifyPropertyChanged(() => DataPointFillColor);
                 EventPublisher.Publish(new DataPointFillColorChangedEvent { Color = value });
+            }
+        }
+
+        public Color SearchHighlightColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("searchHighlightColor", _defaultValues["searchHighlightColor"]); }
+            set
+            {
+                var oldValue = SearchHighlightColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetSearchHighlightColor: {0}", value);
+
+                _appSettings.Set("searchHighlightColor", value);
+                NotifyPropertyChanged(() => SearchHighlightColor);
+                EventPublisher.Publish(new SearchHighlightColorChangedEvent { Color = value });
             }
         }
 

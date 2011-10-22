@@ -258,5 +258,16 @@
                 <Image Source="/EvolutionHighwayApp;component/Resources/Images/LayoutHorizontal.png"/>
             </menu:AgMenuItem.Icon>
         </menu:AgMenuItem>
+        
+        <menu:AgMenuSeparator/>
+        
+        <menu:AgMenuItem HorizontalAlignment="Right" IsEnabled="{Binding SearchEnabled}">
+            <menu:AgMenuItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Search:" VerticalAlignment="Center"/>
+                    <TextBox Width="200" KeyUp="SearchBoxKeyUp"/>
+                </StackPanel>
+            </menu:AgMenuItem.Header>
+        </menu:AgMenuItem>
     </menu:AgMenu>
 </UserControl>

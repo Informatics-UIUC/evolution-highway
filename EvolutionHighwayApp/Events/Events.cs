@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Media;
 using EvolutionHighwayApp.Converters;
@@ -76,6 +77,11 @@ namespace EvolutionHighwayApp.Events
 
     public class RefChromosomeSelectionChangedEvent : ChromosomeSelectionChangedEvent<RefChromosome> { }
 
+    public class UpdateSelectionEvent
+    {
+        public IEnumerable<CompGenome> SelectedCompGenomes;
+    }
+
     #endregion
 
     #region Display events
@@ -144,6 +150,7 @@ namespace EvolutionHighwayApp.Events
     public class FeatureDensityFillColorChangedEvent : ColorChangedEvent { }
     public class SparklineColorChangedEvent : ColorChangedEvent { }
     public class DataPointFillColorChangedEvent : ColorChangedEvent { }
+    public class SearchHighlightColorChangedEvent : ColorChangedEvent { }
 
     public class AdjacencyFeatureWidthChangedEvent
     {

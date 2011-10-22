@@ -32,8 +32,8 @@ namespace EvolutionHighwayApp.Pages
                 .ObserveOnDispatcher()
                 .Subscribe(e =>
                 {
-                    if (selections.SelectedCompGenomes.Count > 0)
-                        ScaleConverter.DataMaximum = selections.SelectedCompGenomes.Keys.Max(c => c.Length);
+                    if (selections.VisibleCompGenomes.Count > 0)
+                        ScaleConverter.DataMaximum = selections.VisibleCompGenomes.Keys.Max(c => c.Length);
 
                     var desiredSize = appSettings.SynBlocksLayout == Orientation.Vertical ? _scrollViewer.ActualHeight : _scrollViewer.ActualWidth;
 

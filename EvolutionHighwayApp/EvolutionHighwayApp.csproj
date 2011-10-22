@@ -157,11 +157,13 @@
     <Compile Include="Models\Chromosome.cs" />
     <Compile Include="Models\FeatureDensity.cs" />
     <Compile Include="Models\HeterochromatinRegion.cs" />
+    <Compile Include="Models\HighlightRegion.cs" />
     <Compile Include="Models\RefChromosome.cs" />
     <Compile Include="Models\CompGenome.cs" />
     <Compile Include="Models\Genome.cs" />
     <Compile Include="Models\RefGenome.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\SearchQuery.cs" />
     <Compile Include="Models\SelectableItem.cs" />
     <Compile Include="Models\SyntenyRegion.cs" />
     <Compile Include="State\Repository.cs" />
@@ -188,6 +190,11 @@
     <Compile Include="ViewModels\CompGenomeSelectorViewModel.cs" />
     <Compile Include="ViewModels\HeterochromatinRegionCollectionViewModel.cs" />
     <Compile Include="ViewModels\HeterochromatinRegionViewModel.cs" />
+    <Compile Include="ViewModels\HighlightRegionCollectionViewModel.cs" />
+    <Compile Include="Views\HighlightRegionCollectionViewer.xaml.cs">
+      <DependentUpon>HighlightRegionCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\HighlightRegionViewModel.cs" />
     <Compile Include="ViewModels\SparklineViewModel.cs" />
     <Compile Include="ViewModels\RefChromosomeCollectionViewModel.cs" />
     <Compile Include="ViewModels\RefChromosomeSelectorViewModel.cs" />
@@ -238,6 +245,9 @@
     </Compile>
     <Compile Include="Views\HeterochromatinRegionViewer.xaml.cs">
       <DependentUpon>HeterochromatinRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HighlightRegionViewer.xaml.cs">
+      <DependentUpon>HighlightRegionViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Sparkline.xaml.cs">
       <DependentUpon>Sparkline.xaml</DependentUpon>
@@ -304,6 +314,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\HighlightRegionCollectionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CentromereRegionCollectionViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -325,6 +339,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HeterochromatinRegionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HighlightRegionViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

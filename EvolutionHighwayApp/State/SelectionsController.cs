@@ -11,15 +11,16 @@ namespace EvolutionHighwayApp.State
 {
     public class SelectionsController
     {
-        public IEnumerable<RefGenome> SelectedRefGenomes { get; private set; }
-        public Dictionary<RefGenome, IEnumerable<RefChromosome>> SelectedRefChromosomes { get; private set; }
-        public Dictionary<RefChromosome, IEnumerable<CompGenome>> SelectedCompGenomes { get; private set; }
+        public IEnumerable<RefGenome> VisibleRefGenomes { get; private set; }
+        public Dictionary<RefGenome, IEnumerable<RefChromosome>> VisibleRefChromosomes { get; private set; }
+        public Dictionary<RefChromosome, IEnumerable<CompGenome>> VisibleCompGenomes { get; private set; }
 
         private readonly IEventPublisher _eventPublisher;
         private readonly Repository _repository;
 
-        private IEnumerable<RefGenome> _refGenomesOrder;
-        private IEnumerable<RefChromosome> _refChromosomesOrder;
+        public IEnumerable<RefGenome> SelectedRefGenomes { get; set; }
+        public IEnumerable<RefChromosome> SelectedRefChromosomes { get; set; }
+        public IEnumerable<CompGenome> SelectedCompGenomes { get; private set; } 
 
         public SelectionsController(IEventPublisher eventPublisher, Repository repository)
         {
@@ -49,41 +50,46 @@ namespace EvolutionHighwayApp.State
         private void InitializeSelections()
         {
             SelectedRefGenomes = Enumerable.Empty<RefGenome>();
-            SelectedRefChromosomes = new Dictionary<RefGenome, IEnumerable<RefChromosome>>();
-            SelectedCompGenomes = new Dictionary<RefChromosome, IEnumerable<CompGenome>>();
+            VisibleRefGenomes = Enumerable.Empty<RefGenome>();
+
+            SelectedRefChromosomes = Enumerable.Empty<RefChromosome>();
+            VisibleRefChromosomes = new Dictionary<RefGenome, IEnumerable<RefChromosome>>();
+
+            SelectedCompGenomes = Enumerable.Empty<CompGenome>();
+            VisibleCompGenomes = new Dictionary<RefChromosome, IEnumerable<CompGenome>>();
         }
 
         private void OnRefGenomeSelectionChanged(RefGenomeSelectionChangedEvent e)
         {
             //Debug.WriteLine("Selected genomes: {0}", e.SelectedGenomes.ToString(","));
-            _refGenomesOrder = e.SelectedGenomes;
+            SelectedRefGenomes = e.SelectedGenomes;
 
-            if (!e.AddedGenomes.IsEmpty() || !e.RemovedGenomes.IsEmpty() || SelectedRefGenomes.IsEmpty()) 
+            if (!e.AddedGenomes.IsEmpty() || !e.RemovedGenomes.IsEmpty() || VisibleRefGenomes.IsEmpty()) 
                 return;
 
-            SelectedRefGenomes = e.SelectedGenomes.Intersect(SelectedRefGenomes).ToList();
+            VisibleRefGenomes = e.SelectedGenomes.Intersect(VisibleRefGenomes).ToList();
             _eventPublisher.Publish(new RefGenomeSelectionDisplayEvent
                 {
                     AddedGenomes = Enumerable.Empty<RefGenome>(),
                     RemovedGenomes = Enumerable.Empty<RefGenome>(),
-                    SelectedGenomes = SelectedRefGenomes
+                    SelectedGenomes = VisibleRefGenomes
                 });
         }
 
         private void OnRefChromosomeSelectionChanged(RefChromosomeSelectionChangedEvent e)
         {
             //Debug.WriteLine("Selected chromosomes: {0}", e.SelectedChromosomes.ToString(","));
-            _refChromosomesOrder = e.SelectedChromosomes;
+            SelectedRefChromosomes = e.SelectedChromosomes;
 
             if (!e.AddedChromosomes.IsEmpty() || !e.RemovedChromosomes.IsEmpty()) 
                 return;
 
             e.SelectedChromosomes.Select(c => c.RefGenome).Distinct()
-                .Where(g => SelectedRefChromosomes.ContainsKey(g)).ForEach(g =>
+                .Where(g => VisibleRefChromosomes.ContainsKey(g)).ForEach(g =>
                 {
                     var selectedRefChromosomes = e.SelectedChromosomes.Where(c => c.RefGenome == g)
-                                                    .Intersect(SelectedRefChromosomes[g]).ToList();
-                    SelectedRefChromosomes.Set(g, selectedRefChromosomes);
+                                                    .Intersect(VisibleRefChromosomes[g]).ToList();
+                    VisibleRefChromosomes.Set(g, selectedRefChromosomes);
                     _eventPublisher.Publish(new RefChromosomeSelectionDisplayEvent(g)
                         {
                             AddedChromosomes = Enumerable.Empty<RefChromosome>(),
@@ -96,13 +102,14 @@ namespace EvolutionHighwayApp.State
         private void OnCompGenomeSelectionChanged(CompGenomeSelectionChangedEvent e)
         {
             //Debug.WriteLine("Selected species: {0}", e.SelectedGenomes.ToString(","));
+            SelectedCompGenomes = e.SelectedGenomes;
 
             if (e.AddedGenomes.IsEmpty() && e.RemovedGenomes.IsEmpty())
             {
                 e.SelectedGenomes.Select(g => g.RefChromosome).Distinct().ForEach(c =>
                     {
                         var selectedCompGenomes = e.SelectedGenomes.Where(g => g.RefChromosome == c).ToList();
-                        SelectedCompGenomes.Set(c, selectedCompGenomes);
+                        VisibleCompGenomes.Set(c, selectedCompGenomes);
                         _eventPublisher.Publish(new CompGenomeSelectionDisplayEvent(c)
                             {
                                 AddedGenomes = Enumerable.Empty<CompGenome>(),
@@ -121,35 +128,35 @@ namespace EvolutionHighwayApp.State
 
                 var addedRefChromosomes = e.AddedGenomes.Select(g => g.RefChromosome).Distinct().ToList();
                 var addedRefGenomes = addedRefChromosomes.Select(c => c.RefGenome)
-                                            .Distinct().Except(SelectedRefGenomes).ToList();
+                                            .Distinct().Except(VisibleRefGenomes).ToList();
 
-                SelectedRefGenomes = _refGenomesOrder.Intersect(displayableRefGenomes).ToList();
+                VisibleRefGenomes = SelectedRefGenomes.Intersect(displayableRefGenomes).ToList();
 
                 var removedRefChromosomes = e.RemovedGenomes.Select(g => g.RefChromosome).Distinct().ToList();
                 var removedRefGenomes = removedRefChromosomes.Select(c => c.RefGenome)
-                                            .Distinct().Except(SelectedRefGenomes).ToList();
+                                            .Distinct().Except(VisibleRefGenomes).ToList();
 
-                removedRefGenomes.ForEach(g => SelectedRefChromosomes.Remove(g));
-                removedRefChromosomes.ForEach(c => SelectedCompGenomes.Remove(c));
+                removedRefGenomes.ForEach(g => VisibleRefChromosomes.Remove(g));
+                removedRefChromosomes.ForEach(c => VisibleCompGenomes.Remove(c));
 
                 if (!addedRefGenomes.IsEmpty() || !removedRefGenomes.IsEmpty())
                     _eventPublisher.Publish(new RefGenomeSelectionDisplayEvent
                     {
                         AddedGenomes = addedRefGenomes,
                         RemovedGenomes = removedRefGenomes,
-                        SelectedGenomes = SelectedRefGenomes
+                        SelectedGenomes = VisibleRefGenomes
                     });
 
                 displayableRefGenomes.ForEach(g =>
                 {
-                    var selectedChromosomes = _refChromosomesOrder.Where(c => c.RefGenome == g).Intersect(
+                    var selectedChromosomes = SelectedRefChromosomes.Where(c => c.RefGenome == g).Intersect(
                                                 displayableRefChromosomes.Where(c => c.RefGenome == g)).ToList();
                     var addedChromosomes = addedRefChromosomes.Where(c => c.RefGenome == g)
-                                                .Except(SelectedRefChromosomes.GetValueOrDefault(g, Enumerable.Empty<RefChromosome>)).ToList();
+                                                .Except(VisibleRefChromosomes.GetValueOrDefault(g, Enumerable.Empty<RefChromosome>)).ToList();
                     var removedChromosomes = removedRefChromosomes.Where(c => c.RefGenome == g)
                                                 .Except(selectedChromosomes).ToList();
 
-                    SelectedRefChromosomes.Set(g, selectedChromosomes);
+                    VisibleRefChromosomes.Set(g, selectedChromosomes);
 
                     if (!addedChromosomes.IsEmpty() || !removedChromosomes.IsEmpty())
                         _eventPublisher.Publish(new RefChromosomeSelectionDisplayEvent(g)
@@ -167,7 +174,7 @@ namespace EvolutionHighwayApp.State
                     SelectedGenomes = e.SelectedGenomes.Where(g => g.RefChromosome == c).ToList()
                 }).ForEach(evt =>
                 {
-                    SelectedCompGenomes.Set(evt.RefChromosome, evt.SelectedGenomes);
+                    VisibleCompGenomes.Set(evt.RefChromosome, evt.SelectedGenomes);
                     if (!evt.AddedGenomes.IsEmpty() || !evt.RemovedGenomes.IsEmpty())
                         _eventPublisher.Publish(evt);
                 });

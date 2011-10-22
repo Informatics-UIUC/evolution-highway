@@ -34,6 +34,7 @@ namespace EvolutionHighwayApp.ViewModels
 
         private readonly Repository _repository;
         private readonly IDisposable _dataSourceChangedObserver;
+        private readonly IDisposable _updateSelectionObserver;
         private readonly IDisposable _loadingObserver;
         private readonly IDisposable _refGenomeLoadingObserver;
 
@@ -47,6 +48,10 @@ namespace EvolutionHighwayApp.ViewModels
             _dataSourceChangedObserver = EventPublisher.GetEvent<DataSourceChangedEvent>()
                 .ObserveOnDispatcher()
                 .Subscribe(OnDataSourceChanged);
+
+            _updateSelectionObserver = EventPublisher.GetEvent<UpdateSelectionEvent>()
+                .ObserveOnDispatcher()
+                .Subscribe(OnUpdateSelection);
 
             _loadingObserver = EventPublisher.GetEvent<LoadingEvent>()
                 .ObserveOnDispatcher()
@@ -118,11 +123,20 @@ namespace EvolutionHighwayApp.ViewModels
             });
         }
 
+        private void OnUpdateSelection(UpdateSelectionEvent e)
+        {
+            var genomeNames = e.SelectedCompGenomes.Select(g => g.RefChromosome.RefGenome.Name).Distinct().ToList();
+            Genomes.ForEach(item => item.PropertyChanged -= OnItemPropertyChanged);
+            Genomes.ForEach(g => g.IsSelected = genomeNames.Contains(g.Name));
+            Genomes.ForEach(item => item.PropertyChanged += OnItemPropertyChanged);
+        }
+
         public override void Dispose()
         {
             base.Dispose();
 
             _dataSourceChangedObserver.Dispose();
+            _updateSelectionObserver.Dispose();
             _loadingObserver.Dispose();
             _refGenomeLoadingObserver.Dispose();
 

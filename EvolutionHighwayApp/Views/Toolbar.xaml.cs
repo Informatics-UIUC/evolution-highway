@@ -1,4 +1,5 @@
-﻿using EvolutionHighwayApp.Infrastructure;
+﻿using System.Windows.Input;
+using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Utils;
 using EvolutionHighwayApp.ViewModels;
 
@@ -49,6 +50,12 @@ namespace EvolutionHighwayApp.Views
         {
             if (ViewModel.GenomeOrientationHorizontalCommand.CanExecute(sender))
                 ViewModel.GenomeOrientationHorizontalCommand.Execute(sender);
+        }
+
+        private void SearchBoxKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && ViewModel.SearchCommand.CanExecute(sender))
+                ViewModel.SearchCommand.Execute(sender);
         }
     }
 }

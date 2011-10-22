@@ -39,6 +39,7 @@ namespace EvolutionHighwayApp.ViewModels
         private readonly Repository _repository;
         private readonly IDisposable _dataSourceChangedObserver;
         private readonly IDisposable _refGenomeSelectionChangedObserver;
+        private readonly IDisposable _updateSelectionObserver;
         private readonly IDisposable _loadingObserver;
         private readonly IDisposable _refChromosomeLoadingObserver;
 
@@ -58,6 +59,10 @@ namespace EvolutionHighwayApp.ViewModels
                 .ObserveOnDispatcher()
                 .Subscribe(OnRefGenomeSelectionChanged);
 
+            _updateSelectionObserver = EventPublisher.GetEvent<UpdateSelectionEvent>()
+                .ObserveOnDispatcher()
+                .Subscribe(OnUpdateSelection);
+
             _loadingObserver = EventPublisher.GetEvent<LoadingEvent>()
                 .ObserveOnDispatcher()
                 .Subscribe(e => IsEnabled = e.IsDoneLoading);
@@ -73,34 +78,10 @@ namespace EvolutionHighwayApp.ViewModels
 
             _repository.LoadRefChromosomes(e.AddedGenomes, (result, param) =>
                 {
-                    var selectedGenomes = e.SelectedGenomes;
-                    var addedChromosomes = from genome in e.AddedGenomes
-                                           from chromosome in _repository.RefGenomeMap[genome]
-                                           select chromosome;
-                    var removedChromosomes = from genome in e.RemovedGenomes
-                                             from chromosome in _repository.RefGenomeMap[genome]
-                                             select chromosome;
-                    var selectedChromosomes = from genome in selectedGenomes
-                                              from chromosome in _repository.RefGenomeMap[genome]
-                                              select chromosome;
-
-                    var selectedItems = Chromosomes.Where(item => item.IsSelected).ToList();
-
-                    var namesToRemove = removedChromosomes.Select(c => c.Name).Distinct().ToList();
-                    var namesToKeep = selectedChromosomes.Select(c => c.Name).Distinct().ToList();
-                    var itemsToRemove = (from name in namesToRemove.Except(namesToKeep)
-                                        join item in Chromosomes on name equals item.Name
-                                        select item).ToList();
-                    itemsToRemove.ForEach(item => item.PropertyChanged -= OnItemPropertyChanged);
-                    Chromosomes.RemoveRange(itemsToRemove);
-
-                    var namesToAdd = addedChromosomes.Select(c => c.Name).Distinct().ToList();
-                    namesToAdd.Sort((a, b) => ChromosomeNameComparer.Compare(a, b));
-                    var itemsToAdd = (from name in namesToAdd
-                                     where !Chromosomes.Any(item => item.Name == name)
-                                     select new SelectableItem(name)).ToList();
-                    itemsToAdd.ForEach(item => item.PropertyChanged += OnItemPropertyChanged);
-                    Chromosomes.AddRange(itemsToAdd);
+                    var selections = UpdateSelections(e.AddedGenomes, e.RemovedGenomes, e.SelectedGenomes);
+                    var addedChromosomes = selections.Item1;
+                    var removedChromosomes = selections.Item2;
+                    var selectedItems = selections.Item3;
 
                     var addedSelectedChromosomes = (from item in selectedItems
                                                    join chromosome in addedChromosomes on item.Name equals chromosome.Name
@@ -112,6 +93,40 @@ namespace EvolutionHighwayApp.ViewModels
                     if (!addedSelectedChromosomes.IsEmpty() || !removedSelectedChromosomes.IsEmpty())
                         OnChromosomeSelectionChanged(addedSelectedChromosomes, removedSelectedChromosomes);
                 });
+        }
+
+        private Tuple<List<RefChromosome>, List<RefChromosome>, List<SelectableItem>> 
+            UpdateSelections(IEnumerable<RefGenome> addedGenomes, IEnumerable<RefGenome> removedGenomes, IEnumerable<RefGenome> selectedGenomes)
+        {
+            var addedChromosomes = (from genome in addedGenomes
+                               from chromosome in _repository.RefGenomeMap[genome]
+                               select chromosome).ToList();
+            var removedChromosomes = (from genome in removedGenomes
+                                 from chromosome in _repository.RefGenomeMap[genome]
+                                 select chromosome).ToList();
+            var selectedChromosomes = (from genome in selectedGenomes
+                                      from chromosome in _repository.RefGenomeMap[genome]
+                                      select chromosome).ToList();
+
+            var selectedItems = Chromosomes.Where(item => item.IsSelected).ToList();
+
+            var namesToRemove = removedChromosomes.Select(c => c.Name).Distinct().ToList();
+            var namesToKeep = selectedChromosomes.Select(c => c.Name).Distinct().ToList();
+            var itemsToRemove = (from name in namesToRemove.Except(namesToKeep)
+                                 join item in Chromosomes on name equals item.Name
+                                 select item).ToList();
+            itemsToRemove.ForEach(item => item.PropertyChanged -= OnItemPropertyChanged);
+            Chromosomes.RemoveRange(itemsToRemove);
+
+            var namesToAdd = addedChromosomes.Select(c => c.Name).Distinct().ToList();
+            namesToAdd.Sort((a, b) => ChromosomeNameComparer.Compare(a, b));
+            var itemsToAdd = (from name in namesToAdd
+                              where !Chromosomes.Any(item => item.Name == name)
+                              select new SelectableItem(name)).ToList();
+            itemsToAdd.ForEach(item => item.PropertyChanged += OnItemPropertyChanged);
+            Chromosomes.AddRange(itemsToAdd);
+
+            return new Tuple<List<RefChromosome>, List<RefChromosome>, List<SelectableItem>>(addedChromosomes, removedChromosomes, selectedItems);
         }
 
         private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -167,12 +182,25 @@ namespace EvolutionHighwayApp.ViewModels
             });
         }
 
+        private void OnUpdateSelection(UpdateSelectionEvent e)
+        {
+            Chromosomes.Clear();
+            _selectedGenomes = e.SelectedCompGenomes.Select(g => g.RefChromosome.RefGenome).Distinct().ToList();
+            UpdateSelections(_selectedGenomes, Enumerable.Empty<RefGenome>(), _selectedGenomes);
+
+            var selectedChromosomeNames = e.SelectedCompGenomes.Select(g => g.RefChromosome.Name).Distinct().ToList();
+            Chromosomes.ForEach(item => item.PropertyChanged -= OnItemPropertyChanged);
+            Chromosomes.ForEach(c => c.IsSelected = selectedChromosomeNames.Contains(c.Name));
+            Chromosomes.ForEach(item => item.PropertyChanged += OnItemPropertyChanged);
+        }
+
         public override void Dispose()
         {
             base.Dispose();
 
             _dataSourceChangedObserver.Dispose();
             _refGenomeSelectionChangedObserver.Dispose();
+            _updateSelectionObserver.Dispose();
             _loadingObserver.Dispose();
             _refChromosomeLoadingObserver.Dispose();
             _selectedGenomes = null;

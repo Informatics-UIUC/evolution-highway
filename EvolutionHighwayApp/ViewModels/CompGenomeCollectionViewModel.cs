@@ -29,8 +29,8 @@ namespace EvolutionHighwayApp.ViewModels
                 if (RefChromosome == value) return;
                 _refChromosome = value;
 
-                if (_selections.SelectedCompGenomes.ContainsKey(_refChromosome))
-                    CompGenomes.AddRange(_selections.SelectedCompGenomes[_refChromosome]);
+                if (_selections.VisibleCompGenomes.ContainsKey(_refChromosome))
+                    CompGenomes.AddRange(_selections.VisibleCompGenomes[_refChromosome]);
 
                 NotifyPropertyChanged(() => RefChromosome);
                 NotifyPropertyChanged(() => ClipRegion);
@@ -90,8 +90,8 @@ namespace EvolutionHighwayApp.ViewModels
         {
             var selectedGenomes = e.SelectedGenomes.ToList();
 
-            e.RemovedGenomes.ForEach(g => CompGenomes.Remove(g));
-            e.AddedGenomes.ForEach(genome => CompGenomes.Insert(selectedGenomes.IndexOf(genome), genome));
+            e.RemovedGenomes.Except(e.AddedGenomes).ForEach(g => CompGenomes.Remove(g));
+            e.AddedGenomes.Except(CompGenomes).ForEach(genome => CompGenomes.Insert(selectedGenomes.IndexOf(genome), genome));
 
             for (var i = 0; i < selectedGenomes.Count; i++)
             {

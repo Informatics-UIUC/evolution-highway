@@ -26,8 +26,8 @@ namespace EvolutionHighwayApp.ViewModels
                 if (RefGenome == value) return;
                 _refGenome = value;
 
-                if (_selections.SelectedRefChromosomes.ContainsKey(_refGenome))
-                    RefChromosomes.AddRange(_selections.SelectedRefChromosomes[_refGenome]);
+                if (_selections.VisibleRefChromosomes.ContainsKey(_refGenome))
+                    RefChromosomes.AddRange(_selections.VisibleRefChromosomes[_refGenome]);
 
                 NotifyPropertyChanged(() => RefGenome);
             }
@@ -56,8 +56,8 @@ namespace EvolutionHighwayApp.ViewModels
         {
             var selectedChromosomes = e.SelectedChromosomes.ToList();
 
-            e.RemovedChromosomes.ForEach(c => RefChromosomes.Remove(c));
-            e.AddedChromosomes.ForEach(chromosome => RefChromosomes.Insert(selectedChromosomes.IndexOf(chromosome), chromosome));
+            e.RemovedChromosomes.Except(e.AddedChromosomes).ForEach(c => RefChromosomes.Remove(c));
+            e.AddedChromosomes.Except(RefChromosomes).ForEach(chromosome => RefChromosomes.Insert(selectedChromosomes.IndexOf(chromosome), chromosome));
 
             for (var i = 0; i < selectedChromosomes.Count; i++)
             {

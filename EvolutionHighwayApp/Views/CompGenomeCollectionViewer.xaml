@@ -39,7 +39,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ItemsControl ItemsSource="{Binding CompGenomes}">
+            <ItemsControl ItemsSource="{Binding CompGenomes}" VerticalAlignment="Top">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Orientation="Horizontal"/>
@@ -55,12 +55,17 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <views:CentromereRegionCollectionViewer RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+            <views:CentromereRegionCollectionViewer VerticalAlignment="Top"
+                                                    RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
                                                     Visibility="{Binding DataContext.AppSettings.ShowCentromere,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
 
-            <views:HeterochromatinRegionCollectionViewer RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+            <views:HeterochromatinRegionCollectionViewer VerticalAlignment="Top"
+                                                         RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
                                                          Visibility="{Binding DataContext.AppSettings.ShowHeterochromatin,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
 
+            <views:HighlightRegionCollectionViewer VerticalAlignment="Top"
+                                                   RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"/>
+            
             <Path Stroke="Black" StrokeThickness="1" Data="{Binding ClipRegion}"/>
         </Grid>
 

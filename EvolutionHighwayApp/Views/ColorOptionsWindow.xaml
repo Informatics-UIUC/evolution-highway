@@ -38,6 +38,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="Heterochromatin Background:" Grid.Column="0" Grid.Row="0"/>
@@ -67,6 +68,10 @@
             <TextBlock Text="Feature Data Point Fill Color:" Grid.Column="0" Grid.Row="6"/>
             <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.DataPointFillColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="6"/>
+
+            <TextBlock Text="Search Highlight Color:" Grid.Column="0" Grid.Row="7"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.SearchHighlightColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="7"/>
         </Grid>
         
         <Button Content="OK" Click="OnOKButtonClick" 

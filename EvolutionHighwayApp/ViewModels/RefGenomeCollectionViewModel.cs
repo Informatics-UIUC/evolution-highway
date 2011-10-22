@@ -45,8 +45,8 @@ namespace EvolutionHighwayApp.ViewModels
         {
             var selectedGenomes = e.SelectedGenomes.ToList();
 
-            e.RemovedGenomes.ForEach(g => RefGenomes.Remove(g));
-            e.AddedGenomes.ForEach(genome => RefGenomes.Insert(selectedGenomes.IndexOf(genome), genome));
+            e.RemovedGenomes.Except(e.AddedGenomes).ForEach(g => RefGenomes.Remove(g));
+            e.AddedGenomes.Except(RefGenomes).ForEach(genome => RefGenomes.Insert(selectedGenomes.IndexOf(genome), genome));
 
             for (var i = 0; i < selectedGenomes.Count; i++)
             {
