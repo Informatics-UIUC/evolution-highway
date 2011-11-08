@@ -12,6 +12,11 @@ namespace EvolutionHighwayApp.Models
             get { return End - Start; }
         }
 
+        public double MidPoint
+        {
+            get { return Start + Span/2; }
+        }
+
         protected Region(double start, double end)
         {
             Start = start;

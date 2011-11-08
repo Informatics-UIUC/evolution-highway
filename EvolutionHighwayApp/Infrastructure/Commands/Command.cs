@@ -33,11 +33,16 @@ namespace EvolutionHighwayApp.Infrastructure.Commands
             {
                 _canExecuteCache = tempCanExecute;
 
-                if (CanExecuteChanged != null)
-                    CanExecuteChanged(this, new EventArgs());
+                UpdateCanExecute();
             }
 
             return _canExecuteCache;
+        }
+
+        public void UpdateCanExecute()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
         }
 
         public void Execute(object parameter)

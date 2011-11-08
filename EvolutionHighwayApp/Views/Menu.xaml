@@ -26,6 +26,11 @@
     <viblend:Menu AnimationType="Bounds" PopupClosing="OnMenuPopupClosing"
                   Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch">
         <viblend:MenuItem Padding="5,3,5,0" Text="File">
+            <viblend:MenuItem Text="Load Track..." Command="{Binding LoadCustomTrackCommand}">
+                <viblend:MenuItem Text="From file..." Command="{Binding LoadCustomTrackCommand}"/>
+                <viblend:MenuItem Text="From clipboard..." Command="{Binding PasteCustomTrackCommand}"/>
+            </viblend:MenuItem>
+            <viblend:MenuItem IsSeparator="True"/>
             <viblend:MenuItem Text="Capture Screen" Command="{Binding CaptureScreenCommand}"/>
         </viblend:MenuItem>
         <viblend:MenuItem Padding="5,3,5,0" Text="View">

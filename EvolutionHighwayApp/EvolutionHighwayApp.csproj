@@ -112,6 +112,7 @@
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Layout.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Windows.Controls.Toolkit, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Windows.Browser" />
     <Reference Include="System.Windows.Controls" />
@@ -151,10 +152,13 @@
     <Compile Include="Dtos\GenomeDto.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Exceptions\ParseErrorException.cs" />
     <Compile Include="Infrastructure\MVVM\ModelBase.cs" />
     <Compile Include="Models\BlockOrientation.cs" />
     <Compile Include="Models\CentromereRegion.cs" />
     <Compile Include="Models\Chromosome.cs" />
+    <Compile Include="Models\CustomTrackRegion.cs" />
+    <Compile Include="Models\Delimiter.cs" />
     <Compile Include="Models\FeatureDensity.cs" />
     <Compile Include="Models\HeterochromatinRegion.cs" />
     <Compile Include="Models\HighlightRegion.cs" />
@@ -171,6 +175,7 @@
     <Compile Include="Utils\ControlExtensions.cs" />
     <Compile Include="Utils\LinearGradientBrushInterpolator.cs" />
     <Compile Include="Utils\SmartObservableCollection.cs" />
+    <Compile Include="Utils\TextBoxUpdateBehavior.cs" />
     <Compile Include="ViewModels\CentromereRegionCollectionViewModel.cs" />
     <Compile Include="ViewModels\CentromereRegionViewModel.cs" />
     <Compile Include="ViewModels\ColorOptionsWindowViewModel.cs" />
@@ -188,9 +193,14 @@
     <Compile Include="Infrastructure\MVVM\ViewModelBase.cs" />
     <Compile Include="ViewModels\CompGenomeNamesViewModel.cs" />
     <Compile Include="ViewModels\CompGenomeSelectorViewModel.cs" />
+    <Compile Include="ViewModels\CustomTrackViewModel.cs" />
     <Compile Include="ViewModels\HeterochromatinRegionCollectionViewModel.cs" />
     <Compile Include="ViewModels\HeterochromatinRegionViewModel.cs" />
     <Compile Include="ViewModels\HighlightRegionCollectionViewModel.cs" />
+    <Compile Include="ViewModels\PasteCustomTrackWindowViewModel.cs" />
+    <Compile Include="Views\CustomTrackViewer.xaml.cs">
+      <DependentUpon>CustomTrackViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HighlightRegionCollectionViewer.xaml.cs">
       <DependentUpon>HighlightRegionCollectionViewer.xaml</DependentUpon>
     </Compile>
@@ -248,6 +258,9 @@
     </Compile>
     <Compile Include="Views\HighlightRegionViewer.xaml.cs">
       <DependentUpon>HighlightRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PasteCustomTrackWindow.xaml.cs">
+      <DependentUpon>PasteCustomTrackWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Sparkline.xaml.cs">
       <DependentUpon>Sparkline.xaml</DependentUpon>
@@ -314,6 +327,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CustomTrackViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HighlightRegionCollectionViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -343,6 +360,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HighlightRegionViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PasteCustomTrackWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

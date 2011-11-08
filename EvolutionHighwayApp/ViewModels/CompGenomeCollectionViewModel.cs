@@ -18,6 +18,16 @@ namespace EvolutionHighwayApp.ViewModels
 
         public SmartObservableCollection<CompGenome> CompGenomes { get; private set; }
 
+        public SmartObservableCollection<CustomTrackRegion> CustomTracks
+        {
+            get
+            {
+                if (RefChromosome == null) return null;
+                var key = string.Format("<{0}><{1}>", RefChromosome.RefGenome.Name, RefChromosome.Name);
+                return _repository.CustomTrackMap.GetValueOrDefault(key);
+            }
+        }
+
         public AppSettings AppSettings { get; set; }
 
         private RefChromosome _refChromosome;
@@ -34,6 +44,7 @@ namespace EvolutionHighwayApp.ViewModels
 
                 NotifyPropertyChanged(() => RefChromosome);
                 NotifyPropertyChanged(() => ClipRegion);
+                NotifyPropertyChanged(() => CustomTracks);
             }
         }
 
@@ -57,14 +68,17 @@ namespace EvolutionHighwayApp.ViewModels
 
         private static readonly ScaleConverter ScaleConverter = new ScaleConverter();
 
+        private readonly Repository _repository;
         private readonly SelectionsController _selections;
         private readonly IDisposable _compGenomeSelectionChangedObserver;
         private readonly IDisposable _displaySizeChangedObserver;
         private readonly IDisposable _showCentromereObserver;
+        private readonly IDisposable _customTrackEventObserver;
 
         public CompGenomeCollectionViewModel(SelectionsController selections, IEventPublisher eventPublisher, Repository repository)
             : base(eventPublisher)
         {
+            _repository = repository;
             _selections = selections;
 
             CompGenomes = new SmartObservableCollection<CompGenome>();
@@ -84,6 +98,9 @@ namespace EvolutionHighwayApp.ViewModels
 
             _showCentromereObserver = EventPublisher.GetEvent<ShowCentromereEvent>()
                 .Subscribe(e => NotifyPropertyChanged(() => ClipRegion));
+
+            _customTrackEventObserver = EventPublisher.GetEvent<CustomTrackDataLoadedEvent>()
+                .Subscribe(e => NotifyPropertyChanged(() => CustomTracks));
         }
 
         private void OnCompGenomeSelectionDisplay(CompGenomeSelectionDisplayEvent e)
@@ -151,6 +168,7 @@ namespace EvolutionHighwayApp.ViewModels
             _compGenomeSelectionChangedObserver.Dispose();
             _displaySizeChangedObserver.Dispose();
             _showCentromereObserver.Dispose();
+            _customTrackEventObserver.Dispose();
             _refChromosome = null;
 
             CompGenomes.Clear();

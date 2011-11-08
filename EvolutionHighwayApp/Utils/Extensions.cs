@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
+using System.Globalization;
 
 namespace EvolutionHighwayApp.Utils
 {
@@ -51,6 +53,39 @@ namespace EvolutionHighwayApp.Utils
         public static bool InDesignMode(this FrameworkElement element)
         {
             return (Application.Current == null) || Application.Current.GetType() == typeof(Application);
+        }
+
+        public static IEnumerable<Enum> GetValues(this Enum @enum)
+        {
+            var values = new List<Enum>();
+            var fields = from field in @enum.GetType().GetFields()
+                        where field.IsLiteral && field.IsStatic
+                        select field;
+            values.AddRange(fields.Select(f => (Enum)f.GetValue(@enum)));
+
+            return values;
+        }
+
+        public static Color FromHexString(this Color color, string hexColor)
+        {
+            if (hexColor.StartsWith("#"))
+                hexColor = hexColor.Substring(1);
+
+            if (hexColor.Length != 8 && hexColor.Length != 6)
+                throw new ArgumentException("The color must be in one of the following (case-insensitive) formats: #AARRGGBB or #RRGGBB");
+
+            var a = (byte) 255;
+            if (hexColor.Length == 8)
+            {
+                a = byte.Parse(hexColor.Substring(0, 2), NumberStyles.HexNumber);
+                hexColor = hexColor.Substring(2);
+            }
+
+            var r = byte.Parse(hexColor.Substring(0, 2), NumberStyles.HexNumber);
+            var g = byte.Parse(hexColor.Substring(2, 2), NumberStyles.HexNumber);
+            var b = byte.Parse(hexColor.Substring(4, 2), NumberStyles.HexNumber);
+
+            return Color.FromArgb(a, r, g, b);
         }
     }
 }

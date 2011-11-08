@@ -51,7 +51,8 @@ namespace EvolutionHighwayApp
                 Component.For<CompGenomeSelectorViewModel>().LifeStyle.Transient,
                 Component.For<RefGenomeCollectionViewModel>().LifeStyle.Transient,
                 Component.For<RefChromosomeCollectionViewModel>().LifeStyle.Transient,
-                Component.For<CompGenomeCollectionViewModel>().LifeStyle.Transient
+                Component.For<CompGenomeCollectionViewModel>().LifeStyle.Transient,
+                Component.For<PasteCustomTrackWindowViewModel>().LifeStyle.Transient
             );
         }
 

@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using EvolutionHighwayApp.Events;
+using EvolutionHighwayApp.Exceptions;
 using EvolutionHighwayApp.Infrastructure.Commands;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
@@ -24,6 +27,8 @@ namespace EvolutionHighwayApp.ViewModels
             }
         }
 
+        public Command LoadCustomTrackCommand { get; private set; }
+        public Command PasteCustomTrackCommand { get; private set; }
         public Command CaptureScreenCommand { get; private set; }
         public Command ResetZoomCommand { get; private set; }
         public Command ViewFullScreenCommand { get; private set; }
@@ -32,15 +37,21 @@ namespace EvolutionHighwayApp.ViewModels
 
         #endregion
 
-        private SelectionsController _selections;
+        // This field is needed to ensure that SelectionsController is instantiated before the other classes
+        private readonly SelectionsController _selections;
+
+        private readonly Repository _repository;
         private readonly ColorOptionsWindow _colorOptionsWindow;
 
-        public MenuViewModel(IEventPublisher eventPublisher, SelectionsController selections) 
+        public MenuViewModel(IEventPublisher eventPublisher, SelectionsController selections, Repository repository) 
             : base(eventPublisher)
         {
             _selections = selections;
+            _repository = repository;
             _colorOptionsWindow = new ColorOptionsWindow();
 
+            LoadCustomTrackCommand = new Command(LoadCustomTrack, canExecute => true);
+            PasteCustomTrackCommand = new Command(PasteCustomTrack, canExecute => true);
             CaptureScreenCommand = new Command(CaptureScreen, canExecute => true);
             ResetZoomCommand = new Command(ResetZoom, canExecute => true);
             ViewFullScreenCommand = new Command(ViewFullScreen, canExecute => true);
@@ -58,6 +69,81 @@ namespace EvolutionHighwayApp.ViewModels
         private void ShowColorOptionsWindow(object obj)
         {
             _colorOptionsWindow.Show();
+        }
+
+        private void LoadCustomTrack(object param)
+        {
+            Debug.WriteLine("LoadCustomTrack invoked");
+            var ofd = new OpenFileDialog
+                          {
+                              Filter = "Track files (*.track;*.csv;*.tsv)|*.track;*.csv;*.tsv|All files (*.*)|*.*"
+                          };
+            if (ofd.ShowDialog() != true) return;
+
+            string trackData;
+            try
+            {
+                using (var reader = ofd.File.OpenText())
+                {
+                    trackData = reader.ReadToEnd();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButton.OK);
+                return;
+            }
+
+            char delimiter;
+            switch (ofd.File.Extension.ToLower())
+            {
+                case ".track":
+                    delimiter = '|';
+                    break;
+
+                case ".csv":
+                    delimiter = ',';
+                    break;
+
+                case ".tsv":
+                    delimiter = '\t';
+                    break;
+
+                default:
+                    delimiter = '\t';
+                    break;
+            }
+
+            ProcessCustomTrackData(trackData, delimiter);
+        }
+
+        private void PasteCustomTrack(object param)
+        {
+            Debug.WriteLine("PasteCustomTrack invoked");
+
+            var window = new PasteCustomTrackWindow((vm, cancelled) =>
+            {
+                if (cancelled) return;
+                
+                ProcessCustomTrackData(vm.TrackDataText, vm.Delimiter.Char);
+            });
+
+            window.Show();
+        }
+
+        private void ProcessCustomTrackData(string trackData, char delimiter)
+        {
+            try
+            {
+                _repository.AddCustomTrackData(trackData, delimiter);
+            }
+            catch (ParseErrorException e)
+            {
+                MessageBox.Show(string.Format("{0}\nLine: {1}\nToken: '{2}'", e.Message, e.LineNumber, e.Text), "Parse error", MessageBoxButton.OK);
+                return;
+            }
+
+            EventPublisher.Publish(new CustomTrackDataLoadedEvent());
         }
 
         private void CaptureScreen(object param)

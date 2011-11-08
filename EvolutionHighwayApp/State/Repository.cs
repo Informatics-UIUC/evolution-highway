@@ -5,14 +5,17 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading;
+using System.Windows.Media;
 using Castle.MicroKernel.Registration;
 using EvolutionHighwayApp.Converters;
 using EvolutionHighwayApp.Events;
+using EvolutionHighwayApp.Exceptions;
 using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Models;
 using EvolutionHighwayApp.ServiceLayer;
 using EvolutionHighwayApp.Utils;
+using SilverlightColorPicker;
 
 namespace EvolutionHighwayApp.State
 {
@@ -23,6 +26,8 @@ namespace EvolutionHighwayApp.State
         public readonly Dictionary<RefChromosome, List<CompGenome>> RefChromosomeMap;
         public static readonly IDictionary<string, IDictionary<string, double>> CompChromosomeLengths
             = new Dictionary<string, IDictionary<string, double>>();
+
+        public readonly Dictionary<string, SmartObservableCollection<CustomTrackRegion>> CustomTrackMap; 
 
         public SelectionsController SelectionsController { get; set; }
 
@@ -36,6 +41,7 @@ namespace EvolutionHighwayApp.State
 
             RefGenomeMap = new Dictionary<RefGenome, List<RefChromosome>>();
             RefChromosomeMap = new Dictionary<RefChromosome, List<CompGenome>>();
+            CustomTrackMap = new Dictionary<string, SmartObservableCollection<CustomTrackRegion>>();
 
             eventPublisher.GetEvent<DataSourceChangedEvent>().Subscribe(e =>
             {
@@ -56,6 +62,8 @@ namespace EvolutionHighwayApp.State
 
                 CompChromosomeLengths.ForEach(cl => cl.Value.Clear());
                 CompChromosomeLengths.Clear();
+
+                ClearCustomTracks();
             });
         }
 
@@ -424,6 +432,62 @@ namespace EvolutionHighwayApp.State
             };
 
             worker.RunWorkerAsync();
+        }
+
+        public void AddCustomTrackData(string trackData, char delimiter, bool append = false)
+        {
+            var lines = trackData.Split(new[] { '\n', '\r' });
+            var lineno = 0;
+
+            if (!append)
+                // Clear any existing custom tracks
+                ClearCustomTracks();
+
+            foreach (var line in lines.Where(line => !string.IsNullOrWhiteSpace(line)))
+            {
+                lineno++;
+
+                var parts = line.Split(delimiter);
+
+                if (parts.Length != 5 && parts.Length != 6)
+                    throw new ParseErrorException(line, lineno);
+
+                var genome = parts[0];
+                var chromosome = parts[1];
+                var label = parts[2];
+                var start = double.Parse(parts[3]);
+                var end = double.Parse(parts[4]);
+
+
+                var color = PredefinedColors.AllColors["Black"];
+                if (parts.Length == 6)
+                {
+                    var colorStr = parts[5];
+                    if (colorStr.StartsWith("#"))
+                        color = color.FromHexString(colorStr);
+                    else
+                        if (PredefinedColors.AllColors.ContainsKey(colorStr))
+                            color = PredefinedColors.AllColors[colorStr];
+                        else
+                            throw new ParseErrorException(colorStr, lineno);
+                }
+
+                var key = string.Format("<{0}><{1}>", genome, chromosome);
+
+                var trackRegion = new CustomTrackRegion(genome, chromosome, start, end, label, color);
+
+                if (!CustomTrackMap.ContainsKey(key))
+                    CustomTrackMap.Add(key, new SmartObservableCollection<CustomTrackRegion>());
+
+                var trackRegions = CustomTrackMap[key];
+                trackRegions.Add(trackRegion);
+            }
+        }
+
+        private void ClearCustomTracks()
+        {
+            CustomTrackMap.ForEach(kvp => kvp.Value.Clear());
+            CustomTrackMap.Clear();
         }
     }
 }

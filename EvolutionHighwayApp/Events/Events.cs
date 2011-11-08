@@ -36,6 +36,8 @@ namespace EvolutionHighwayApp.Events
         public int CompGenomeNameFormat { get; set; }
     }
 
+    public class CustomTrackDataLoadedEvent { }
+
     #region Layout events
 
     public abstract class LayoutEvent
