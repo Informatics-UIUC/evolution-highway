@@ -1,4 +1,4 @@
-<OutOfBrowserSettings ShortName="Evolution Highway" EnableGPUAcceleration="False" ShowInstallMenuItem="True">
+<OutOfBrowserSettings ShortName="Evolution Highway" EnableGPUAcceleration="True" ShowInstallMenuItem="True">
   <OutOfBrowserSettings.Blurb>Evolution Highway is a collaborative project designed to provide a visual means for simultaneously comparing genomes of multiple amniote species. The tool removes the burden of manually aligning these maps and allows cognitive skills to be used toward something more valuable than preparation and transformation of data.</OutOfBrowserSettings.Blurb>
   <OutOfBrowserSettings.WindowSettings>
     <WindowSettings Title="Evolution Highway" />
