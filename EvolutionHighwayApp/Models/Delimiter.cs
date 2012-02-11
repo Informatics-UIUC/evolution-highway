@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace EvolutionHighwayApp.Models
 {
@@ -10,6 +11,21 @@ namespace EvolutionHighwayApp.Models
         public override string ToString()
         {
             return Label;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == this) return true;
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var other = (Delimiter) obj;
+            return Label.Equals(other.Label) && Char.Equals(other.Char);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Label != null ? Label.GetHashCode() : 0) * 31 + Char.GetHashCode();
         }
     }
 

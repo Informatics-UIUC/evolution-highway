@@ -52,7 +52,7 @@ namespace EvolutionHighwayApp
                 Component.For<RefGenomeCollectionViewModel>().LifeStyle.Transient,
                 Component.For<RefChromosomeCollectionViewModel>().LifeStyle.Transient,
                 Component.For<CompGenomeCollectionViewModel>().LifeStyle.Transient,
-                Component.For<PasteCustomTrackWindowViewModel>().LifeStyle.Transient
+                Component.For<EditCustomTrackWindowViewModel>().LifeStyle.Transient
             );
         }
 

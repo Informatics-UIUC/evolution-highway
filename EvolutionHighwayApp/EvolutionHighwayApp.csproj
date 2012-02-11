@@ -224,7 +224,7 @@
     <Compile Include="ViewModels\HeterochromatinRegionCollectionViewModel.cs" />
     <Compile Include="ViewModels\HeterochromatinRegionViewModel.cs" />
     <Compile Include="ViewModels\HighlightRegionCollectionViewModel.cs" />
-    <Compile Include="ViewModels\PasteCustomTrackWindowViewModel.cs" />
+    <Compile Include="ViewModels\EditCustomTrackWindowViewModel.cs" />
     <Compile Include="Views\CustomTrackViewer.xaml.cs">
       <DependentUpon>CustomTrackViewer.xaml</DependentUpon>
     </Compile>
@@ -286,8 +286,8 @@
     <Compile Include="Views\HighlightRegionViewer.xaml.cs">
       <DependentUpon>HighlightRegionViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PasteCustomTrackWindow.xaml.cs">
-      <DependentUpon>PasteCustomTrackWindow.xaml</DependentUpon>
+    <Compile Include="Views\EditCustomTrackWindow.xaml.cs">
+      <DependentUpon>EditCustomTrackWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Sparkline.xaml.cs">
       <DependentUpon>Sparkline.xaml</DependentUpon>
@@ -390,7 +390,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PasteCustomTrackWindow.xaml">
+    <Page Include="Views\EditCustomTrackWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

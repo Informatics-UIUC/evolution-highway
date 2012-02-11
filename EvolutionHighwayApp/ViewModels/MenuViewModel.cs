@@ -7,6 +7,7 @@ using EvolutionHighwayApp.Exceptions;
 using EvolutionHighwayApp.Infrastructure.Commands;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
+using EvolutionHighwayApp.Models;
 using EvolutionHighwayApp.State;
 using EvolutionHighwayApp.Views;
 
@@ -28,7 +29,8 @@ namespace EvolutionHighwayApp.ViewModels
         }
 
         public Command LoadCustomTrackCommand { get; private set; }
-        public Command PasteCustomTrackCommand { get; private set; }
+        public Command EditCustomTrackCommand { get; private set; }
+        public Command ClearCustomTrackCommand { get; private set; }
         public Command CaptureScreenCommand { get; private set; }
         public Command ResetZoomCommand { get; private set; }
         public Command ViewFullScreenCommand { get; private set; }
@@ -42,6 +44,8 @@ namespace EvolutionHighwayApp.ViewModels
 
         private readonly Repository _repository;
         private readonly ColorOptionsWindow _colorOptionsWindow;
+        private string _trackData;
+        private Delimiter _delimiter;
 
         public MenuViewModel(IEventPublisher eventPublisher, SelectionsController selections, Repository repository) 
             : base(eventPublisher)
@@ -51,7 +55,8 @@ namespace EvolutionHighwayApp.ViewModels
             _colorOptionsWindow = new ColorOptionsWindow();
 
             LoadCustomTrackCommand = new Command(LoadCustomTrack, canExecute => true);
-            PasteCustomTrackCommand = new Command(PasteCustomTrack, canExecute => true);
+            EditCustomTrackCommand = new Command(EditCustomTrack, canExecute => true);
+            ClearCustomTrackCommand = new Command(ClearCustomTrack, canExecute => true);
             CaptureScreenCommand = new Command(CaptureScreen, canExecute => true);
             ResetZoomCommand = new Command(ResetZoom, canExecute => true);
             ViewFullScreenCommand = new Command(ViewFullScreen, canExecute => true);
@@ -80,12 +85,11 @@ namespace EvolutionHighwayApp.ViewModels
                           };
             if (ofd.ShowDialog() != true) return;
 
-            string trackData;
             try
             {
                 using (var reader = ofd.File.OpenText())
                 {
-                    trackData = reader.ReadToEnd();
+                    _trackData = reader.ReadToEnd();
                 }
             }
             catch (Exception e)
@@ -94,41 +98,51 @@ namespace EvolutionHighwayApp.ViewModels
                 return;
             }
 
-            char delimiter;
             switch (ofd.File.Extension.ToLower())
             {
                 case ".track":
-                    delimiter = '|';
+                    _delimiter = new Delimiter {Char = '|', Label = "Vertical Line"};
                     break;
 
                 case ".csv":
-                    delimiter = ',';
+                    _delimiter = new Delimiter {Char = ',', Label = "Comma"};
                     break;
 
                 case ".tsv":
-                    delimiter = '\t';
+                    _delimiter = new Delimiter {Char = '\t', Label = "Tab"};
                     break;
 
                 default:
-                    delimiter = '\t';
+                    _delimiter = new Delimiter { Char = '\t', Label = "Tab" };
                     break;
             }
 
-            ProcessCustomTrackData(trackData, delimiter);
+            ProcessCustomTrackData(_trackData, _delimiter.Char);
         }
 
-        private void PasteCustomTrack(object param)
+        private void EditCustomTrack(object param)
         {
-            Debug.WriteLine("PasteCustomTrack invoked");
+            Debug.WriteLine("EditCustomTrack invoked");
 
-            var window = new PasteCustomTrackWindow((vm, cancelled) =>
+            var window = new EditCustomTrackWindow(trackData: _trackData, delimiter: _delimiter, resultCallback: (vm, cancelled) =>
             {
                 if (cancelled) return;
-                
-                ProcessCustomTrackData(vm.TrackDataText, vm.Delimiter.Char);
+
+                _trackData = vm.TrackDataText;
+                _delimiter = vm.Delimiter;
+                ProcessCustomTrackData(_trackData, _delimiter.Char);
             });
 
             window.Show();
+        }
+
+        private void ClearCustomTrack(object param)
+        {
+            Debug.WriteLine("ClearCustomTrack invoked");
+
+            _repository.ClearCustomTracks();
+            _trackData = null;
+            _delimiter = null;
         }
 
         private void ProcessCustomTrackData(string trackData, char delimiter)

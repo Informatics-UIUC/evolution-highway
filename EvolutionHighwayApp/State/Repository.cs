@@ -98,6 +98,17 @@ namespace EvolutionHighwayApp.State
             worker.RunWorkerAsync();
         }
 
+        public void LoadRefChromosomesAndRelatedData(IEnumerable<RefGenome> genomes, 
+            Action<RunWorkerCompletedEventArgs, object> loadCompletedCallback, Action beforeLoadCallback = null, 
+            object param = null)
+        {
+            LoadRefChromosomes(genomes, (r, p) =>
+                                            {
+                                                var chromosomes = genomes.SelectMany(g => RefGenomeMap[g]).ToList();
+                                                LoadCompGenomes(chromosomes, loadCompletedCallback);
+                                            }, beforeLoadCallback, param);
+        }
+
         public void LoadRefChromosomes(IEnumerable<RefGenome> genomes, 
             Action<RunWorkerCompletedEventArgs, object> loadCompletedCallback, Action beforeLoadCallback = null, 
             object param = null)
@@ -484,7 +495,7 @@ namespace EvolutionHighwayApp.State
             }
         }
 
-        private void ClearCustomTracks()
+        public void ClearCustomTracks()
         {
             CustomTrackMap.ForEach(kvp => kvp.Value.Clear());
             CustomTrackMap.Clear();
