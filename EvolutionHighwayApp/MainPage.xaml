@@ -30,6 +30,7 @@
                     <ContentControl Style="{StaticResource LogoIcon}"/>
                     <TextBlock x:Name="ApplicationNameTextBlock" Style="{StaticResource ApplicationNameStyle}" 
                                Text="Evolution Highway"/>
+                    <TextBlock Style="{StaticResource VersionNumberStyle}" Text="{Binding Version}"/>
                 </StackPanel>
             </Border>
 

@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * Credit goes to http://blogs.msdn.com/b/carlosfigueira/archive/2010/04/29/consuming-rest-json-services-in-silverlight-4.aspx
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Json;

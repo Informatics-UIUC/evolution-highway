@@ -52,6 +52,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ba-debug.min.js" />
     <Content Include="ClientBin\EvolutionHighwayApp.xap" />
     <Content Include="datasources.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

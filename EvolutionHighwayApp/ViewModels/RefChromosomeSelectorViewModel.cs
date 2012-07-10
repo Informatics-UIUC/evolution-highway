@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
@@ -78,6 +79,13 @@ namespace EvolutionHighwayApp.ViewModels
 
             _repository.LoadRefChromosomes(e.AddedGenomes, (result, param) =>
                 {
+                    if (result.Error != null)
+                    {
+                        result.Error.Message.LogError();
+                        MessageBox.Show(result.Error.Message, "Error", MessageBoxButton.OK);
+                        return;
+                    }
+
                     var selections = UpdateSelections(e.AddedGenomes, e.RemovedGenomes, e.SelectedGenomes);
                     var addedChromosomes = selections.Item1;
                     var removedChromosomes = selections.Item2;

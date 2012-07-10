@@ -18,6 +18,7 @@
 	    text-align:center;
     }
     </style>
+    <script type="text/javascript" src="ba-debug.min.js"></script>
     <script type="text/javascript" src="Silverlight.js"></script>
     <script type="text/javascript">
         function onSilverlightError(sender, args) {

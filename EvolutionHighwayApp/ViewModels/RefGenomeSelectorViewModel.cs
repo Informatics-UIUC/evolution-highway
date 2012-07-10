@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
@@ -66,6 +67,13 @@ namespace EvolutionHighwayApp.ViewModels
         {
             _repository.LoadRefGenomes((result, param) =>
                 {
+                    if (result.Error != null)
+                    {
+                        result.Error.Message.LogError();
+                        MessageBox.Show(result.Error.Message, "Error", MessageBoxButton.OK);
+                        return;
+                    }
+
                     var items = _repository.RefGenomeMap.Keys.Select(genome =>
                                 {
                                     var item = new SelectableItem(genome.Name);

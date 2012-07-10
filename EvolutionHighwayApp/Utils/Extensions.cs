@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Browser;
 using System.Windows.Media;
 using System.Globalization;
 
@@ -86,6 +87,17 @@ namespace EvolutionHighwayApp.Utils
             var b = byte.Parse(hexColor.Substring(4, 2), NumberStyles.HexNumber);
 
             return Color.FromArgb(a, r, g, b);
+        }
+
+        public static void LogError(this object obj)
+        {
+            var window = HtmlPage.Window;
+            var isErrorLogAvailable = (bool)window.Eval("typeof(debug) != 'undefined' && typeof(debug.error) != 'undefined'");
+            if (!isErrorLogAvailable) return;
+
+            var errorLog = (window.Eval("debug.error") as ScriptObject);
+            if (errorLog != null)
+                errorLog.InvokeSelf(obj.ToString());
         }
     }
 }

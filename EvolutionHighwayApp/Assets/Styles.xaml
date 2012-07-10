@@ -95,7 +95,15 @@
       </Setter.Value>
     </Setter>
   </Style>
-
+    
+  <!-- Version Number Style -->
+  <Style x:Key="VersionNumberStyle" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="{StaticResource NavigationForegroundColorBrush}"/>
+      <Setter Property="FontSize" Value="9"/>
+      <Setter Property="Margin" Value="5,2,0,0"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+    
   <!-- Links Border Style -->
   <Style x:Key="LinksBorderStyle" TargetType="Border">
     <Setter Property="Height" Value="42"/>

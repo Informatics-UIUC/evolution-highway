@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
@@ -75,6 +76,13 @@ namespace EvolutionHighwayApp.ViewModels
 
             _repository.LoadCompGenomes(e.AddedChromosomes, (result, param) =>
                 {
+                    if (result.Error != null)
+                    {
+                        result.Error.Message.LogError();
+                        MessageBox.Show(result.Error.Message, "Error", MessageBoxButton.OK);
+                        return;
+                    }
+
                     var selections = UpdateSelections(e.AddedChromosomes, e.RemovedChromosomes, e.SelectedChromosomes);
                     var addedGenomes = selections.Item1;
                     var removedGenomes = selections.Item2; 

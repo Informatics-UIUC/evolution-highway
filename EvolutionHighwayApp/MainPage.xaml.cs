@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -10,9 +11,23 @@ namespace EvolutionHighwayApp
 {
     public partial class MainPage
     {
+        public string Version
+        {
+            get
+            {
+                var asm = Assembly.GetExecutingAssembly();
+                if (asm.FullName == null) return "";
+
+                var version = new AssemblyName(asm.FullName).Version;
+                return string.Format("v{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
+            }
+        }
+
         public MainPage()
         {
             InitializeComponent();
+
+            DataContext = this;
 
             if (Application.Current.InstallState == InstallState.Installed)
             {

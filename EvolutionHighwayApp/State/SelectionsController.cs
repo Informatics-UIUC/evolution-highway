@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Models;
@@ -123,6 +124,13 @@ namespace EvolutionHighwayApp.State
 
             _repository.LoadSyntenyBlocks(e.AddedGenomes, (result, param) =>
             {
+                if (result.Error != null)
+                {
+                    result.Error.Message.LogError();
+                    MessageBox.Show(result.Error.Message, "Error", MessageBoxButton.OK);
+                    return;
+                }
+
                 var displayableRefChromosomes = e.SelectedGenomes.Select(g => g.RefChromosome).Distinct().ToList();
                 var displayableRefGenomes = displayableRefChromosomes.Select(c => c.RefGenome).Distinct().ToList();
 
