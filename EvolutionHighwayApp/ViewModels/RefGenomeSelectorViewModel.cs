@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using EvolutionHighwayApp.Events;
@@ -65,7 +66,7 @@ namespace EvolutionHighwayApp.ViewModels
 
         private void OnDataSourceChanged(DataSourceChangedEvent e)
         {
-            _repository.LoadRefGenomes((result, param) =>
+            _repository.LoadSelectionData((result, param) =>
                 {
                     if (result.Error != null)
                     {
@@ -89,6 +90,7 @@ namespace EvolutionHighwayApp.ViewModels
 
         void OnItemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            Debug.WriteLine("OnItemPropertyChanged(" + e.PropertyName + ")");
             if (!e.PropertyName.Equals("IsSelected")) return;
 
             var item = (SelectableItem) sender;

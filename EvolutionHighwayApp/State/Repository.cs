@@ -38,7 +38,7 @@ namespace EvolutionHighwayApp.State
             Debug.WriteLine("{0} instantiated", GetType().Name);
 
             _eventPublisher = eventPublisher;
-
+            
             RefGenomeMap = new Dictionary<RefGenome, List<RefChromosome>>();
             RefChromosomeMap = new Dictionary<RefChromosome, List<CompGenome>>();
             CustomTrackMap = new Dictionary<string, SmartObservableCollection<CustomTrackRegion>>();
@@ -65,6 +65,21 @@ namespace EvolutionHighwayApp.State
 
                 ClearCustomTracks();
             });
+        }
+
+        public void LoadSelectionData(Action<RunWorkerCompletedEventArgs, object> loadCompletedCallback, 
+                                      Action beforeLoadCallback = null, object param = null)
+        {
+            LoadRefGenomes((rg, pg) =>
+            {
+                var genomes = RefGenomeMap.Keys;
+                LoadRefChromosomes(genomes, (rc, pc) =>
+                {
+                    var chromosomes = genomes.SelectMany(g => RefGenomeMap[g]).ToList();
+                    LoadCompGenomes(chromosomes, loadCompletedCallback);
+                });
+//                LoadRefChromosomes(genomes, loadCompletedCallback);
+            }, beforeLoadCallback, param);
         }
 
         public void LoadRefGenomes(Action<RunWorkerCompletedEventArgs, object> loadCompletedCallback, 
@@ -110,17 +125,6 @@ namespace EvolutionHighwayApp.State
                 };
 
             worker.RunWorkerAsync();
-        }
-
-        public void LoadRefChromosomesAndRelatedData(IEnumerable<RefGenome> genomes, 
-            Action<RunWorkerCompletedEventArgs, object> loadCompletedCallback, Action beforeLoadCallback = null, 
-            object param = null)
-        {
-            LoadRefChromosomes(genomes, (r, p) =>
-                                            {
-                                                var chromosomes = genomes.SelectMany(g => RefGenomeMap[g]).ToList();
-                                                LoadCompGenomes(chromosomes, loadCompletedCallback);
-                                            }, beforeLoadCallback, param);
         }
 
         public void LoadRefChromosomes(IEnumerable<RefGenome> genomes, 
@@ -231,21 +235,21 @@ namespace EvolutionHighwayApp.State
 
                 waitHandles.All(w => w.WaitOne());
 
-                var extraDataLoaded = new ManualResetEvent(false);
-                LoadCentromereRegions(chromosomesToLoad, (rc, pc) => {
-                    if (rc.Error != null)
-                        errors.Add(rc.Error);
-                    LoadHeterochromatinRegions(chromosomesToLoad, (rh, ph) => {
-                        if (rh.Error != null)
-                            errors.Add(rh.Error);
-                        LoadDensityFeatureData("AdjacencyScore", chromosomesToLoad, (rf, pf) => {
-                            if (rf.Error != null)
-                                errors.Add(rf.Error);
-                            extraDataLoaded.Set();
-                        });
-                    });
-                });
-                extraDataLoaded.WaitOne();
+//                var extraDataLoaded = new ManualResetEvent(false);
+//                LoadCentromereRegions(chromosomesToLoad, (rc, pc) => {
+//                    if (rc.Error != null)
+//                        errors.Add(rc.Error);
+//                    LoadHeterochromatinRegions(chromosomesToLoad, (rh, ph) => {
+//                        if (rh.Error != null)
+//                            errors.Add(rh.Error);
+//                        LoadDensityFeatureData("AdjacencyScore", chromosomesToLoad, (rf, pf) => {
+//                            if (rf.Error != null)
+//                                errors.Add(rf.Error);
+//                            extraDataLoaded.Set();
+//                        });
+//                    });
+//                });
+//                extraDataLoaded.WaitOne();
 
                 if (!errors.IsEmpty())
                     throw new MultipleExceptions(errors);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using EvolutionHighwayApp.Events;
+using EvolutionHighwayApp.Infrastructure.Commands;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Models;
@@ -33,6 +34,8 @@ namespace EvolutionHighwayApp.ViewModels
             set { NotifyPropertyChanged(() => IsEnabled, ref _isEnabled, value); }
         }
 
+        public Command SelectAllCommand { get; private set; }
+
         #endregion
 
         private static readonly ChromosomeNameComparer ChromosomeNameComparer = new ChromosomeNameComparer();
@@ -45,6 +48,32 @@ namespace EvolutionHighwayApp.ViewModels
         private readonly IDisposable _refChromosomeLoadingObserver;
 
         private IEnumerable<RefGenome> _selectedGenomes;
+
+        private void SelectAll(object param)
+        {
+            var selected = bool.Parse(param.ToString());
+
+            var chrNames = selected
+                               ? Chromosomes.Where(item => !item.IsSelected).Select(item => item.Name).ToList()
+                               : Chromosomes.Where(item => item.IsSelected).Select(item => item.Name).ToList();
+
+            Chromosomes.ForEach(item =>
+                                    {
+                                        item.PropertyChanged -= OnItemPropertyChanged;
+                                        item.IsSelected = selected;
+                                        item.PropertyChanged += OnItemPropertyChanged;
+                                    });
+
+            var chromosomes = from genome in _selectedGenomes
+                              from chromosome in _repository.RefGenomeMap[genome]
+                              where chrNames.Contains(chromosome.Name)
+                              select chromosome;
+
+            if (selected)
+                OnChromosomeSelectionChanged(new List<RefChromosome>(chromosomes), Enumerable.Empty<RefChromosome>());
+            else
+                OnChromosomeSelectionChanged(Enumerable.Empty<RefChromosome>(), new List<RefChromosome>(chromosomes));
+        }
 
         public RefChromosomeSelectorViewModel(Repository repository, IEventPublisher eventPublisher) 
             : base(eventPublisher)
@@ -71,6 +100,8 @@ namespace EvolutionHighwayApp.ViewModels
             _refChromosomeLoadingObserver = EventPublisher.GetEvent<RefChromosomesLoadingEvent>()
                 .ObserveOnDispatcher()
                 .Subscribe(e => IsLoading = !e.IsDoneLoading);
+
+            SelectAllCommand = new Command(SelectAll, canExecute => true);
         }
 
         private void OnRefGenomeSelectionChanged(RefGenomeSelectionChangedEvent e)

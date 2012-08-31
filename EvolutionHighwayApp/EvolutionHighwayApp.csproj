@@ -202,6 +202,7 @@
     <Compile Include="State\Repository.cs" />
     <Compile Include="State\SelectionsController.cs" />
     <Compile Include="Utils\ControlExtensions.cs" />
+    <Compile Include="Utils\FixedListBoxDragDropTarget.cs" />
     <Compile Include="Utils\LinearGradientBrushInterpolator.cs" />
     <Compile Include="Utils\SmartObservableCollection.cs" />
     <Compile Include="Utils\TextBoxUpdateBehavior.cs" />

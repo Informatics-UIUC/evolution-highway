@@ -4,12 +4,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:tkctrl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
+    xmlns:utils="clr-namespace:EvolutionHighwayApp.Utils" 
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
     IsEnabled="{Binding IsEnabled}"
     x:Name="_refGenomeSelector">
 
     <tkctrl:BusyIndicator BusyContent="Loading..." DisplayAfter="0" IsBusy="{Binding IsLoading}">
-        <tkctrl:ListBoxDragDropTarget AllowDrop="True" AllowedSourceEffects="Move,Scroll" 
+        <utils:FixedListBoxDragDropTarget AllowDrop="True" AllowedSourceEffects="Move,Scroll" 
                                       DragOver="OnDragOver" Drop="OnDrop" ItemDragCompleted="OnItemDragCompleted">
             <ListBox ItemsSource="{Binding Genomes}"
                      SelectionMode="Extended"
@@ -30,6 +31,6 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </tkctrl:ListBoxDragDropTarget>
+        </utils:FixedListBoxDragDropTarget>
     </tkctrl:BusyIndicator>
 </UserControl>

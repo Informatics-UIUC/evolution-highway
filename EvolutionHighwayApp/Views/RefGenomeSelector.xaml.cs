@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
 using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Utils;
 using EvolutionHighwayApp.ViewModels;
