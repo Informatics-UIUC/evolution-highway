@@ -111,7 +111,7 @@ namespace EvolutionHighwayApp.Menus.ViewModels
             if (searchText.IsEmpty())
             {
                 Debug.WriteLine("Clearing search query");
-                _displayController.GetVisibleRefChromosomes().ForEach(c => _displayController.SetHighlightRegions(c, new Region[0]));
+                _displayController.ClearHighlight();
             }
             else
             {
@@ -161,7 +161,7 @@ namespace EvolutionHighwayApp.Menus.ViewModels
                                             where
                                                 chr.Name == query.RefChromosomeName &&
                                                 chr.Genome.Name.Contains(query.RefGenomeName)
-                                            let chrRegion = new HighlightRegion(query.Start, query.End)
+                                            let chrRegion = new SearchHighlightRegion(query.Start, query.End)
                                             group chrRegion by chr;
 
                                         chrHighlightRegions.ForEach(cr => _displayController.SetHighlightRegions(cr.Key, cr.ToArray()));

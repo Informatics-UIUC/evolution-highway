@@ -1,7 +1,9 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using EvolutionHighwayApp.Display.Controllers;
 using EvolutionHighwayApp.Display.ViewModels;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Exceptions;
@@ -11,6 +13,7 @@ using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Models;
 using EvolutionHighwayApp.Repository.Controllers;
+using EvolutionHighwayApp.Settings.Models;
 using EvolutionHighwayApp.Settings.Views;
 using ColorOptionsWindow = EvolutionHighwayApp.Settings.Views.ColorOptionsWindow;
 
@@ -21,6 +24,8 @@ namespace EvolutionHighwayApp.Menus.ViewModels
         #region ViewModel Bindable Properties
 
         public AppSettings AppSettings { get; private set; }
+
+        public IDisplayController DisplayController { get; private set; }
 
         public int CompGenomeNameFormat
         {
@@ -39,21 +44,22 @@ namespace EvolutionHighwayApp.Menus.ViewModels
         public Command ViewFullScreenCommand { get; private set; }
         public Command ShowColorOptionsWindowCommand { get; private set; }
         public Command ResetOptionsToDefaultsCommand { get; private set; }
+        public Command ShowConservedSyntenyCommand { get; private set; }
+        public Command ShowBreakpointClassificationCommand { get; private set; }
 
         #endregion
-
-        // This field is needed to ensure that SelectionsController is instantiated before the other classes
-        //private readonly DisplayController _selections;
 
         private readonly IRepositoryController _repositoryController;
         private readonly IEventPublisher _eventPublisher;
         private readonly ColorOptionsWindow _colorOptionsWindow;
+
         private string _trackData;
         private Delimiter _delimiter;
 
         public MenuViewModel()
         {
             AppSettings = IoC.Container.Resolve<AppSettings>();
+            DisplayController = IoC.Container.Resolve<IDisplayController>();
 
             _repositoryController = IoC.Container.Resolve<IRepositoryController>();
             _eventPublisher = IoC.Container.Resolve<IEventPublisher>();
@@ -67,6 +73,47 @@ namespace EvolutionHighwayApp.Menus.ViewModels
             ViewFullScreenCommand = new Command(ViewFullScreen, canExecute => true);
             ShowColorOptionsWindowCommand = new Command(ShowColorOptionsWindow, canExecute => true);
             ResetOptionsToDefaultsCommand = new Command(ResetOptionsToDefaults, canExecute => true);
+            ShowConservedSyntenyCommand = new Command(ShowConservedSynteny, canExecute => true);
+            ShowBreakpointClassificationCommand = new Command(ShowBreakpointClassification, canExecute => true);
+        }
+
+        private void ShowConservedSynteny(object obj)
+        {
+            if (DisplayController.ShowConservedSynteny)
+            {
+                DisplayController.ClearHighlight();
+                return;
+            }
+
+            DisplayController.SetShowConservedSynteny();
+        }
+
+        private void ShowBreakpointClassification(object obj)
+        {
+            if (DisplayController.ShowBreakpointClassification)
+            {
+                DisplayController.ClearHighlight();
+                return;
+            }
+
+            var availableClasses = DisplayController.GetVisibleCompGenomes().Select(g => g.Name).Distinct().ToList();
+            var maxThreshold = AppSettings.BreakpointClassificationMaxThreshold;
+            var breakpointClassificationOptions = new BreakpointClassificationOptions(availableClasses, maxThreshold);
+
+            var breakpointOptionsDialog = new BreakpointClassificationOptionsDialog(breakpointClassificationOptions);
+            breakpointOptionsDialog.Closed += (o, e) =>
+            {
+                var dialogResult = breakpointOptionsDialog.DialogResult;
+                // return if cancel was pressed
+                if (!dialogResult.HasValue || !dialogResult.Value)
+                    return;
+
+                var options = breakpointOptionsDialog.Options;
+                AppSettings.BreakpointClassificationMaxThreshold = options.MaxThreshold;
+                DisplayController.SetShowBreakpointClassification(options.Classes, options.MaxThreshold);
+            };
+
+            breakpointOptionsDialog.Show();
         }
 
         private void ResetOptionsToDefaults(object obj)

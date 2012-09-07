@@ -262,9 +262,10 @@
       <DependentUpon>Toolbar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\BlockOrientation.cs" />
-    <Compile Include="Models\BreakpointRegion.cs" />
+    <Compile Include="Models\BreakpointClassificationHighlightRegion.cs" />
     <Compile Include="Models\CentromereRegion.cs" />
     <Compile Include="Models\Chromosome.cs" />
+    <Compile Include="Models\ConservedSyntenyHighlightRegion.cs" />
     <Compile Include="Models\CustomTrackRegion.cs" />
     <Compile Include="Models\Delimiter.cs" />
     <Compile Include="Models\FeatureDensity.cs" />
@@ -275,6 +276,7 @@
     <Compile Include="Models\Genome.cs" />
     <Compile Include="Models\RefGenome.cs" />
     <Compile Include="Models\Region.cs" />
+    <Compile Include="Models\SearchHighlightRegion.cs" />
     <Compile Include="Models\SearchQuery.cs" />
     <Compile Include="Models\SyntenyRegion.cs" />
     <Compile Include="Repository\Controllers\IRepositoryController.cs" />
@@ -307,8 +309,13 @@
     <Compile Include="Selection\Views\SelectionsPanel.xaml.cs">
       <DependentUpon>SelectionsPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Settings\Models\BreakpointClassificationOptions.cs" />
+    <Compile Include="Settings\ViewModels\BreakpointClassificationOptionsDialogViewModel.cs" />
     <Compile Include="Settings\ViewModels\ColorOptionsWindowViewModel.cs" />
     <Compile Include="Settings\ViewModels\EditCustomTrackWindowViewModel.cs" />
+    <Compile Include="Settings\Views\BreakpointClassificationOptionsDialog.xaml.cs">
+      <DependentUpon>BreakpointClassificationOptionsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\Views\ColorOptionsWindow.xaml.cs">
       <DependentUpon>ColorOptionsWindow.xaml</DependentUpon>
     </Compile>
@@ -465,6 +472,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Selection\Views\SelectionsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\Views\BreakpointClassificationOptionsDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

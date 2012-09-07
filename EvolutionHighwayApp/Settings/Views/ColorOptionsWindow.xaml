@@ -39,6 +39,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="Heterochromatin Background:" Grid.Column="0" Grid.Row="0"/>
@@ -72,6 +74,15 @@
             <TextBlock Text="Search Highlight Color:" Grid.Column="0" Grid.Row="7"/>
             <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.SearchHighlightColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="7"/>
+
+            <TextBlock Text="Conserved Synteny Highlight Color:" Grid.Column="0" Grid.Row="8"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.ConservedSyntenyHighlightColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="8"/>
+
+            <TextBlock Text="Breakpoint Classification Highlight Color:" Grid.Column="0" Grid.Row="9"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.BreakpointClassificationHighlightColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="9"/>
+
         </Grid>
         
         <Button Content="OK" Click="OnOKButtonClick" 

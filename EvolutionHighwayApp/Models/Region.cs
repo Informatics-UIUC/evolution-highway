@@ -1,6 +1,4 @@
-﻿using EvolutionHighwayApp.Infrastructure.MVVM;
-
-namespace EvolutionHighwayApp.Models
+﻿namespace EvolutionHighwayApp.Models
 {
     public abstract class Region
     {

@@ -3,10 +3,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tooltip="clr-namespace:Silverlight.Controls.ToolTips;assembly=Silverlight.Controls.ToolTips"
     mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
     Margin="{Binding HighlightRegion.Start, Converter={StaticResource DoubleToTopMarginConverter}}" 
     Height="{Binding HighlightRegion.Span, Converter={StaticResource ScaleConverter}}">
 
-    <Rectangle Fill="{Binding AppSettings.SearchHighlightColor,Converter={StaticResource ColorToBrushConverter}}"
+    <Rectangle Fill="{Binding HighlightRegion.Color,Converter={StaticResource ColorToBrushConverter}}"
                Stroke="Black" Opacity="0.5"/>
+    
+    <tooltip:ToolTipService.ToolTip>
+        <tooltip:ToolTip InitialDelay="00:00:01" DisplayTime="Forever" Background="Beige">
+            <tooltip:ToolTip.Content>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding HighlightRegion.Start,Converter={StaticResource NumberToPrettyTextConverter}}"/>
+                    <TextBlock Text=" - "/>
+                    <TextBlock Text="{Binding HighlightRegion.End,Converter={StaticResource NumberToPrettyTextConverter}}"/>
+                    <TextBlock Text=" : "/>
+                    <TextBlock Text="{Binding HighlightRegion.Span,Converter={StaticResource NumberToPrettyTextConverter}}"/>
+                </StackPanel>
+            </tooltip:ToolTip.Content>
+        </tooltip:ToolTip>
+    </tooltip:ToolTipService.ToolTip>
 </UserControl>

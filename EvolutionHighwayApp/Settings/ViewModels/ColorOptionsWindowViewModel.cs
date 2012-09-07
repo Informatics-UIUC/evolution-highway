@@ -1,4 +1,3 @@
-using System;
 using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 

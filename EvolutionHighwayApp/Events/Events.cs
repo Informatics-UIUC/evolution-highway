@@ -169,6 +169,7 @@ namespace EvolutionHighwayApp.Events
         public Color Color { get; set; }        
     }
 
+    public class HighlightColorChangedEvent : ColorChangedEvent { }
     public class HeterochromatinBgColorChangedEvent : ColorChangedEvent { }
     public class CentromereBgColorChangedEvent : ColorChangedEvent { }
     public class GenomeInsideBgColorChangedEvent : ColorChangedEvent { }
@@ -176,7 +177,6 @@ namespace EvolutionHighwayApp.Events
     public class FeatureDensityFillColorChangedEvent : ColorChangedEvent { }
     public class SparklineColorChangedEvent : ColorChangedEvent { }
     public class DataPointFillColorChangedEvent : ColorChangedEvent { }
-    public class SearchHighlightColorChangedEvent : ColorChangedEvent { }
 
     public class AdjacencyFeatureWidthChangedEvent
     {

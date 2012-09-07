@@ -1,7 +1,17 @@
-﻿namespace EvolutionHighwayApp.Models
+﻿using System.Windows.Media;
+using EvolutionHighwayApp.Infrastructure;
+
+namespace EvolutionHighwayApp.Models
 {
-    public class HighlightRegion : Region
+    public abstract class HighlightRegion : Region
     {
-        public HighlightRegion(double start, double end) : base(start, end) { }
+        public abstract Color Color { get; }
+
+        protected AppSettings AppSettings { get; private set; }
+
+        protected HighlightRegion(double start, double end) : base(start, end)
+        {
+            AppSettings = IoC.Container.Resolve<AppSettings>();
+        }
     }
 }

@@ -9,6 +9,7 @@ using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Models;
 using EvolutionHighwayApp.Repository.Controllers;
+using EvolutionHighwayApp.Settings.Models;
 using EvolutionHighwayApp.Utils;
 
 namespace EvolutionHighwayApp.Display.Controllers
@@ -37,8 +38,19 @@ namespace EvolutionHighwayApp.Display.Controllers
             get { return _showConservedSynteny; }
             private set
             {
-                ShowHighlightRegions = value;
+                if (value) ShowHighlightRegions = true;
                 NotifyPropertyChanged(() => ShowConservedSynteny, ref _showConservedSynteny, value);
+            }
+        }
+
+        private bool _showBreakpointClassification;
+        public bool ShowBreakpointClassification
+        {
+            get { return _showBreakpointClassification; }
+            private set
+            {
+                if (value) ShowHighlightRegions = true;
+                NotifyPropertyChanged(() => ShowBreakpointClassification, ref _showBreakpointClassification, value);
             }
         }
 
@@ -61,6 +73,8 @@ namespace EvolutionHighwayApp.Display.Controllers
         private readonly IRepositoryController _repositoryController;
         private readonly IEventPublisher _eventPublisher;
 
+        private BreakpointClassificationOptions _breakpointClassificationOptions;
+
         public DisplayController(IRepositoryController repositoryController, IEventPublisher eventPublisher)
         {
             Debug.WriteLine("{0} instantiated", GetType().Name);
@@ -82,6 +96,8 @@ namespace EvolutionHighwayApp.Display.Controllers
             _visibleRefChromosomes = new Dictionary<RefGenome, IEnumerable<RefChromosome>>();
             _visibleCompGenomes = new Dictionary<RefChromosome, IEnumerable<CompGenome>>();
             _highlightRegions = new Dictionary<RefChromosome, IEnumerable<Region>>();
+
+            _breakpointClassificationOptions = null;
         }
 
         public IEnumerable<RefGenome> GetVisibleRefGenomes()
@@ -185,10 +201,12 @@ namespace EvolutionHighwayApp.Display.Controllers
                 Debug.WriteLine("Load completed");
 
                 if (ShowConservedSynteny)
-                {
-                    addedCompGenomes.ForEach(kvp =>
-                        _highlightRegions[kvp.Key] = GetConservedSynteny(kvp.Value));
-                }
+                    SetShowConservedSynteny();
+
+                if (ShowBreakpointClassification && _breakpointClassificationOptions != null)
+                    SetShowBreakpointClassification(
+                        _breakpointClassificationOptions.Classes, 
+                        _breakpointClassificationOptions.MaxThreshold);
 
                 _visibleCompGenomes.ForEach(kvp => _eventPublisher.Publish(new CompGenomeSelectionDisplayEvent(kvp.Key)
                 {
@@ -261,70 +279,105 @@ namespace EvolutionHighwayApp.Display.Controllers
                     });
         }
 
+        
         public void SetHighlightRegions(RefChromosome chromosome, ICollection<Region> highlightRegions)
         {
+            ShowConservedSynteny = false;
+            ShowBreakpointClassification = false;
+
             _highlightRegions[chromosome] = highlightRegions;
             _eventPublisher.Publish(new HighlightRegionDisplayEvent(chromosome, highlightRegions));
+
             ShowHighlightRegions = true;
         }
 
-        public void SetShowConservedSynteny(bool visible, Action continuation = null)
+        public void SetShowConservedSynteny(Action continuation = null)
         {
-            if (!visible)
-            {
-                if (_showConservedSynteny)
-                    ShowConservedSynteny = false;
+            ShowBreakpointClassification = false;
+            ShowConservedSynteny = true;
 
-                if (continuation != null) continuation();
-                return;
+            foreach (var kvp in _visibleCompGenomes)
+            {
+                var conservedRegions = GetConservedSynteny(kvp.Value).ToList();
+                _highlightRegions[kvp.Key] = conservedRegions;
+                _eventPublisher.Publish(new HighlightRegionDisplayEvent(kvp.Key, conservedRegions));
             }
 
-            _visibleCompGenomes.ForEach(kvp => SetHighlightRegions(kvp.Key, GetConservedSynteny(kvp.Value).ToArray()));
-            _showConservedSynteny = visible;
             if (continuation != null) continuation();
         }
 
-        private IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes)
+        public void SetShowBreakpointClassification(IEnumerable<string> classNames, double maxThreshold, Action continuation = null)
         {
-            return GetOverlapRegions(compGenomes.Select(g => g.SyntenyBlocks));
+            ShowConservedSynteny = false;
+            ShowBreakpointClassification = true;
+
+            _breakpointClassificationOptions = new BreakpointClassificationOptions(classNames.ToList(), maxThreshold);
+
+            foreach (var kvp in _visibleCompGenomes)
+            {
+                var genomes = kvp.Value.ToList();
+                var classes = genomes.Where(g => classNames.Contains(g.Name)).ToList();
+                var compGenomes = genomes.Except(classes).ToList();
+                var classRegions = GetBreakpointClassification(classes, compGenomes, maxThreshold).ToList();
+
+                _highlightRegions[kvp.Key] = classRegions;
+                _eventPublisher.Publish(new HighlightRegionDisplayEvent(kvp.Key, classRegions));
+            }
+
+            if (continuation != null) continuation();
         }
 
-        private static IEnumerable<Region> GetOverlapRegions(IEnumerable<IEnumerable<Region>> regionsCollection)
+        public void ClearHighlight()
         {
-            IEnumerable<Tuple<IEnumerable<Region>, Region>> emptyRegions
-                = new[] { new Tuple<IEnumerable<Region>, Region>(Enumerable.Empty<Region>(), null) };
+            _highlightRegions.Clear();
+            ShowHighlightRegions = false;
+            ShowConservedSynteny = false;
+            ShowBreakpointClassification = false;
 
-            return
-                regionsCollection.Aggregate(emptyRegions,
-                    (accRegions, regs) => 
-                        from acc in accRegions
-                        from region in regs
-                        let regions = acc.Item1.Concat(new[] {region})
-                        let overlap = GetOverlap(regions)
-                        where overlap != null
-                        select new Tuple<IEnumerable<Region>, Region>(regions, overlap),
-                    result => result.Select(r => r.Item2));
+            _eventPublisher.Publish(new HighlightRegionDisplayEvent(null, null));
         }
 
-        private IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, long maxThreshold)
+        private static IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes)
         {
-            var overlapGenomes = GetConservedSynteny(compGenomes);
-            var overlapClassBreakpoints = GetOverlapRegions(classes.Select(c => GetBreakpoints(c).MemoizeAll()));
-            var classRegions = GetOverlapRegions(new[] {overlapGenomes, overlapClassBreakpoints});
+            return GetOverlapRegions(compGenomes.Select(g => g.SyntenyBlocks), ConservedSyntenyHighlightRegionFactory);
+        }
+
+        private static IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, double maxThreshold)
+        {
+            var overlapGenomes = GetOverlapRegions(compGenomes.Select(g => g.SyntenyBlocks), BreakpointClassificationHighlightRegionFactory);
+            var overlapClassBreakpoints = GetOverlapRegions(classes.Select(c => GetBreakpoints(c, BreakpointClassificationHighlightRegionFactory).MemoizeAll()), BreakpointClassificationHighlightRegionFactory);
+            var classRegions = GetOverlapRegions(new[] {overlapGenomes, overlapClassBreakpoints}, BreakpointClassificationHighlightRegionFactory);
 
             return classRegions.Where(r => r.Span < maxThreshold);
         }
 
-        private static Region GetOverlap(IEnumerable<Region> regions)
+        private static IEnumerable<T> GetOverlapRegions<T>(IEnumerable<IEnumerable<Region>> regionsCollection, Func<double, double, T> regionFactory) where T:Region
+        {
+            IEnumerable<Tuple<IEnumerable<Region>,T>> emptyRegions = 
+                new[] { new Tuple<IEnumerable<Region>, T>(Enumerable.Empty<T>(), null) };
+
+            return
+                regionsCollection.Aggregate(emptyRegions,
+                    (accRegions, regs) =>
+                        from acc in accRegions
+                        from region in regs
+                        let regions = acc.Item1.Concat(new[] {region})
+                        let overlap = GetOverlap(regions, regionFactory)
+                        where overlap != null
+                        select new Tuple<IEnumerable<Region>, T>(regions, overlap),
+                    result => result.Select(r => r.Item2));
+        }
+
+        private static T GetOverlap<T>(IEnumerable<Region> regions, Func<double, double, T> regionFactory) where T:Region
         {
             regions = regions.ToArray();
             var x = regions.Max(r => r.Start);
             var y = regions.Min(r => r.End);
 
-            return y >= x ? new HighlightRegion(x, y) : null;
+            return y >= x ? regionFactory(x, y) : null;
         }
 
-        private static IEnumerable<BreakpointRegion> GetBreakpoints(CompGenome compGenome)
+        private static IEnumerable<T> GetBreakpoints<T>(CompGenome compGenome, Func<double, double, T> regionFactory) where T:Region
         {
             var sortedRegions = compGenome.SyntenyBlocks.ToList();
             sortedRegions.Sort((a, b) => a.Start.CompareTo(b.Start));
@@ -333,13 +386,20 @@ namespace EvolutionHighwayApp.Display.Controllers
             foreach (var region in sortedRegions)
             {
                 if (i < region.Start)
-                    yield return new BreakpointRegion(i, region.Start);
+                    yield return regionFactory(i, region.Start);
 
                 i = region.End;
             }
 
             if (i < compGenome.RefChromosome.Length)
-                yield return new BreakpointRegion(i, compGenome.RefChromosome.Length);
+                yield return regionFactory(i, compGenome.RefChromosome.Length);
         }
+
+        private static readonly Func<double, double, ConservedSyntenyHighlightRegion> ConservedSyntenyHighlightRegionFactory = 
+            (s, e) => new ConservedSyntenyHighlightRegion(s, e);
+
+        private static readonly Func<double, double, BreakpointClassificationHighlightRegion> BreakpointClassificationHighlightRegionFactory =
+           (s, e) => new BreakpointClassificationHighlightRegion(s, e);
+
     }
 }

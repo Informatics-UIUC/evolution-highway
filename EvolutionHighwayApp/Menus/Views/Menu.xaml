@@ -58,9 +58,14 @@
                     </ToolTip>
                 </ToolTipService.ToolTip>
             </viblend:MenuItem>
-            <viblend:MenuItem AllowCheckState="True"
-                              IsChecked="{Binding AppSettings.ShowConservedSynteny, Mode=TwoWay}"
+            <viblend:MenuItem 
+                              IsChecked="{Binding DisplayController.ShowConservedSynteny}"
+                              Command="{Binding ShowConservedSyntenyCommand}"
                               Text="Conserved Synteny"/>
+            <viblend:MenuItem 
+                              IsChecked="{Binding DisplayController.ShowBreakpointClassification}"
+                              Command="{Binding ShowBreakpointClassificationCommand}"
+                              Text="Brkpt Classification"/>
             <viblend:MenuItem Text="Features">
                 <viblend:MenuItem AllowCheckState="True"
                                   IsChecked="{Binding AppSettings.ShowAdjacencyScore, Mode=TwoWay}"

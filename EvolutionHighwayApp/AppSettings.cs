@@ -37,7 +37,6 @@ namespace EvolutionHighwayApp
                                      {"showCentromere", true},
                                      {"showHeterochromatin", true},
                                      {"showBlockOrientation", false},
-                                     {"showConservedSynteny", false},
                                      {"showAdjacencyScore", false},
                                      {"genomeLayout", Orientation.Horizontal},
                                      {"chromosomeLayout", Orientation.Horizontal},
@@ -53,15 +52,15 @@ namespace EvolutionHighwayApp
                                      {"featureDensityFillColor", Colors.Transparent},
                                      {"sparklineColor", Colors.Black},
                                      {"searchHighlightColor", PredefinedColors.AllColors["LightGreen"]},
+                                     {"conservedSyntenyHighlightColor", PredefinedColors.AllColors["PaleGreen"]},
+                                     {"breakpointClassificationHighlightColor", PredefinedColors.AllColors["Plum"]},
+                                     {"breakpointClassificationMaxThreshold", 100000000d},
                                      {"dataPointFillColor", PredefinedColors.AllColors["LightSalmon"]},
                                      {"adjacencyFeatureWidth", 20}
                                  };
 
-            _showConservedSynteny = (bool) _defaultValues["showConservedSynteny"];
-
             _displayController.SetShowCentromere(ShowCentromere);
             _displayController.SetShowHeterochromatin(ShowHeterochromatin);
-            _displayController.SetShowConservedSynteny(ShowConservedSynteny);
         }
 
         public void ResetToDefaults()
@@ -69,7 +68,6 @@ namespace EvolutionHighwayApp
             ShowCentromere = (bool) _defaultValues["showCentromere"];
             ShowHeterochromatin = (bool) _defaultValues["showHeterochromatin"];
             ShowBlockOrientation = (bool) _defaultValues["showBlockOrientation"];
-            ShowConservedSynteny = (bool) _defaultValues["showConservedSynteny"];
             ShowAdjacencyScore = (bool) _defaultValues["showAdjacencyScore"];
             GenomeLayout = (Orientation) _defaultValues["genomeLayout"];
             ChromosomeLayout = (Orientation) _defaultValues["chromosomeLayout"];
@@ -86,6 +84,9 @@ namespace EvolutionHighwayApp
             SparklineColor = (Color) _defaultValues["sparklineColor"];
             DataPointFillColor = (Color) _defaultValues["dataPointFillColor"];
             SearchHighlightColor = (Color) _defaultValues["searchHighlightColor"];
+            ConservedSyntenyHighlightColor = (Color) _defaultValues["conservedSyntenyHighlightColor"];
+            BreakpointClassificationHighlightColor = (Color) _defaultValues["breakpointClassificationHighlightColor"];
+            BreakpointClassificationMaxThreshold = (double) _defaultValues["breakpointClassificationMaxThreshold"];
             AdjacencyFeatureWidth = (int) _defaultValues["adjacencyFeatureWidth"];
         }
 
@@ -138,24 +139,6 @@ namespace EvolutionHighwayApp
                 EventPublisher.Publish(new ShowBlockOrientationEvent { ShowBlockOrientation = value });
             }
         }
-
-        private bool _showConservedSynteny;
-        public bool ShowConservedSynteny
-        {
-            get { return _showConservedSynteny; }
-            set
-            {
-                if (_showConservedSynteny == value) return;
-
-                Debug.WriteLine("ShowConservedSynteny: {0}", value);
-
-                _showConservedSynteny = value;
-                NotifyPropertyChanged(() => ShowConservedSynteny);
-
-                _displayController.SetShowConservedSynteny(value);
-            }
-        }
-
 
         public bool ShowAdjacencyScore
         {
@@ -406,7 +389,54 @@ namespace EvolutionHighwayApp
 
                 _appSettings.Set("searchHighlightColor", value);
                 NotifyPropertyChanged(() => SearchHighlightColor);
-                EventPublisher.Publish(new SearchHighlightColorChangedEvent { Color = value });
+                EventPublisher.Publish(new HighlightColorChangedEvent { Color = value });
+            }
+        }
+
+        public Color ConservedSyntenyHighlightColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("conservedSyntenyHighlightColor", _defaultValues["conservedSyntenyHighlightColor"]); }
+            set
+            {
+                var oldValue = ConservedSyntenyHighlightColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetConservedSyntenyHighlightColor: {0}", value);
+
+                _appSettings.Set("conservedSyntenyHighlightColor", value);
+                NotifyPropertyChanged(() => ConservedSyntenyHighlightColor);
+                EventPublisher.Publish(new HighlightColorChangedEvent { Color = value });
+            }
+        }
+
+        public Color BreakpointClassificationHighlightColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("breakpointClassificationHighlightColor", _defaultValues["breakpointClassificationHighlightColor"]); }
+            set
+            {
+                var oldValue = BreakpointClassificationHighlightColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetBreakpointClassificationHighlightColor: {0}", value);
+
+                _appSettings.Set("breakpointClassificationHighlightColor", value);
+                NotifyPropertyChanged(() => BreakpointClassificationHighlightColor);
+                EventPublisher.Publish(new HighlightColorChangedEvent { Color = value });
+            }
+        }
+
+        public double BreakpointClassificationMaxThreshold
+        {
+            get { return (double)_appSettings.GetValueOrDefault("breakpointClassificationMaxThreshold", _defaultValues["breakpointClassificationMaxThreshold"]); }
+            set
+            {
+                var oldValue = BreakpointClassificationMaxThreshold;
+                if (oldValue.Equals(value)) return;
+
+                Debug.WriteLine("SetBreakpointClassificationMaxThreshold: {0}", value);
+
+                _appSettings.Set("breakpointClassificationMaxThreshold", value);
+                NotifyPropertyChanged(() => BreakpointClassificationMaxThreshold);
             }
         }
 

@@ -9,6 +9,8 @@ namespace EvolutionHighwayApp.Display.Controllers
         bool ShowCentromere { get; }
         bool ShowHeterochromatin { get; }
         bool ShowHighlightRegions { get; }
+        bool ShowConservedSynteny { get; }
+        bool ShowBreakpointClassification { get; }
 
         IEnumerable<RefGenome> GetVisibleRefGenomes();
 
@@ -24,6 +26,8 @@ namespace EvolutionHighwayApp.Display.Controllers
         void SetShowCentromere(bool visible, Action continuation = null);
         void SetShowHeterochromatin(bool value, Action continuation = null);
         void SetHighlightRegions(RefChromosome chromosome, ICollection<Region> highlightRegions);
-        void SetShowConservedSynteny(bool visible, Action continuation = null);
+        void SetShowConservedSynteny(Action continuation = null);
+        void SetShowBreakpointClassification(IEnumerable<string> classNames, double maxThreshold, Action continuation = null);
+        void ClearHighlight();
     }
 }
