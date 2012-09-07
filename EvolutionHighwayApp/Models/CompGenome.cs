@@ -6,12 +6,12 @@ namespace EvolutionHighwayApp.Models
     {
         public RefChromosome RefChromosome { get; private set; }
 
-        public List<SyntenyRegion> SyntenyBlocks { get; private set; }
+        public ICollection<SyntenyRegion> SyntenyBlocks { get; set; }
 
         public CompGenome(string name, RefChromosome refChromosome) : base(name)
         {
             RefChromosome = refChromosome;
-            SyntenyBlocks = new List<SyntenyRegion>();
+            SyntenyBlocks = null;
         }
     }
 }

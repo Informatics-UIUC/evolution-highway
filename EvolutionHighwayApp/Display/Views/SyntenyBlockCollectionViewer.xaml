@@ -1,0 +1,29 @@
+<UserControl x:Class="EvolutionHighwayApp.Display.Views.SyntenyBlockCollectionViewer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:views="clr-namespace:EvolutionHighwayApp.Display.Views"
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
+
+    <Border BorderBrush="Black" BorderThickness="0.5,0,0.5,0">
+        <ItemsControl ItemsSource="{Binding CompGenome.SyntenyBlocks}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid Background="{Binding AppSettings.GenomeInsideBgColor,Converter={StaticResource ColorToBrushConverter}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <views:SyntenyBlockViewer SyntenyRegion="{Binding Content,RelativeSource={RelativeSource TemplatedParent}}"
+                                              VerticalAlignment="Top" Cursor="Hand" MouseLeftButtonUp="OnMouseLeftButtonUp"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Border>
+</UserControl>

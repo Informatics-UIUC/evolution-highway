@@ -10,7 +10,8 @@ namespace EvolutionHighwayApp.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return string.Format("0,{0},0,0", ScaleConverter.Convert(value, null, null, null));
+            var topMargin = ScaleConverter.Convert(value, null, null, null);
+            return string.Format("0,{0},0,0", topMargin);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

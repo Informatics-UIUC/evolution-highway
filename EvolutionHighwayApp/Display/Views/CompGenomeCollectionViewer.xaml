@@ -1,0 +1,122 @@
+<UserControl x:Class="EvolutionHighwayApp.Display.Views.CompGenomeCollectionViewer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:views="clr-namespace:EvolutionHighwayApp.Display.Views"
+    xmlns:toolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
+    x:Name="_compGenomeCollectionViewer">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Text="Mbp" FontSize="7"/>
+
+        <views:ScaleAxis Grid.Row="1" Grid.Column="0"
+                         MinorTickMarks="10" MajorTickMarks="50" 
+                         MaxScale="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer}"/>
+
+        <views:CompGenomeNamesViewer Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" 
+                                     Height="{Binding DataContext.AppSettings.LabelSize,ElementName=_compGenomeCollectionViewer}"
+                                     CompGenomes="{Binding DataContext.CompGenomes,ElementName=_compGenomeCollectionViewer}" 
+                                     NamesWidth="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
+                                     NamesAlignment="Bottom"/>
+
+        <Grid Grid.Row="1" Grid.Column="1"
+              Background="White" Clip="{Binding ClipRegion}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ItemsControl ItemsSource="{Binding CompGenomes}" VerticalAlignment="Top">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:SyntenyBlockCollectionViewer Width="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
+                                                            Height="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"
+                                                            CompGenome="{Binding Content,RelativeSource={RelativeSource TemplatedParent}}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <views:CentromereRegionCollectionViewer VerticalAlignment="Top"
+                                                    RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+                                                    Visibility="{Binding DataContext.DisplayController.ShowCentromere,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
+
+            <views:HeterochromatinRegionCollectionViewer VerticalAlignment="Top"
+                                                         RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+                                                         Visibility="{Binding DataContext.DisplayController.ShowHeterochromatin,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
+
+            <Path Stroke="Black" StrokeThickness="1" Data="{Binding ClipRegion}"/>
+        </Grid>
+        
+        <Grid Grid.Row="1" Grid.Column="1">
+            <views:HighlightRegionCollectionViewer VerticalAlignment="Top"
+                                                   Margin="-10,0,-10,0"
+                                                   RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+                                                   Visibility="{Binding DataContext.DisplayController.ShowHighlightRegions,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
+
+        </Grid>
+
+        <views:CompGenomeNamesViewer Grid.Row="2" Grid.Column="1" Margin="0,5,0,0"
+                                     CompGenomes="{Binding DataContext.CompGenomes,ElementName=_compGenomeCollectionViewer}"
+                                     NamesWidth="{Binding DataContext.BlockWidth,ElementName=_compGenomeCollectionViewer}"
+                                     NamesAlignment="Top"/>
+
+        <ItemsControl Grid.Row="1" Grid.Column="2" 
+                      ItemsSource="{Binding DataContext.CustomTracks,ElementName=_compGenomeCollectionViewer}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <views:CustomTrackViewer CustomTrack="{Binding Content,RelativeSource={RelativeSource TemplatedParent}}"
+                                             VerticalAlignment="Top"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+<!--        <toolkit:LayoutTransformer Grid.Row="0" Grid.Column="3" Margin="5,0,0,5"-->
+<!--                                   Height="{Binding DataContext.AppSettings.LabelSize,ElementName=_compGenomeCollectionViewer}"-->
+<!--                                   Visibility="{Binding Visibility,ElementName=_sparkline}">-->
+<!--            <toolkit:LayoutTransformer.LayoutTransform>-->
+<!--                <RotateTransform Angle="90"/>-->
+<!--            </toolkit:LayoutTransformer.LayoutTransform>-->
+<!---->
+<!--            <Viewbox Stretch="Uniform" MaxHeight="14" HorizontalAlignment="Right">-->
+<!--                <TextBlock Text="Adj. Score" FontFamily="Trebuchet MS"/>-->
+<!--            </Viewbox>-->
+<!--        </toolkit:LayoutTransformer>-->
+        
+<!--        <views:Sparkline x:Name="_sparkline" x:FieldModifier="private" -->
+<!--                         Grid.Row="1" Grid.Column="3" Margin="5,0,0,0" -->
+<!--                         Width="{Binding DataContext.AppSettings.AdjacencyFeatureWidth,ElementName=_compGenomeCollectionViewer}"-->
+<!--                         Height="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"-->
+<!--                         DataPoints="{Binding DataContext.RefChromosome.FeatureDensityData[AdjacencyScore],ElementName=_compGenomeCollectionViewer}"-->
+<!--                         Visibility="{Binding ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}"/>-->
+    </Grid>
+</UserControl>

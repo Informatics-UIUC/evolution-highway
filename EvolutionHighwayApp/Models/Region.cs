@@ -2,7 +2,7 @@
 
 namespace EvolutionHighwayApp.Models
 {
-    public abstract class Region : ModelBase
+    public abstract class Region
     {
         public double Start { get; private set; }
         public double End { get; private set; }

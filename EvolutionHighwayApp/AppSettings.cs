@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.IO.IsolatedStorage;
 using System.Windows.Controls;
 using System.Windows.Media;
+using EvolutionHighwayApp.Display.Controllers;
 using EvolutionHighwayApp.Events;
+using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Utils;
@@ -13,8 +15,11 @@ namespace EvolutionHighwayApp
 {
     public class AppSettings : ViewModelBase
     {
+        private readonly IDisplayController _displayController;
         private readonly IsolatedStorageSettings _appSettings = IsolatedStorageSettings.ApplicationSettings;
         private readonly Dictionary<string, object> _defaultValues;
+
+        public IEventPublisher EventPublisher { get; private set; }
 
         public static int DisplaySizeMinimum { get { return 50; } }
         public static int DisplaySizeMaximum { get { return 20000; } }
@@ -22,14 +27,17 @@ namespace EvolutionHighwayApp
         public static int DisplaySizeLargeChange { get { return 2000; } }
 
 
-        public AppSettings(IEventPublisher eventPublisher) 
-            : base(eventPublisher)
+        public AppSettings(IDisplayController displayController)
         {
+            _displayController = displayController;
+
+            EventPublisher = IoC.Container.Resolve<IEventPublisher>();
             _defaultValues = new Dictionary<string, object>
                                  {
                                      {"showCentromere", true},
                                      {"showHeterochromatin", true},
                                      {"showBlockOrientation", false},
+                                     {"showConservedSynteny", false},
                                      {"showAdjacencyScore", false},
                                      {"genomeLayout", Orientation.Horizontal},
                                      {"chromosomeLayout", Orientation.Horizontal},
@@ -48,6 +56,12 @@ namespace EvolutionHighwayApp
                                      {"dataPointFillColor", PredefinedColors.AllColors["LightSalmon"]},
                                      {"adjacencyFeatureWidth", 20}
                                  };
+
+            _showConservedSynteny = (bool) _defaultValues["showConservedSynteny"];
+
+            _displayController.SetShowCentromere(ShowCentromere);
+            _displayController.SetShowHeterochromatin(ShowHeterochromatin);
+            _displayController.SetShowConservedSynteny(ShowConservedSynteny);
         }
 
         public void ResetToDefaults()
@@ -55,6 +69,7 @@ namespace EvolutionHighwayApp
             ShowCentromere = (bool) _defaultValues["showCentromere"];
             ShowHeterochromatin = (bool) _defaultValues["showHeterochromatin"];
             ShowBlockOrientation = (bool) _defaultValues["showBlockOrientation"];
+            ShowConservedSynteny = (bool) _defaultValues["showConservedSynteny"];
             ShowAdjacencyScore = (bool) _defaultValues["showAdjacencyScore"];
             GenomeLayout = (Orientation) _defaultValues["genomeLayout"];
             ChromosomeLayout = (Orientation) _defaultValues["chromosomeLayout"];
@@ -86,7 +101,8 @@ namespace EvolutionHighwayApp
 
                 _appSettings.Set("showCentromere", value);
                 NotifyPropertyChanged(() => ShowCentromere);
-                EventPublisher.Publish(new ShowCentromereEvent { ShowCentromere = value });
+
+                _displayController.SetShowCentromere(value);
             }
         }
 
@@ -102,7 +118,8 @@ namespace EvolutionHighwayApp
 
                 _appSettings.Set("showHeterochromatin", value);
                 NotifyPropertyChanged(() => ShowHeterochromatin);
-                EventPublisher.Publish(new ShowHeterochromatinEvent { ShowHeterochromatin = value });
+
+                _displayController.SetShowHeterochromatin(value);
             }
         }
 
@@ -121,6 +138,24 @@ namespace EvolutionHighwayApp
                 EventPublisher.Publish(new ShowBlockOrientationEvent { ShowBlockOrientation = value });
             }
         }
+
+        private bool _showConservedSynteny;
+        public bool ShowConservedSynteny
+        {
+            get { return _showConservedSynteny; }
+            set
+            {
+                if (_showConservedSynteny == value) return;
+
+                Debug.WriteLine("ShowConservedSynteny: {0}", value);
+
+                _showConservedSynteny = value;
+                NotifyPropertyChanged(() => ShowConservedSynteny);
+
+                _displayController.SetShowConservedSynteny(value);
+            }
+        }
+
 
         public bool ShowAdjacencyScore
         {

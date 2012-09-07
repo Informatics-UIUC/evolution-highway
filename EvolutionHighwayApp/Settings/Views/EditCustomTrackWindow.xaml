@@ -1,0 +1,42 @@
+<controls:ChildWindow x:Class="EvolutionHighwayApp.Settings.Views.EditCustomTrackWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:utils="clr-namespace:EvolutionHighwayApp.Utils"
+    xmlns:models="clr-namespace:EvolutionHighwayApp.Models"
+    Width="400" Height="300" Title="Custom Track">
+    
+    <controls:ChildWindow.Resources>
+        <models:Delimiters x:Key="Delimiters"/>
+    </controls:ChildWindow.Resources>
+    
+    <Grid Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Enter the track data below, then select the appropriate delimiter:"/>
+
+        <TextBox Grid.Row="1" Text="{Binding TrackDataText,Mode=TwoWay}" AcceptsReturn="True" 
+                 VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <i:Interaction.Behaviors>
+                <utils:TextBoxUpdateBehavior/>
+            </i:Interaction.Behaviors>
+        </TextBox>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,5">
+            <TextBlock Text="Record delimiter:" VerticalAlignment="Center"/>
+            <ComboBox Width="Auto" Margin="5,0,0,0" 
+                      ItemsSource="{StaticResource Delimiters}" SelectedItem="{Binding Delimiter,Mode=TwoWay}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="OK" Width="75" Margin="0,0,10,0" Click="OnOKButtonClick" Command="{Binding SubmitCommand}"/>
+            <Button Content="Cancel" Width="75" Click="OnCancelButtonClick" Command="{Binding CancelCommand}"/>
+        </StackPanel>
+    </Grid>
+</controls:ChildWindow>

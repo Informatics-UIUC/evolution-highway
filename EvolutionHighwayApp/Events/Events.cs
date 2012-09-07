@@ -60,29 +60,22 @@ namespace EvolutionHighwayApp.Events
         public string DataSourceUrl { get; set; }
     }
 
-    public abstract class GenomeSelectionChangedEvent<T> where T : Genome
+    public abstract class SelectionChangedEvent { }
+
+    public abstract class GenomeSelectionChangedEvent<T> : SelectionChangedEvent where T : Genome
     {
         public IEnumerable<T> SelectedGenomes { get; set; }
-        public IEnumerable<T> AddedGenomes { get; set; }
-        public IEnumerable<T> RemovedGenomes { get; set; }
     }
 
     public class RefGenomeSelectionChangedEvent : GenomeSelectionChangedEvent<RefGenome> { }
     public class CompGenomeSelectionChangedEvent : GenomeSelectionChangedEvent<CompGenome> { }
 
-    public abstract class ChromosomeSelectionChangedEvent<T> where T : Chromosome
+    public abstract class ChromosomeSelectionChangedEvent<T> : SelectionChangedEvent where T : Chromosome
     {
         public IEnumerable<T> SelectedChromosomes { get; set; }
-        public IEnumerable<T> AddedChromosomes { get; set; }
-        public IEnumerable<T> RemovedChromosomes { get; set; }
     }
 
     public class RefChromosomeSelectionChangedEvent : ChromosomeSelectionChangedEvent<RefChromosome> { }
-
-    public class UpdateSelectionEvent
-    {
-        public IEnumerable<CompGenome> SelectedCompGenomes;
-    }
 
     #endregion
 
@@ -121,6 +114,37 @@ namespace EvolutionHighwayApp.Events
         {
             RefGenome = refGenome;
         }
+    }
+
+    public abstract class ChromosomeRegionDisplayEvent<T> where T : Region
+    {
+        public Chromosome Chromosome { get; private set; }
+        public IEnumerable<T> Regions { get; private set; }
+        public bool Visible { get; set; }
+
+        protected ChromosomeRegionDisplayEvent(Chromosome chromosome, IEnumerable<T> regions)
+        {
+            Chromosome = chromosome;
+            Regions = regions;
+        }
+    }
+
+    public class CentromereRegionDisplayEvent : ChromosomeRegionDisplayEvent<CentromereRegion>
+    {
+        public CentromereRegionDisplayEvent(Chromosome chromosome, IEnumerable<CentromereRegion> regions) 
+            : base(chromosome, regions) { }
+    }
+
+    public class HeterochromatinRegionDisplayEvent : ChromosomeRegionDisplayEvent<HeterochromatinRegion>
+    {
+        public HeterochromatinRegionDisplayEvent(Chromosome chromosome, IEnumerable<HeterochromatinRegion> regions) 
+            : base(chromosome, regions) { }
+    }
+
+    public class HighlightRegionDisplayEvent : ChromosomeRegionDisplayEvent<Region>
+    {
+        public HighlightRegionDisplayEvent(Chromosome chromosome, IEnumerable<Region> regions) 
+            : base(chromosome, regions) { }
     }
 
     public class ResetZoomEvent { }

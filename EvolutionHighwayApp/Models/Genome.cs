@@ -1,8 +1,7 @@
-﻿using EvolutionHighwayApp.Infrastructure.MVVM;
-
-namespace EvolutionHighwayApp.Models
+﻿namespace EvolutionHighwayApp.Models
 {
-    public abstract class Genome : ModelBase
+    //TODO Implement GetHashcode and override equals since we're using these as keys into dictionaries
+    public abstract class Genome
     {
         public string Name { get; private set; }
 

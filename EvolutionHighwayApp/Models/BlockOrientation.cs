@@ -1,4 +1,4 @@
-﻿using EvolutionHighwayApp.State;
+﻿using EvolutionHighwayApp.Repository.Models;
 
 namespace EvolutionHighwayApp.Models
 {
@@ -27,7 +27,7 @@ namespace EvolutionHighwayApp.Models
 
             _start = (syntenyRegion.Sign == -1) ? syntenyRegion.ModEnd : syntenyRegion.ModStart;
             _end = (syntenyRegion.Sign == -1) ? syntenyRegion.ModStart : syntenyRegion.ModEnd;
-            _compChrLength = Repository.CompChromosomeLengths[syntenyRegion.CompGenome.Name][syntenyRegion.Chromosome];
+            _compChrLength = RepositoryState.CompChromosomeLengths[syntenyRegion.CompGenome.Name][syntenyRegion.Chromosome];
         }
     }
 }

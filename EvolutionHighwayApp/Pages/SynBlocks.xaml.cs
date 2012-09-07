@@ -3,10 +3,10 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using EvolutionHighwayApp.Converters;
+using EvolutionHighwayApp.Display.Controllers;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
-using EvolutionHighwayApp.State;
 
 namespace EvolutionHighwayApp.Pages
 {
@@ -17,12 +17,8 @@ namespace EvolutionHighwayApp.Pages
             InitializeComponent();
 
             var eventPublisher = IoC.Container.Resolve<IEventPublisher>();
-            var selections = IoC.Container.Resolve<SelectionsController>();
+            var displayController = IoC.Container.Resolve<IDisplayController>();
             var appSettings = IoC.Container.Resolve<AppSettings>();
-
-            var dataSourceChangedEventObserver = eventPublisher.GetEvent<DataSourceChangedEvent>()
-                .ObserveOnDispatcher()
-                .Subscribe(e => _accordion.SelectAll());
 
             var loadingEventObserver = eventPublisher.GetEvent<SyntenyBlocksLoadingEvent>()
                 .ObserveOnDispatcher()
@@ -32,8 +28,9 @@ namespace EvolutionHighwayApp.Pages
                 .ObserveOnDispatcher()
                 .Subscribe(e =>
                 {
-                    if (selections.VisibleCompGenomes.Count > 0)
-                        ScaleConverter.DataMaximum = selections.VisibleCompGenomes.Keys.Max(c => c.Length);
+                    var visibleRefChromosomes = displayController.GetVisibleRefChromosomes();
+                    if (!visibleRefChromosomes.IsEmpty())
+                        ScaleConverter.DataMaximum = visibleRefChromosomes.Max(c => c.Length);
 
                     var desiredSize = appSettings.SynBlocksLayout == Orientation.Vertical ? _scrollViewer.ActualHeight : _scrollViewer.ActualWidth;
 
@@ -43,11 +40,10 @@ namespace EvolutionHighwayApp.Pages
             
             Unloaded += delegate
                 {
-                    dataSourceChangedEventObserver.Dispose(); 
                     loadingEventObserver.Dispose();
                     resetZoomEventObserver.Dispose();
                     IoC.Container.Release(eventPublisher);
-                    IoC.Container.Release(selections);
+                    IoC.Container.Release(displayController);
                     IoC.Container.Release(appSettings);
                 };
         }

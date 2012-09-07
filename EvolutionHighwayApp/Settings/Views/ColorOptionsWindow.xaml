@@ -1,0 +1,80 @@
+<controls:ChildWindow x:Class="EvolutionHighwayApp.Settings.Views.ColorOptionsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+    xmlns:color="clr-namespace:SilverlightColorPicker;assembly=SilverlightColorPicker" 
+    Width="400" Height="300" OverlayBrush="{x:Null}"
+    Title="Color Options">
+    
+    <controls:ChildWindow.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+        
+        <Style TargetType="color:SilverlightColorPicker">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+        </Style>
+    </controls:ChildWindow.Resources>
+
+    <Grid Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Heterochromatin Background:" Grid.Column="0" Grid.Row="0"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.HeterochromatinBgColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="0"/>
+
+            <TextBlock Text="Centromere Background:" Grid.Column="0" Grid.Row="1"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.CentromereBgColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="1"/>
+
+            <TextBlock Text="Interior Genome Background:" Grid.Column="0" Grid.Row="2"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.GenomeInsideBgColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="2"/>
+
+            <TextBlock Text="Feature Background:" Grid.Column="0" Grid.Row="3"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.FeatureDensityBgColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="3"/>
+            
+            <TextBlock Text="Feature Fill Color:" Grid.Column="0" Grid.Row="4"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.FeatureDensityFillColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="4"/>
+
+            <TextBlock Text="Feature Sparkline Color:" Grid.Column="0" Grid.Row="5"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.SparklineColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="5"/>
+
+            <TextBlock Text="Feature Data Point Fill Color:" Grid.Column="0" Grid.Row="6"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.DataPointFillColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="6"/>
+
+            <TextBlock Text="Search Highlight Color:" Grid.Column="0" Grid.Row="7"/>
+            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.SearchHighlightColor,Mode=TwoWay}"
+                                          Grid.Column="1" Grid.Row="7"/>
+        </Grid>
+        
+        <Button Content="OK" Click="OnOKButtonClick" 
+                Width="75" Height="23" HorizontalAlignment="Right" Margin="0,12,12,0" Grid.Row="1" />
+    </Grid> 
+</controls:ChildWindow>

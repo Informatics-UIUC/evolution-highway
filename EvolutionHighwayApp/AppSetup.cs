@@ -2,11 +2,12 @@
 using System.Diagnostics;
 using Castle.MicroKernel.Registration;
 using EvolutionHighwayApp.Converters;
+using EvolutionHighwayApp.Display.Controllers;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
-using EvolutionHighwayApp.State;
-using EvolutionHighwayApp.ViewModels;
+using EvolutionHighwayApp.Repository.Controllers;
+using EvolutionHighwayApp.Selection.Controllers;
 using ImageTools.IO;
 using ImageTools.IO.Jpeg;
 using ImageTools.IO.Png;
@@ -29,7 +30,7 @@ namespace EvolutionHighwayApp
                 .Subscribe(e => ScaleConverter.DisplayMaximum = e.DisplaySize);
 
             eventPublisher.GetEvent<DataSourceChangedEvent>()
-                .Subscribe(e => ScaleConverter.DataMaximum = default(double));
+                .Subscribe(e => ScaleConverter.DataMaximum = null);
 
             CompGenomeNameFormatToStringConverter.NameFormat = appSettings.CompGenomeNameFormat;
             eventPublisher.GetEvent<CompGenomeNameFormatChangedEvent>()
@@ -39,20 +40,11 @@ namespace EvolutionHighwayApp
         private static void ContainerSetup()
         {
             IoC.Container.Register(
-                Component.For<AppSettings>().LifeStyle.Singleton,
                 Component.For<IEventPublisher>().ImplementedBy<EventAggregator>().LifeStyle.Singleton,
-                Component.For<Repository>().LifeStyle.Singleton,
-                Component.For<SelectionsController>().LifeStyle.Singleton,
-                Component.For<MenuViewModel>().LifeStyle.Transient,
-                Component.For<ToolbarViewModel>().LifeStyle.Transient,
-                Component.For<DataSourceSelectorViewModel>().LifeStyle.Transient,
-                Component.For<RefGenomeSelectorViewModel>().LifeStyle.Transient,
-                Component.For<RefChromosomeSelectorViewModel>().LifeStyle.Transient,
-                Component.For<CompGenomeSelectorViewModel>().LifeStyle.Transient,
-                Component.For<RefGenomeCollectionViewModel>().LifeStyle.Transient,
-                Component.For<RefChromosomeCollectionViewModel>().LifeStyle.Transient,
-                Component.For<CompGenomeCollectionViewModel>().LifeStyle.Transient,
-                Component.For<EditCustomTrackWindowViewModel>().LifeStyle.Transient
+                Component.For<IRepositoryController>().ImplementedBy<RepositoryController>().LifeStyle.Singleton,
+                Component.For<ISelectionController>().ImplementedBy<SelectionController>().LifeStyle.Singleton,
+                Component.For<IDisplayController>().ImplementedBy<DisplayController>().LifeStyle.Singleton,
+                Component.For<AppSettings>().LifeStyle.Singleton
             );
         }
 

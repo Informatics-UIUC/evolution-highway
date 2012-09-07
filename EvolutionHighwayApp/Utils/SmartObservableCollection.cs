@@ -20,7 +20,7 @@ namespace EvolutionHighwayApp.Utils
                 base.OnCollectionChanged(e);
         }
 
-        public void AddRange(IEnumerable<T> items)
+        public void AddRange(ICollection<T> items)
         {
             if (items.IsEmpty()) return;
             SuspendCollectionChangedNotification = true;
@@ -29,7 +29,7 @@ namespace EvolutionHighwayApp.Utils
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        public void RemoveRange(IEnumerable<T> items)
+        public void RemoveRange(ICollection<T> items)
         {
             if (items.IsEmpty()) return;
             SuspendCollectionChangedNotification = true;
@@ -40,6 +40,8 @@ namespace EvolutionHighwayApp.Utils
 
         public void ReplaceWith(IEnumerable<T> items)
         {
+            if (items == Items) return;
+
             SuspendCollectionChangedNotification = true;
             ClearItems();
             AddRangeInternal(items);

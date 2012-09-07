@@ -161,6 +161,12 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppSettings.cs" />
+    <Compile Include="Cache\Controllers\CentromereCacheController.cs" />
+    <Compile Include="Cache\Controllers\HeterochromatinCacheController.cs" />
+    <Compile Include="Cache\Controllers\IsolatedStorageCacheController.cs" />
+    <Compile Include="Cache\Controllers\SynBlocksCacheController.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Converters\BoolToOrientationConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\CompGenomeNameFormatToBoolConverter.cs" />
@@ -173,16 +179,88 @@
     <Compile Include="Converters\OrientationToAngleConverter.cs" />
     <Compile Include="Converters\ScaleConverter.cs" />
     <Compile Include="Converters\SignConverter.cs" />
+    <Compile Include="Display\Controllers\DisplayController.cs" />
+    <Compile Include="Display\Controllers\IDisplayController.cs" />
+    <Compile Include="Display\ViewModels\CentromereRegionCollectionViewModel.cs" />
+    <Compile Include="Display\ViewModels\CentromereRegionViewModel.cs" />
+    <Compile Include="Display\ViewModels\CompGenomeCollectionViewModel.cs" />
+    <Compile Include="Display\ViewModels\CompGenomeNamesViewModel.cs" />
+    <Compile Include="Display\ViewModels\CustomTrackViewModel.cs" />
+    <Compile Include="Display\ViewModels\HeterochromatinRegionCollectionViewModel.cs" />
+    <Compile Include="Display\ViewModels\HeterochromatinRegionViewModel.cs" />
+    <Compile Include="Display\ViewModels\HighlightRegionCollectionViewModel.cs" />
+    <Compile Include="Display\ViewModels\HighlightRegionViewModel.cs" />
+    <Compile Include="Display\ViewModels\RefChromosomeCollectionViewModel.cs" />
+    <Compile Include="Display\ViewModels\RefGenomeCollectionViewModel.cs" />
+    <Compile Include="Display\ViewModels\ScaleAxisViewModel.cs" />
+    <Compile Include="Display\ViewModels\SparklineViewModel.cs" />
+    <Compile Include="Display\ViewModels\SyntenyBlockCollectionViewModel.cs" />
+    <Compile Include="Display\ViewModels\SyntenyBlockViewModel.cs" />
+    <Compile Include="Display\Views\CentromereRegionCollectionViewer.xaml.cs">
+      <DependentUpon>CentromereRegionCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\CentromereRegionViewer.xaml.cs">
+      <DependentUpon>CentromereRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\CompGenomeCollectionViewer.xaml.cs">
+      <DependentUpon>CompGenomeCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\CompGenomeNamesViewer.xaml.cs">
+      <DependentUpon>CompGenomeNamesViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\CustomTrackViewer.xaml.cs">
+      <DependentUpon>CustomTrackViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\HeterochromatinRegionCollectionViewer.xaml.cs">
+      <DependentUpon>HeterochromatinRegionCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\HeterochromatinRegionViewer.xaml.cs">
+      <DependentUpon>HeterochromatinRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\HighlightRegionCollectionViewer.xaml.cs">
+      <DependentUpon>HighlightRegionCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\HighlightRegionViewer.xaml.cs">
+      <DependentUpon>HighlightRegionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\RefChromosomeCollectionViewer.xaml.cs">
+      <DependentUpon>RefChromosomeCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\RefGenomeCollectionViewer.xaml.cs">
+      <DependentUpon>RefGenomeCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\ScaleAxis.xaml.cs">
+      <DependentUpon>ScaleAxis.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\Sparkline.xaml.cs">
+      <DependentUpon>Sparkline.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\SyntenyBlockCollectionViewer.xaml.cs">
+      <DependentUpon>SyntenyBlockCollectionViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Views\SyntenyBlockViewer.xaml.cs">
+      <DependentUpon>SyntenyBlockViewer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Dtos\CompGenomeDto.cs" />
     <Compile Include="Dtos\FeatureDensityDto.cs" />
     <Compile Include="Dtos\FeatureDto.cs" />
     <Compile Include="Dtos\GenomeDto.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\ActionFailingEventArgs.cs" />
+    <Compile Include="Events\ActionCompletedEventArgs.cs" />
     <Compile Include="Exceptions\MultipleExceptions.cs" />
     <Compile Include="Exceptions\ParseErrorException.cs" />
     <Compile Include="Exceptions\ServiceException.cs" />
     <Compile Include="Infrastructure\MVVM\ModelBase.cs" />
+    <Compile Include="Menus\ViewModels\MenuViewModel.cs" />
+    <Compile Include="Menus\ViewModels\ToolbarViewModel.cs" />
+    <Compile Include="Menus\Views\Menu.xaml.cs">
+      <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Menus\Views\Toolbar.xaml.cs">
+      <DependentUpon>Toolbar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\BlockOrientation.cs" />
     <Compile Include="Models\CentromereRegion.cs" />
     <Compile Include="Models\Chromosome.cs" />
@@ -197,19 +275,50 @@
     <Compile Include="Models\RefGenome.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\SearchQuery.cs" />
-    <Compile Include="Models\SelectableItem.cs" />
     <Compile Include="Models\SyntenyRegion.cs" />
-    <Compile Include="State\Repository.cs" />
-    <Compile Include="State\SelectionsController.cs" />
+    <Compile Include="Repository\Controllers\IRepositoryController.cs" />
+    <Compile Include="Repository\Controllers\RepositoryController.cs" />
+    <Compile Include="Repository\Models\RepositoryState.cs" />
+    <Compile Include="Repository\Models\RepositoryStateOld.cs" />
+    <Compile Include="Selection\Controllers\ISelectionController.cs" />
+    <Compile Include="Selection\Controllers\SelectionController.cs" />
+    <Compile Include="Selection\Models\CompGenomeItem.cs" />
+    <Compile Include="Selection\Models\RefChromosomeItem.cs" />
+    <Compile Include="Selection\Models\RefGenomeItem.cs" />
+    <Compile Include="Selection\Models\SelectableItem.cs" />
+    <Compile Include="Selection\ViewModels\CompGenomeSelectorViewModel.cs" />
+    <Compile Include="Selection\ViewModels\DataSourceSelectorViewModel.cs" />
+    <Compile Include="Selection\ViewModels\RefChromosomeSelectorViewModel.cs" />
+    <Compile Include="Selection\ViewModels\RefGenomeSelectorViewModel.cs" />
+    <Compile Include="Selection\ViewModels\SelectionsPanelViewModel.cs" />
+    <Compile Include="Selection\Views\CompGenomeSelector.xaml.cs">
+      <DependentUpon>CompGenomeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Selection\Views\DataSourceSelector.xaml.cs">
+      <DependentUpon>DataSourceSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Selection\Views\RefChromosomeSelector.xaml.cs">
+      <DependentUpon>RefChromosomeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Selection\Views\RefGenomeSelector.xaml.cs">
+      <DependentUpon>RefGenomeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Selection\Views\SelectionsPanel.xaml.cs">
+      <DependentUpon>SelectionsPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ViewModels\ColorOptionsWindowViewModel.cs" />
+    <Compile Include="Settings\ViewModels\EditCustomTrackWindowViewModel.cs" />
+    <Compile Include="Settings\Views\ColorOptionsWindow.xaml.cs">
+      <DependentUpon>ColorOptionsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\Views\EditCustomTrackWindow.xaml.cs">
+      <DependentUpon>EditCustomTrackWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ControlExtensions.cs" />
     <Compile Include="Utils\FixedListBoxDragDropTarget.cs" />
     <Compile Include="Utils\LinearGradientBrushInterpolator.cs" />
     <Compile Include="Utils\SmartObservableCollection.cs" />
     <Compile Include="Utils\TextBoxUpdateBehavior.cs" />
-    <Compile Include="ViewModels\CentromereRegionCollectionViewModel.cs" />
-    <Compile Include="ViewModels\CentromereRegionViewModel.cs" />
-    <Compile Include="ViewModels\ColorOptionsWindowViewModel.cs" />
-    <Compile Include="ViewModels\CompGenomeCollectionViewModel.cs" />
     <Compile Include="AppSetup.cs" />
     <Compile Include="Dtos\CentromereRegionDto.cs" />
     <Compile Include="Dtos\CompChrLengthDto.cs" />
@@ -221,26 +330,6 @@
     <Compile Include="Infrastructure\Extensions\Extensions.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
     <Compile Include="Infrastructure\MVVM\ViewModelBase.cs" />
-    <Compile Include="ViewModels\CompGenomeNamesViewModel.cs" />
-    <Compile Include="ViewModels\CompGenomeSelectorViewModel.cs" />
-    <Compile Include="ViewModels\CustomTrackViewModel.cs" />
-    <Compile Include="ViewModels\HeterochromatinRegionCollectionViewModel.cs" />
-    <Compile Include="ViewModels\HeterochromatinRegionViewModel.cs" />
-    <Compile Include="ViewModels\HighlightRegionCollectionViewModel.cs" />
-    <Compile Include="ViewModels\EditCustomTrackWindowViewModel.cs" />
-    <Compile Include="Views\CustomTrackViewer.xaml.cs">
-      <DependentUpon>CustomTrackViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\HighlightRegionCollectionViewer.xaml.cs">
-      <DependentUpon>HighlightRegionCollectionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\HighlightRegionViewModel.cs" />
-    <Compile Include="ViewModels\SparklineViewModel.cs" />
-    <Compile Include="ViewModels\RefChromosomeCollectionViewModel.cs" />
-    <Compile Include="ViewModels\RefChromosomeSelectorViewModel.cs" />
-    <Compile Include="ViewModels\DataSourceSelectorViewModel.cs" />
-    <Compile Include="ViewModels\RefGenomeSelectorViewModel.cs" />
-    <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ServiceLayer\EHDataService.cs" />
     <Compile Include="Infrastructure\WebServices\WebServicesRestExtension.cs" />
     <Compile Include="Dtos\SyntenyRegionDto.cs" />
@@ -263,80 +352,81 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="ViewModels\RefGenomeCollectionViewModel.cs" />
-    <Compile Include="ViewModels\ScaleAxisViewModel.cs" />
-    <Compile Include="ViewModels\SyntenyBlockCollectionViewModel.cs" />
-    <Compile Include="ViewModels\SyntenyBlockViewModel.cs" />
-    <Compile Include="ViewModels\ToolbarViewModel.cs" />
-    <Compile Include="Views\CentromereRegionCollectionViewer.xaml.cs">
-      <DependentUpon>CentromereRegionCollectionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CentromereRegionViewer.xaml.cs">
-      <DependentUpon>CentromereRegionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ColorOptionsWindow.xaml.cs">
-      <DependentUpon>ColorOptionsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CompGenomeNamesViewer.xaml.cs">
-      <DependentUpon>CompGenomeNamesViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\HeterochromatinRegionCollectionViewer.xaml.cs">
-      <DependentUpon>HeterochromatinRegionCollectionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\HeterochromatinRegionViewer.xaml.cs">
-      <DependentUpon>HeterochromatinRegionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\HighlightRegionViewer.xaml.cs">
-      <DependentUpon>HighlightRegionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditCustomTrackWindow.xaml.cs">
-      <DependentUpon>EditCustomTrackWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Sparkline.xaml.cs">
-      <DependentUpon>Sparkline.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RefChromosomeCollectionViewer.xaml.cs">
-      <DependentUpon>RefChromosomeCollectionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CompGenomeCollectionViewer.xaml.cs">
-      <DependentUpon>CompGenomeCollectionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RefGenomeCollectionViewer.xaml.cs">
-      <DependentUpon>RefGenomeCollectionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RefChromosomeSelector.xaml.cs">
-      <DependentUpon>RefChromosomeSelector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CompGenomeSelector.xaml.cs">
-      <DependentUpon>CompGenomeSelector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DataSourceSelector.xaml.cs">
-      <DependentUpon>DataSourceSelector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RefGenomeSelector.xaml.cs">
-      <DependentUpon>RefGenomeSelector.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Menu.xaml.cs">
-      <DependentUpon>Menu.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ScaleAxis.xaml.cs">
-      <DependentUpon>ScaleAxis.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SyntenyBlockViewer.xaml.cs">
-      <DependentUpon>SyntenyBlockViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SyntenyBlockCollectionViewer.xaml.cs">
-      <DependentUpon>SyntenyBlockCollectionViewer.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Toolbar.xaml.cs">
-      <DependentUpon>Toolbar.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Utils\UISynchronizationContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Display\Views\CentromereRegionCollectionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\CentromereRegionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\CompGenomeCollectionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\CompGenomeNamesViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\CustomTrackViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\HeterochromatinRegionCollectionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\HeterochromatinRegionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\HighlightRegionCollectionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\HighlightRegionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\RefChromosomeCollectionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\RefGenomeCollectionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\ScaleAxis.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\Sparkline.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\SyntenyBlockCollectionViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\Views\SyntenyBlockViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Menus\Views\Menu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Menus\Views\Toolbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\About.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -357,97 +447,33 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\CustomTrackViewer.xaml">
+    <Page Include="Selection\Views\CompGenomeSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Selection\Views\DataSourceSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Selection\Views\RefChromosomeSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Selection\Views\RefGenomeSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Selection\Views\SelectionsPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HighlightRegionCollectionViewer.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Settings\Views\ColorOptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CentromereRegionCollectionViewer.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Settings\Views\EditCustomTrackWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CentromereRegionViewer.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ColorOptionsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CompGenomeNamesViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\HeterochromatinRegionCollectionViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\HeterochromatinRegionViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\HighlightRegionViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditCustomTrackWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Sparkline.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RefChromosomeCollectionViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CompGenomeCollectionViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RefGenomeCollectionViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RefChromosomeSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CompGenomeSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DataSourceSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RefGenomeSelector.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Menu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ScaleAxis.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SyntenyBlockViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SyntenyBlockCollectionViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Toolbar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Resource Include="Assets\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -472,6 +498,9 @@
   <ItemGroup>
     <Resource Include="Resources\Images\LayoutHorizontal.png" />
     <Resource Include="Resources\Images\LayoutVertical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Display\Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

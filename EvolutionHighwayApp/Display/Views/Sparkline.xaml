@@ -1,0 +1,47 @@
+<UserControl x:Class="EvolutionHighwayApp.Display.Views.Sparkline"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:display="clr-namespace:EvolutionHighwayApp.Display.ViewModels"
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400"
+    x:Name="_sparkline">
+    
+    <UserControl.Resources>
+        <display:OffsetAdjustmentConverter x:Key="OffsetAdjustmentConverter"/>
+    </UserControl.Resources>
+
+    <Grid Background="{Binding AppSettings.FeatureDensityBgColor,Converter={StaticResource ColorToBrushConverter}}">
+        <Canvas>
+            <!-- Draw the sparkline -->
+            <Polyline Points="{Binding SparklinePointCollection}" 
+                      Stroke="{Binding AppSettings.SparklineColor,Converter={StaticResource ColorToBrushConverter}}" StrokeThickness="0.5" 
+                      Fill="{Binding AppSettings.FeatureDensityFillColor,Converter={StaticResource ColorToBrushConverter}}"/>
+        </Canvas>
+
+        <!-- Draw the data points -->
+        <ItemsControl ItemsSource="{Binding SparklineDataPoints}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Canvas>
+                        <Ellipse Canvas.Left="{Binding X,Converter={StaticResource OffsetAdjustmentConverter},ConverterParameter=-3}" 
+                                 Canvas.Top="{Binding Y,Converter={StaticResource OffsetAdjustmentConverter},ConverterParameter=-3}"
+                                 Width="6" Height="6" 
+                                 Stroke="Black" StrokeThickness="0.5"
+                                 Fill="{Binding DataContext.AppSettings.DataPointFillColor,ElementName=_sparkline,Converter={StaticResource ColorToBrushConverter}}">
+                            <ToolTipService.ToolTip>
+                                <TextBlock Text="{Binding FeatureDensityData.ToolTip}"/>
+                            </ToolTipService.ToolTip>
+                        </Ellipse>
+                    </Canvas>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

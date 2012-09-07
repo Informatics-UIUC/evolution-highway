@@ -4,9 +4,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
-    xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Layout.Toolkit"
     xmlns:tkctrl="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Toolkit"
-    xmlns:views="clr-namespace:EvolutionHighwayApp.Views"
+    xmlns:display="clr-namespace:EvolutionHighwayApp.Display.Views"
+    xmlns:menus="clr-namespace:EvolutionHighwayApp.Menus.Views"
+    xmlns:selection="clr-namespace:EvolutionHighwayApp.Selection.Views" 
     mc:Ignorable="d" d:DesignWidth="640" d:DesignHeight="480"
     Title="SynBlocks Page">
     
@@ -21,28 +22,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <views:Menu Grid.Row="0" Grid.ColumnSpan="2" Height="20"/>
+        <menus:Menu Grid.Row="0" Grid.ColumnSpan="2" Height="20"/>
 
-        <ScrollViewer Grid.Row="1" Grid.Column="0"
-                      HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <StackPanel HorizontalAlignment="Left" Background="Beige">
-                <views:DataSourceSelector/>
-
-                <toolkit:Accordion x:Name="_accordion" SelectionMode="ZeroOrMore" Width="180" x:FieldModifier="private">
-                    <toolkit:AccordionItem Header="Reference Genome" HorizontalContentAlignment="Stretch">
-                        <views:RefGenomeSelector Height="150"/>
-                    </toolkit:AccordionItem>
-
-                    <toolkit:AccordionItem Header="Reference Chromosome" HorizontalContentAlignment="Stretch">
-                        <views:RefChromosomeSelector Height="150"/>
-                    </toolkit:AccordionItem>
-
-                    <toolkit:AccordionItem Header="Comparative Genome" HorizontalContentAlignment="Stretch">
-                        <views:CompGenomeSelector Height="150"/>
-                    </toolkit:AccordionItem>
-                </toolkit:Accordion>
-            </StackPanel>
-        </ScrollViewer>
+        <selection:SelectionsPanel Grid.Row="1" Grid.Column="0"/>
 
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -50,13 +32,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <views:Toolbar/>
+            <menus:Toolbar/>
 
             <tkctrl:BusyIndicator x:Name="_loadingIndicator" x:FieldModifier="private" Grid.Row="1"
                                   BusyContent="Loading synteny blocks..." DisplayAfter="0">
                 <ScrollViewer x:Name="_scrollViewer" x:FieldModifier="private" 
                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <views:RefGenomeCollectionViewer/>
+                    <display:RefGenomeCollectionViewer/>
                 </ScrollViewer>
             </tkctrl:BusyIndicator>
         </Grid>

@@ -1,0 +1,212 @@
+<UserControl x:Class="EvolutionHighwayApp.Menus.Views.Menu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viblend="clr-namespace:VIBlend.Silverlight.Controls;assembly=VIBlend.Silverlight.Menu"
+    mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+        	<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/VIBlend.Silverlight.Theme.Office2010Silver;component/Menu.xaml"/>
+                <ResourceDictionary Source="/VIBlend.Silverlight.Theme.Office2010Silver;component/MenuItem.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="menuItemStyle" TargetType="viblend:MenuItem" BasedOn="{StaticResource Office2010SilverMenuItemStyle}">
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+            
+            <Style TargetType="viblend:Menu" BasedOn="{StaticResource Office2010SilverMenuStyle}">
+                <Setter Property="ItemContainerStyle" Value="{StaticResource menuItemStyle}"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <viblend:Menu AnimationType="Bounds" PopupClosing="OnMenuPopupClosing"
+                  Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <viblend:MenuItem Padding="5,3,5,0" Text="File">
+            <viblend:MenuItem Text="Custom Track...">
+                <viblend:MenuItem Text="Load from file..." Command="{Binding LoadCustomTrackCommand}"/>
+                <viblend:MenuItem Text="Edit..." Command="{Binding EditCustomTrackCommand}"/>
+                <viblend:MenuItem IsSeparator="True"/>
+                <viblend:MenuItem Text="Clear" Command="{Binding ClearCustomTrackCommand}"/>
+            </viblend:MenuItem>
+            <viblend:MenuItem IsSeparator="True"/>
+            <viblend:MenuItem Text="Capture Screen" Command="{Binding CaptureScreenCommand}"/>
+        </viblend:MenuItem>
+        <viblend:MenuItem Padding="5,3,5,0" Text="View">
+            <viblend:MenuItem AllowCheckState="True" 
+                              IsChecked="{Binding AppSettings.ShowCentromere, Mode=TwoWay}" 
+                              Text="Centromere"/>
+            <viblend:MenuItem AllowCheckState="True" 
+                              IsChecked="{Binding AppSettings.ShowHeterochromatin, Mode=TwoWay}" 
+                              Text="Heterochromatin"/>
+            <viblend:MenuItem AllowCheckState="True" 
+                              IsChecked="{Binding AppSettings.ShowBlockOrientation, Mode=TwoWay}" 
+                              Text="Block Orientation">
+                <ToolTipService.ToolTip>
+                    <ToolTip Width="300">
+                        <ToolTip.Content>
+                            <TextBlock TextWrapping="Wrap">
+                                <TextBlock.Text>
+                                    Diagonal lines within each block (from top left to bottom right) show the 
+                                    orientation and position of this block in the comparative genome
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </ToolTip.Content>
+                    </ToolTip>
+                </ToolTipService.ToolTip>
+            </viblend:MenuItem>
+            <viblend:MenuItem AllowCheckState="True"
+                              IsChecked="{Binding AppSettings.ShowConservedSynteny, Mode=TwoWay}"
+                              Text="Conserved Synteny"/>
+            <viblend:MenuItem Text="Features">
+                <viblend:MenuItem AllowCheckState="True"
+                                  IsChecked="{Binding AppSettings.ShowAdjacencyScore, Mode=TwoWay}"
+                                  Text="Adjacency Score">
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <StackPanel Margin="25,0,10,0" Orientation="Vertical">
+                                <TextBlock Text="Width" Margin="4,0,0,2"/>
+                                <Slider Minimum="6" Maximum="50" SmallChange="2" LargeChange="5"
+                                        Value="{Binding AppSettings.AdjacencyFeatureWidth, Mode=TwoWay}"/>
+                            </StackPanel>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                </viblend:MenuItem>
+            </viblend:MenuItem>
+            <viblend:MenuItem Text="Label">
+                <viblend:MenuItem AllowCheckState="True"
+                                  IsChecked="{Binding CompGenomeNameFormat, Mode=TwoWay,
+                                             Converter={StaticResource CompGenomeNameFormatToBoolConverter}, 
+                                             ConverterParameter=Genome}"
+                                  Text="Show Genome"/>
+                <viblend:MenuItem AllowCheckState="True"
+                                  IsChecked="{Binding CompGenomeNameFormat, Mode=TwoWay,
+                                             Converter={StaticResource CompGenomeNameFormatToBoolConverter}, 
+                                             ConverterParameter=Species}"
+                                  Text="Show Build"/>
+                <viblend:MenuItem AllowCheckState="True"
+                                  IsChecked="{Binding CompGenomeNameFormat, Mode=TwoWay,
+                                             Converter={StaticResource CompGenomeNameFormatToBoolConverter}, 
+                                             ConverterParameter=Custom}"
+                                  Text="Show Custom"/>
+                <viblend:MenuItem IsSeparator="True"/>
+                <viblend:MenuItem>
+                    <viblend:MenuItem.Header>
+                        <StackPanel Margin="25,0,10,0" Orientation="Vertical">
+                            <TextBlock Text="Label Size" Margin="4,5,0,2"/>
+                            <Slider Minimum="5" Maximum="200" SmallChange="5" LargeChange="10" 
+                                    Value="{Binding AppSettings.LabelSize, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </viblend:MenuItem.Header>
+                </viblend:MenuItem>
+            </viblend:MenuItem>
+            <viblend:MenuItem IsSeparator="True"/>
+            <viblend:MenuItem Text="Scale">
+                <viblend:MenuItem>
+                    <viblend:MenuItem.Header>
+                        <StackPanel Margin="25,0,10,0" Orientation="Vertical">
+                            <TextBlock Text="Block Width" Margin="4,0,0,2"/>
+                            <Slider Minimum="10" Maximum="50" SmallChange="2" LargeChange="5"
+                                    Value="{Binding AppSettings.BlockWidth, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </viblend:MenuItem.Header>
+                </viblend:MenuItem>
+                <viblend:MenuItem>
+                    <viblend:MenuItem.Header>
+                        <StackPanel Margin="25,0,10,0" Orientation="Vertical">
+                            <TextBlock Text="Display Size" Margin="4,5,0,2"/>
+                            <Slider Minimum="50" Maximum="20000" 
+                                    SmallChange="50" LargeChange="2000" 
+                                    Value="{Binding AppSettings.DisplaySize, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </viblend:MenuItem.Header>
+                </viblend:MenuItem>
+                <viblend:MenuItem IsSeparator="True"/>
+                <viblend:MenuItem Text="Reset" Command="{Binding ResetZoomCommand}"/>
+            </viblend:MenuItem>
+            <viblend:MenuItem Text="Full Screen" Command="{Binding ViewFullScreenCommand}"/>
+        </viblend:MenuItem>
+
+        <viblend:MenuItem Padding="5,3,5,0" Text="Options">
+            <viblend:MenuItem Text="Layout">
+                <viblend:MenuItem Text="Genomes">
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <RadioButton ClickMode="Press" Margin="25,0,0,0"
+                                         IsChecked="{Binding AppSettings.GenomeLayout, Mode=TwoWay,
+                                                     Converter={StaticResource BoolToOrientationConverter},
+                                                     ConverterParameter=Horizontal}"
+                                         GroupName="GenomeLayout"
+                                         Content="Horizontal"/>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <RadioButton ClickMode="Press" Margin="25,0,0,0"
+                                         IsChecked="{Binding AppSettings.GenomeLayout, Mode=TwoWay,
+                                                     Converter={StaticResource BoolToOrientationConverter},
+                                                     ConverterParameter=Vertical}"
+                                         GroupName="GenomeLayout"
+                                         Content="Vertical"/>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                </viblend:MenuItem>
+
+                <viblend:MenuItem Text="Chromosomes">
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <RadioButton ClickMode="Press" Margin="25,0,0,0"
+                                         IsChecked="{Binding AppSettings.ChromosomeLayout, Mode=TwoWay,
+                                                     Converter={StaticResource BoolToOrientationConverter},
+                                                     ConverterParameter=Horizontal}"
+                                         GroupName="ChromosomeLayout"
+                                         Content="Horizontal"/>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <RadioButton ClickMode="Press" Margin="25,0,0,0"
+                                         IsChecked="{Binding AppSettings.ChromosomeLayout, Mode=TwoWay,
+                                                     Converter={StaticResource BoolToOrientationConverter},
+                                                     ConverterParameter=Vertical}"
+                                         GroupName="ChromosomeLayout"
+                                         Content="Vertical"/>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                </viblend:MenuItem>
+
+                <viblend:MenuItem Text="Synteny Blocks">
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <RadioButton ClickMode="Press" Margin="25,0,0,0"
+                                         IsChecked="{Binding AppSettings.SynBlocksLayout, Mode=TwoWay,
+                                                     Converter={StaticResource BoolToOrientationConverter},
+                                                     ConverterParameter=Horizontal}"
+                                         GroupName="SynBlocksLayout"
+                                         Content="Horizontal"/>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                    <viblend:MenuItem>
+                        <viblend:MenuItem.Header>
+                            <RadioButton ClickMode="Press" Margin="25,0,0,0"
+                                         IsChecked="{Binding AppSettings.SynBlocksLayout, Mode=TwoWay,
+                                                     Converter={StaticResource BoolToOrientationConverter},
+                                                     ConverterParameter=Vertical}"
+                                         GroupName="SynBlocksLayout"
+                                         Content="Vertical"/>
+                        </viblend:MenuItem.Header>
+                    </viblend:MenuItem>
+                </viblend:MenuItem>
+            </viblend:MenuItem>
+            
+            <viblend:MenuItem Text="Colors" Command="{Binding ShowColorOptionsWindowCommand}"/>
+            
+            <viblend:MenuItem IsSeparator="true"/>
+            
+            <viblend:MenuItem Text="Reset To Defaults" Command="{Binding ResetOptionsToDefaultsCommand}"/>
+        </viblend:MenuItem>
+    </viblend:Menu>
+</UserControl>

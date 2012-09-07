@@ -1,7 +1,14 @@
-﻿namespace EvolutionHighwayApp.Models
+﻿using System.Collections.Generic;
+
+namespace EvolutionHighwayApp.Models
 {
     public class RefGenome : Genome
     {
-        public RefGenome(string name) : base(name) { }
+        public ICollection<RefChromosome> RefChromosomes { get; set; }
+        
+        public RefGenome(string name) : base(name)
+        {
+            RefChromosomes = null;
+        }
     }
 }
