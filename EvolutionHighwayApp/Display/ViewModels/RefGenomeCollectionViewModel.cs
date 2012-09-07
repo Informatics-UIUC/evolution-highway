@@ -42,7 +42,7 @@ namespace EvolutionHighwayApp.Display.ViewModels
                 .Subscribe(e => RefGenomes.Clear());
 
             _refGenomeSelectionChangedObserver = _eventPublisher.GetEvent<RefGenomeSelectionDisplayEvent>()
-                .ObserveOnDispatcher()
+                //.ObserveOnDispatcher()
                 .Subscribe(OnRefGenomeSelectionDisplay);
         }
 

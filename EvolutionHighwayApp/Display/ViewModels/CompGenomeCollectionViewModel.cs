@@ -95,7 +95,7 @@ namespace EvolutionHighwayApp.Display.ViewModels
 
             _compGenomeSelectionChangedObserver = _eventPublisher.GetEvent<CompGenomeSelectionDisplayEvent>()
                 .Where(e => e.RefChromosome == RefChromosome)
-                .ObserveOnDispatcher()
+                //.ObserveOnDispatcher()
                 .Subscribe(OnCompGenomeSelectionDisplay);
 
             _displaySizeChangedObserver = _eventPublisher.GetEvent<DisplaySizeChangedEvent>()

@@ -58,7 +58,7 @@ namespace EvolutionHighwayApp.Display.ViewModels
 
             _refChromosomeSelectionChangedObserver = _eventPublisher.GetEvent<RefChromosomeSelectionDisplayEvent>()
                 .Where(e => e.RefGenome == RefGenome)
-                .ObserveOnDispatcher()
+                //.ObserveOnDispatcher()
                 .Subscribe(OnRefChromosomeSelectionDisplay);
         }
 
