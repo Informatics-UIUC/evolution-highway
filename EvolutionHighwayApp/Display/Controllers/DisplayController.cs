@@ -286,27 +286,60 @@ namespace EvolutionHighwayApp.Display.Controllers
 
         private IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes)
         {
+            return GetOverlapRegions(compGenomes.Select(g => g.SyntenyBlocks));
+        }
+
+        private static IEnumerable<Region> GetOverlapRegions(IEnumerable<IEnumerable<Region>> regionsCollection)
+        {
             IEnumerable<Tuple<IEnumerable<Region>, Region>> emptyRegions
                 = new[] { new Tuple<IEnumerable<Region>, Region>(Enumerable.Empty<Region>(), null) };
 
             return
-                compGenomes.Select(g => g.SyntenyBlocks).Aggregate(emptyRegions,
-                    (cglst, cg) => from cgle in cglst
-                                   from b in cg
-                                   let regions = cgle.Item1.Concat(new[] { b })
-                                   let overlap = GetOverlap(regions)
-                                   where overlap != null
-                                   select new Tuple<IEnumerable<Region>, Region>(regions, overlap),
+                regionsCollection.Aggregate(emptyRegions,
+                    (accRegions, regs) => 
+                        from acc in accRegions
+                        from region in regs
+                        let regions = acc.Item1.Concat(new[] {region})
+                        let overlap = GetOverlap(regions)
+                        where overlap != null
+                        select new Tuple<IEnumerable<Region>, Region>(regions, overlap),
                     result => result.Select(r => r.Item2));
+        }
+
+        private IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, long maxThreshold)
+        {
+            var overlapGenomes = GetConservedSynteny(compGenomes);
+            var overlapClassBreakpoints = GetOverlapRegions(classes.Select(c => GetBreakpoints(c).MemoizeAll()));
+            var classRegions = GetOverlapRegions(new[] {overlapGenomes, overlapClassBreakpoints});
+
+            return classRegions.Where(r => r.Span < maxThreshold);
         }
 
         private static Region GetOverlap(IEnumerable<Region> regions)
         {
+            regions = regions.ToArray();
             var x = regions.Max(r => r.Start);
             var y = regions.Min(r => r.End);
 
             return y >= x ? new HighlightRegion(x, y) : null;
         }
 
+        private static IEnumerable<BreakpointRegion> GetBreakpoints(CompGenome compGenome)
+        {
+            var sortedRegions = compGenome.SyntenyBlocks.ToList();
+            sortedRegions.Sort((a, b) => a.Start.CompareTo(b.Start));
+
+            double i = 0;
+            foreach (var region in sortedRegions)
+            {
+                if (i < region.Start)
+                    yield return new BreakpointRegion(i, region.Start);
+
+                i = region.End;
+            }
+
+            if (i < compGenome.RefChromosome.Length)
+                yield return new BreakpointRegion(i, compGenome.RefChromosome.Length);
+        }
     }
 }
