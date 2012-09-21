@@ -9,13 +9,15 @@ namespace EvolutionHighwayApp.Infrastructure.Commands
     public class Command: ICommand
     {
         private readonly Dispatcher _dispatcher;
-        private readonly Func<object, bool> _canExecute;
+        private readonly Predicate<object> _canExecute;
         private readonly Action<object> _executeAction;
-        private bool _canExecuteCache;
 
         // ReSharper disable InconsistentNaming
-        public Command(Action<object> executeAction, Func<object, bool> canExecute, bool executeOnUIThread = true)
+        public Command(Action<object> executeAction, Predicate<object> canExecute = null, bool executeOnUIThread = true)
         {
+            if (executeAction == null)
+                throw new ArgumentNullException("executeAction");
+
             _dispatcher = executeOnUIThread ? Deployment.Current.Dispatcher : null;
             _executeAction = executeAction;
             _canExecute = canExecute;
@@ -27,16 +29,7 @@ namespace EvolutionHighwayApp.Infrastructure.Commands
 
         public bool CanExecute(object parameter)
         {
-            var tempCanExecute = _canExecute(parameter);
-
-            if (_canExecuteCache != tempCanExecute)
-            {
-                _canExecuteCache = tempCanExecute;
-
-                UpdateCanExecute();
-            }
-
-            return _canExecuteCache;
+            return _canExecute == null || _canExecute(parameter);
         }
 
         public void UpdateCanExecute()

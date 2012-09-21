@@ -27,6 +27,8 @@ namespace EvolutionHighwayApp.Models
 
             _start = (syntenyRegion.Sign == -1) ? syntenyRegion.ModEnd : syntenyRegion.ModStart;
             _end = (syntenyRegion.Sign == -1) ? syntenyRegion.ModStart : syntenyRegion.ModEnd;
+
+            // TODO: why is the following line not throwing an exception when the key is wrong?
             _compChrLength = RepositoryState.CompChromosomeLengths[syntenyRegion.CompGenome.Name][syntenyRegion.Chromosome];
         }
     }

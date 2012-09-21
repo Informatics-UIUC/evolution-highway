@@ -35,7 +35,7 @@
             <viblend:MenuItem IsSeparator="True"/>
             <viblend:MenuItem Text="Capture Screen" Command="{Binding CaptureScreenCommand}"/>
         </viblend:MenuItem>
-        <viblend:MenuItem Padding="5,3,5,0" Text="View">
+        <viblend:MenuItem Padding="5,3,5,0" Text="View" DropDownWidth="190">
             <viblend:MenuItem AllowCheckState="True" 
                               IsChecked="{Binding AppSettings.ShowCentromere, Mode=TwoWay}" 
                               Text="Centromere"/>
@@ -58,14 +58,20 @@
                     </ToolTip>
                 </ToolTipService.ToolTip>
             </viblend:MenuItem>
-            <viblend:MenuItem 
+            <viblend:MenuItem x:Name="mnuConSyn"
                               IsChecked="{Binding DisplayController.ShowConservedSynteny}"
                               Command="{Binding ShowConservedSyntenyCommand}"
-                              Text="Conserved Synteny"/>
-            <viblend:MenuItem 
+                              Text="Conserved Synteny">
+                <viblend:MenuItem Text="Save As..." Command="{Binding SaveConservedSyntenyCommand}"
+                                  IsEnabled="{Binding IsChecked,ElementName=mnuConSyn}"/>
+            </viblend:MenuItem>
+            <viblend:MenuItem x:Name="mnuBrkptClass" x:FieldModifier="private"
                               IsChecked="{Binding DisplayController.ShowBreakpointClassification}"
                               Command="{Binding ShowBreakpointClassificationCommand}"
-                              Text="Brkpt Classification"/>
+                              Text="Breakpoint Classification">
+                <viblend:MenuItem Text="Save As..." Command="{Binding SaveBreakpointClassificationCommand}"
+                                  IsEnabled="{Binding IsChecked,ElementName=mnuBrkptClass}"/>
+            </viblend:MenuItem>
             <viblend:MenuItem Text="Features">
                 <viblend:MenuItem AllowCheckState="True"
                                   IsChecked="{Binding AppSettings.ShowAdjacencyScore, Mode=TwoWay}"

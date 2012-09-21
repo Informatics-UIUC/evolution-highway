@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -86,10 +87,11 @@ namespace EvolutionHighwayApp.Selection.ViewModels
             _repositoryController.GetCompGenomes(e.SelectedChromosomes.ToList(),
                 success =>
                 {
+                    var previousNameOrder = Genomes.Select(g => g.Name).ToList();
                     var previouslySelectedCompGenNames = Genomes.Where(g => g.IsSelected).Select(c => c.Name).ToList();
                     var compGenNames = success.Result.Select(g => g.Name).Distinct().ToList();
                     compGenNames.Sort();
-                    var items = compGenNames.Select(
+                    var items = previousNameOrder.Intersect(compGenNames).Union(compGenNames).Select(
                         name =>
                         {
                             var item = new CompGenomeItem(name);

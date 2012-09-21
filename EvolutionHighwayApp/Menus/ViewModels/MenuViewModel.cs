@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using EvolutionHighwayApp.Display.Controllers;
@@ -15,6 +18,7 @@ using EvolutionHighwayApp.Models;
 using EvolutionHighwayApp.Repository.Controllers;
 using EvolutionHighwayApp.Settings.Models;
 using EvolutionHighwayApp.Settings.Views;
+using EvolutionHighwayApp.Utils;
 using ColorOptionsWindow = EvolutionHighwayApp.Settings.Views.ColorOptionsWindow;
 
 namespace EvolutionHighwayApp.Menus.ViewModels
@@ -45,7 +49,9 @@ namespace EvolutionHighwayApp.Menus.ViewModels
         public Command ShowColorOptionsWindowCommand { get; private set; }
         public Command ResetOptionsToDefaultsCommand { get; private set; }
         public Command ShowConservedSyntenyCommand { get; private set; }
+        public Command SaveConservedSyntenyCommand { get; private set; }
         public Command ShowBreakpointClassificationCommand { get; private set; }
+        public Command SaveBreakpointClassificationCommand { get; private set; }
 
         #endregion
 
@@ -74,7 +80,9 @@ namespace EvolutionHighwayApp.Menus.ViewModels
             ShowColorOptionsWindowCommand = new Command(ShowColorOptionsWindow, canExecute => true);
             ResetOptionsToDefaultsCommand = new Command(ResetOptionsToDefaults, canExecute => true);
             ShowConservedSyntenyCommand = new Command(ShowConservedSynteny, canExecute => true);
+            SaveConservedSyntenyCommand = new Command(SaveConservedSynteny, canExecute => true);
             ShowBreakpointClassificationCommand = new Command(ShowBreakpointClassification, canExecute => true);
+            SaveBreakpointClassificationCommand = new Command(SaveBreakpointClassification, canExecute => true);
         }
 
         private void ShowConservedSynteny(object obj)
@@ -86,6 +94,37 @@ namespace EvolutionHighwayApp.Menus.ViewModels
             }
 
             DisplayController.SetShowConservedSynteny();
+        }
+
+        private void SaveConservedSynteny(object obj)
+        {
+            var sfd = new SaveFileDialog
+            {
+                DefaultExt = "csv",
+                Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*",
+                FilterIndex = 1
+            };
+
+            if (sfd.ShowDialog() != true) return;
+
+            var conservedSyntenyCSV = DisplayController.GetVisibleRefChromosomes()
+                .SelectMany(c => DataExport.ConservedSyntenyToCSV(c, DisplayController.GetHighlightRegions(c).Cast<ConservedSyntenyHighlightRegion>()));
+
+            const string header = "ref_gen,ref_chr,start_bp,end_bp,length";
+
+            try
+            {
+                using (var stream = new StreamWriter(sfd.OpenFile()))
+                {
+                    stream.WriteLine(header);
+                    stream.Write(string.Join("", conservedSyntenyCSV));
+                    stream.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Could not save CSV output: " + e.Message, "Error", MessageBoxButton.OK);
+            }
         }
 
         private void ShowBreakpointClassification(object obj)
@@ -114,6 +153,37 @@ namespace EvolutionHighwayApp.Menus.ViewModels
             };
 
             breakpointOptionsDialog.Show();
+        }
+
+        private void SaveBreakpointClassification(object obj)
+        {
+            var sfd = new SaveFileDialog
+            {
+                DefaultExt = "csv",
+                Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*",
+                FilterIndex = 1
+            };
+
+            if (sfd.ShowDialog() != true) return;
+
+            var breakpointsCSV = DisplayController.GetVisibleRefChromosomes()
+                .SelectMany(c => DataExport.BreakpointClassesToCSV(c, DisplayController.GetHighlightRegions(c).Cast<BreakpointClassificationHighlightRegion>()));
+
+            const string header = "ref_gen,ref_chr,start_bp,end_bp,length";
+
+            try
+            {
+                using (var stream = new StreamWriter(sfd.OpenFile()))
+                {
+                    stream.WriteLine(header);
+                    stream.Write(string.Join("", breakpointsCSV));
+                    stream.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Could not save CSV output: " + e.Message, "Error", MessageBoxButton.OK);
+            }
         }
 
         private void ResetOptionsToDefaults(object obj)

@@ -69,5 +69,8 @@ namespace EvolutionHighwayApp.Repository.Controllers
             Action<ActionCompletedEventArgs<List<HeterochromatinRegion>>> successCallback,
             Action<ActionFailingEventArgs<RefChromosome>> failureCallback = null,
             Action beforeLoadCallback = null);
+
+        IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes);
+        IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, double maxThreshold);
     }
 }

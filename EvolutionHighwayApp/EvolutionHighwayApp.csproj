@@ -146,13 +146,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft SDKs\Silverlight\v5.0\Libraries\Client\System.Xml.XPath.dll</HintPath>
     </Reference>
-    <Reference Include="VIBlend.Silverlight.Menu">
+    <Reference Include="VIBlend.Silverlight.Menu, Version=6.5.0.0, Culture=neutral, PublicKeyToken=85c7390eefa587df, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Menu.dll</HintPath>
     </Reference>
-    <Reference Include="VIBlend.Silverlight.Theme.Office2010Silver">
+    <Reference Include="VIBlend.Silverlight.Theme.Office2010Silver, Version=6.5.0.0, Culture=neutral, PublicKeyToken=391e3faf415e7c75, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Theme.Office2010Silver.dll</HintPath>
     </Reference>
-    <Reference Include="VIBlend.Silverlight.Utilities">
+    <Reference Include="VIBlend.Silverlight.Utilities, Version=6.5.0.0, Culture=neutral, PublicKeyToken=5f65d588f3a56fc4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\VIBlend\VIBlend.Silverlight.Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -323,6 +326,8 @@
       <DependentUpon>EditCustomTrackWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\ControlExtensions.cs" />
+    <Compile Include="Utils\Csv.cs" />
+    <Compile Include="Utils\DataExport.cs" />
     <Compile Include="Utils\FixedListBoxDragDropTarget.cs" />
     <Compile Include="Utils\LinearGradientBrushInterpolator.cs" />
     <Compile Include="Utils\SmartObservableCollection.cs" />

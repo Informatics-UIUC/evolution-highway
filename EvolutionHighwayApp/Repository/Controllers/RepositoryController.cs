@@ -608,5 +608,72 @@ namespace EvolutionHighwayApp.Repository.Controllers
 
             worker.RunWorkerAsync();
         }
+
+
+
+        public IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes)
+        {
+            return GetOverlapRegions(compGenomes.Select(g => g.SyntenyBlocks), ConservedSyntenyHighlightRegionFactory);
+        }
+
+        public IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, double maxThreshold)
+        {
+            var overlapGenomes = GetOverlapRegions(compGenomes.Select(g => g.SyntenyBlocks), BreakpointClassificationHighlightRegionFactory);
+            var overlapClassBreakpoints = GetOverlapRegions(classes.Select(c => GetBreakpoints(c, BreakpointClassificationHighlightRegionFactory).MemoizeAll()), BreakpointClassificationHighlightRegionFactory);
+            var classRegions = GetOverlapRegions(new[] { overlapGenomes, overlapClassBreakpoints }, BreakpointClassificationHighlightRegionFactory);
+
+            return classRegions.Where(r => r.Span < maxThreshold);
+        }
+
+        private static IEnumerable<T> GetOverlapRegions<T>(IEnumerable<IEnumerable<Region>> regionsCollection, Func<double, double, T> regionFactory) where T : Region
+        {
+            IEnumerable<Tuple<IEnumerable<Region>, T>> emptyRegions =
+                new[] { new Tuple<IEnumerable<Region>, T>(Enumerable.Empty<T>(), null) };
+
+            return
+                regionsCollection.Aggregate(emptyRegions,
+                    (accRegions, regs) =>
+                        from acc in accRegions
+                        from region in regs
+                        let regions = acc.Item1.Concat(new[] { region })
+                        let overlap = GetOverlap(regions, regionFactory)
+                        where overlap != null
+                        select new Tuple<IEnumerable<Region>, T>(regions, overlap),
+                    result => result.Select(r => r.Item2));
+        }
+
+        private static T GetOverlap<T>(IEnumerable<Region> regions, Func<double, double, T> regionFactory) where T : Region
+        {
+            regions = regions.ToArray();
+            var x = regions.Max(r => r.Start);
+            var y = regions.Min(r => r.End);
+
+            return y >= x ? regionFactory(x, y) : null;
+        }
+
+        private static IEnumerable<T> GetBreakpoints<T>(CompGenome compGenome, Func<double, double, T> regionFactory) where T : Region
+        {
+            var sortedRegions = compGenome.SyntenyBlocks.ToList();
+            sortedRegions.Sort((a, b) => a.Start.CompareTo(b.Start));
+
+            double i = 0;
+            foreach (var region in sortedRegions)
+            {
+                if (i < region.Start)
+                    yield return regionFactory(i, region.Start);
+
+                i = region.End;
+            }
+
+            if (i < compGenome.RefChromosome.Length)
+                yield return regionFactory(i, compGenome.RefChromosome.Length);
+        }
+
+        private static readonly Func<double, double, ConservedSyntenyHighlightRegion> ConservedSyntenyHighlightRegionFactory =
+            (s, e) => new ConservedSyntenyHighlightRegion(s, e);
+
+        private static readonly Func<double, double, BreakpointClassificationHighlightRegion> BreakpointClassificationHighlightRegionFactory =
+           (s, e) => new BreakpointClassificationHighlightRegion(s, e);
+
     }
 }

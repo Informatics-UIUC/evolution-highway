@@ -89,10 +89,11 @@ namespace EvolutionHighwayApp.Selection.ViewModels
                 success =>
                 {
                     // TODO: selection logic needs fixing - should not resort for each event - need to maintain user ordering
+                    var previousNameOrder = Chromosomes.Select(c => c.Name).ToList();
                     var previouslySelectedChrNames = Chromosomes.Where(c => c.IsSelected).Select(c => c.Name).ToList();
                     var chrNames = success.Result.Select(c => c.Name).Distinct().ToList();
                     chrNames.Sort((a, b) => ChromosomeNameComparer.Compare(a, b));
-                    var items = chrNames.Select(
+                    var items = previousNameOrder.Intersect(chrNames).Union(chrNames).Select(
                         name =>
                         {
                             var item = new RefChromosomeItem(name);
