@@ -19,6 +19,18 @@ namespace EvolutionHighwayApp
                 if (asm.FullName == null) return "";
 
                 var version = new AssemblyName(asm.FullName).Version;
+                return string.Format("v{0}.{1}.{2}", version.Major, version.Minor, version.Build);
+            }
+        }
+
+        public string VersionFull
+        {
+            get
+            {
+                var asm = Assembly.GetExecutingAssembly();
+                if (asm.FullName == null) return "";
+
+                var version = new AssemblyName(asm.FullName).Version;
                 return string.Format("v{0}.{1}.{2}.{3}", version.Major, version.Minor, version.Build, version.Revision);
             }
         }

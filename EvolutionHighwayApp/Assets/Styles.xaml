@@ -102,6 +102,7 @@
       <Setter Property="FontSize" Value="9"/>
       <Setter Property="Margin" Value="5,2,0,0"/>
       <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="ToolTipService.ToolTip" Value="{Binding VersionFull}"/>
   </Style>
     
   <!-- Links Border Style -->
