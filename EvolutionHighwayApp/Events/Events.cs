@@ -170,6 +170,7 @@ namespace EvolutionHighwayApp.Events
     }
 
     public class HighlightColorChangedEvent : ColorChangedEvent { }
+    public class HighlightRegionStrokeColorChangedEvent : ColorChangedEvent { }
     public class HeterochromatinBgColorChangedEvent : ColorChangedEvent { }
     public class CentromereBgColorChangedEvent : ColorChangedEvent { }
     public class GenomeInsideBgColorChangedEvent : ColorChangedEvent { }

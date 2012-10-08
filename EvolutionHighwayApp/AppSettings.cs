@@ -9,6 +9,7 @@ using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Utils;
+using ImageTools;
 using SilverlightColorChooser;
 
 namespace EvolutionHighwayApp
@@ -59,7 +60,8 @@ namespace EvolutionHighwayApp
                                      {"dataPointFillColor", PredefinedColor.AllColors["Light Salmon"]},
                                      {"adjacencyFeatureWidth", 20},
                                      {"highlightRegionMargin", -10d},
-                                     {"highlightRegionStrokeSize", 1d}
+                                     {"highlightRegionStrokeSize", 1d},
+                                     {"highlightRegionStrokeColor", PredefinedColor.AllColors["Red"]}
                                  };
 
             _displayController.SetShowCentromere(ShowCentromere);
@@ -93,6 +95,7 @@ namespace EvolutionHighwayApp
             AdjacencyFeatureWidth = (int) _defaultValues["adjacencyFeatureWidth"];
             HighlightRegionMargin = (double) _defaultValues["highlightRegionMargin"];
             HighlightRegionStrokeSize = (double) _defaultValues["highlightRegionStrokeSize"];
+            HighlightRegionStrokeColor = (Color) _defaultValues["highlightRegionStrokeColor"];
         }
 
         public bool ShowCentromere
@@ -488,6 +491,22 @@ namespace EvolutionHighwayApp
 
                 _appSettings.Set("highlightRegionStrokeSize", value);
                 NotifyPropertyChanged(() => HighlightRegionStrokeSize);
+            }
+        }
+
+        public Color HighlightRegionStrokeColor
+        {
+            get { return (Color)_appSettings.GetValueOrDefault("highlightRegionStrokeColor", _defaultValues["highlightRegionStrokeColor"]); }
+            set
+            {
+                var oldValue = HighlightRegionStrokeColor;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetHighlightRegionStrokeColor: {0}", value);
+
+                _appSettings.Set("highlightRegionStrokeColor", value);
+                NotifyPropertyChanged(() => HighlightRegionStrokeColor);
+                EventPublisher.Publish(new HighlightRegionStrokeColorChangedEvent { Color = value });
             }
         }
     }

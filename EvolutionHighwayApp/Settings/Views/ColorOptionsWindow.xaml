@@ -43,6 +43,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="Heterochromatin Background:" Grid.Column="0" Grid.Row="0"/>
@@ -106,6 +107,11 @@
                     Value="{Binding AppSettings.HighlightRegionStrokeSize,Mode=TwoWay}"
                     Style="{StaticResource ValuesStyle}"
                     Grid.Column="1" Grid.Row="11"/>
+
+            <TextBlock Text="Highlight Region Stroke Color:" Grid.Column="0" Grid.Row="12"/>
+            <color:ColorPicker Color="{Binding AppSettings.HighlightRegionStrokeColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
+                               Grid.Column="1" Grid.Row="12"/>
         </Grid>
         
         <Button Content="OK" Click="OnOKButtonClick" 
