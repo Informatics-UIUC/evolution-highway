@@ -3,7 +3,7 @@ using System.Linq;
 using EvolutionHighwayApp.Exceptions;
 using EvolutionHighwayApp.Models;
 using EvolutionHighwayApp.Utils;
-using SilverlightColorPicker;
+using SilverlightColorChooser;
 
 namespace EvolutionHighwayApp.Repository.Models
 {
@@ -52,15 +52,15 @@ namespace EvolutionHighwayApp.Repository.Models
                 var end = double.Parse(parts[4]);
 
 
-                var color = PredefinedColors.AllColors["Black"];
+                var color = PredefinedColor.AllColors["Black"];
                 if (parts.Length == 6)
                 {
                     var colorStr = parts[5];
                     if (colorStr.StartsWith("#"))
                         color = color.FromHexString(colorStr);
                     else
-                        if (PredefinedColors.AllColors.ContainsKey(colorStr))
-                            color = PredefinedColors.AllColors[colorStr];
+                        if (PredefinedColor.AllColors.ContainsKey(colorStr))
+                            color = PredefinedColor.AllColors[colorStr];
                         else
                             throw new ParseErrorException(colorStr, lineno);
                 }

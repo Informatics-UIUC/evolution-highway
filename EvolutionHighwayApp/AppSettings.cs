@@ -9,7 +9,7 @@ using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Utils;
-using SilverlightColorPicker;
+using SilverlightColorChooser;
 
 namespace EvolutionHighwayApp
 {
@@ -32,6 +32,7 @@ namespace EvolutionHighwayApp
             _displayController = displayController;
 
             EventPublisher = IoC.Container.Resolve<IEventPublisher>();
+
             _defaultValues = new Dictionary<string, object>
                                  {
                                      {"showCentromere", true},
@@ -48,15 +49,16 @@ namespace EvolutionHighwayApp
                                      {"centromereBgColor", Colors.Black},
                                      {"heterochromatinBgColor", Colors.Transparent},
                                      {"genomeInsideBgColor", Colors.White},
-                                     {"featureDensityBgColor", PredefinedColors.AllColors["AliceBlue"]},
+                                     {"featureDensityBgColor", PredefinedColor.AllColors["Alice Blue"]},
                                      {"featureDensityFillColor", Colors.Transparent},
                                      {"sparklineColor", Colors.Black},
-                                     {"searchHighlightColor", PredefinedColors.AllColors["LightGreen"]},
-                                     {"conservedSyntenyHighlightColor", PredefinedColors.AllColors["PaleGreen"]},
-                                     {"breakpointClassificationHighlightColor", PredefinedColors.AllColors["Plum"]},
+                                     {"searchHighlightColor", PredefinedColor.AllColors["Light Green"]},
+                                     {"conservedSyntenyHighlightColor", PredefinedColor.AllColors["Pale Green"]},
+                                     {"breakpointClassificationHighlightColor", PredefinedColor.AllColors["Plum"]},
                                      {"breakpointClassificationMaxThreshold", 100000000d},
-                                     {"dataPointFillColor", PredefinedColors.AllColors["LightSalmon"]},
-                                     {"adjacencyFeatureWidth", 20}
+                                     {"dataPointFillColor", PredefinedColor.AllColors["Light Salmon"]},
+                                     {"adjacencyFeatureWidth", 20},
+                                     {"highlightRegionMargin", -10}
                                  };
 
             _displayController.SetShowCentromere(ShowCentromere);
@@ -88,6 +90,7 @@ namespace EvolutionHighwayApp
             BreakpointClassificationHighlightColor = (Color) _defaultValues["breakpointClassificationHighlightColor"];
             BreakpointClassificationMaxThreshold = (double) _defaultValues["breakpointClassificationMaxThreshold"];
             AdjacencyFeatureWidth = (int) _defaultValues["adjacencyFeatureWidth"];
+            HighlightRegionMargin = (int) _defaultValues["highlightRegionMargin"];
         }
 
         public bool ShowCentromere
@@ -453,6 +456,21 @@ namespace EvolutionHighwayApp
                 _appSettings.Set("adjacencyFeatureWidth", value);
                 NotifyPropertyChanged(() => AdjacencyFeatureWidth);
                 EventPublisher.Publish(new AdjacencyFeatureWidthChangedEvent { Width = value });
+            }
+        }
+
+        public int HighlightRegionMargin
+        {
+            get { return (int)_appSettings.GetValueOrDefault("highlightRegionMargin", _defaultValues["highlightRegionMargin"]); }
+            set
+            {
+                var oldValue = HighlightRegionMargin;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetHighlightRegionMargin: {0}", value);
+
+                _appSettings.Set("highlightRegionMargin", value);
+                NotifyPropertyChanged(() => HighlightRegionMargin);
             }
         }
     }

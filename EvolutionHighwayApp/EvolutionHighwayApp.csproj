@@ -172,6 +172,7 @@
     </Compile>
     <Compile Include="Converters\BoolToOrientationConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
     <Compile Include="Converters\CompGenomeNameFormatToBoolConverter.cs" />
     <Compile Include="Converters\CompGenomeNameFormatToStringConverter.cs" />
     <Compile Include="Converters\DebuggingConverter.cs" />
