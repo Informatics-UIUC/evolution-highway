@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
     xmlns:color="clr-namespace:SilverlightColorChooser;assembly=SilverlightColorChooser"
-    Width="405" Height="300" OverlayBrush="{x:Null}"
+    Width="405" Height="350" OverlayBrush="{x:Null}"
     Title="Color Options">
     
     <controls:ChildWindow.Resources>
@@ -12,7 +12,7 @@
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
 
-        <Style TargetType="color:ColorPicker">
+        <Style x:Key="ValuesStyle" TargetType="Control">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,0,0,0"/>
         </Style>
@@ -28,10 +28,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -46,44 +47,65 @@
 
             <TextBlock Text="Heterochromatin Background:" Grid.Column="0" Grid.Row="0"/>
             <color:ColorPicker Color="{Binding AppSettings.HeterochromatinBgColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="0"/>
 
             <TextBlock Text="Centromere Background:" Grid.Column="0" Grid.Row="1"/>
             <color:ColorPicker Color="{Binding AppSettings.CentromereBgColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="1"/>
 
             <TextBlock Text="Interior Genome Background:" Grid.Column="0" Grid.Row="2"/>
             <color:ColorPicker Color="{Binding AppSettings.GenomeInsideBgColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="2"/>
 
             <TextBlock Text="Feature Background:" Grid.Column="0" Grid.Row="3"/>
             <color:ColorPicker Color="{Binding AppSettings.FeatureDensityBgColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="3"/>
             
             <TextBlock Text="Feature Fill Color:" Grid.Column="0" Grid.Row="4"/>
             <color:ColorPicker Color="{Binding AppSettings.FeatureDensityFillColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="4"/>
+                               Style="{StaticResource ValuesStyle}"
+                               Grid.Column="1" Grid.Row="4"/>
 
             <TextBlock Text="Feature Sparkline Color:" Grid.Column="0" Grid.Row="5"/>
             <color:ColorPicker Color="{Binding AppSettings.SparklineColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="5"/>
+                               Style="{StaticResource ValuesStyle}"
+                               Grid.Column="1" Grid.Row="5"/>
 
             <TextBlock Text="Feature Data Point Fill Color:" Grid.Column="0" Grid.Row="6"/>
             <color:ColorPicker Color="{Binding AppSettings.DataPointFillColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="6"/>
 
             <TextBlock Text="Search Highlight Color:" Grid.Column="0" Grid.Row="7"/>
             <color:ColorPicker Color="{Binding AppSettings.SearchHighlightColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="7"/>
 
             <TextBlock Text="Conserved Synteny Highlight Color:" Grid.Column="0" Grid.Row="8"/>
             <color:ColorPicker Color="{Binding AppSettings.ConservedSyntenyHighlightColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="8"/>
 
             <TextBlock Text="Breakpoint Classification Highlight Color:" Grid.Column="0" Grid.Row="9"/>
             <color:ColorPicker Color="{Binding AppSettings.BreakpointClassificationHighlightColor,Mode=TwoWay}"
+                               Style="{StaticResource ValuesStyle}"
                                Grid.Column="1" Grid.Row="9"/>
 
+            <TextBlock Text="Highlight Margin:" Grid.Column="0" Grid.Row="10"/>
+            <Slider Minimum="0" Maximum="15" SmallChange="1" LargeChange="3"
+                    Value="{Binding AppSettings.HighlightRegionMargin,Mode=TwoWay,Converter={StaticResource NegateValueConverter}}"
+                    Style="{StaticResource ValuesStyle}"
+                    Grid.Column="1" Grid.Row="10"/>
+
+            <TextBlock Text="Highlight Stroke Size:" Grid.Column="0" Grid.Row="11"/>
+            <Slider Minimum="0" Maximum="1" SmallChange="0.1" LargeChange="0.2"
+                    Value="{Binding AppSettings.HighlightRegionStrokeSize,Mode=TwoWay}"
+                    Style="{StaticResource ValuesStyle}"
+                    Grid.Column="1" Grid.Row="11"/>
         </Grid>
         
         <Button Content="OK" Click="OnOKButtonClick" 

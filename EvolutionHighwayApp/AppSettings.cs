@@ -58,7 +58,8 @@ namespace EvolutionHighwayApp
                                      {"breakpointClassificationMaxThreshold", 100000000d},
                                      {"dataPointFillColor", PredefinedColor.AllColors["Light Salmon"]},
                                      {"adjacencyFeatureWidth", 20},
-                                     {"highlightRegionMargin", -10}
+                                     {"highlightRegionMargin", -10d},
+                                     {"highlightRegionStrokeSize", 1d}
                                  };
 
             _displayController.SetShowCentromere(ShowCentromere);
@@ -90,7 +91,8 @@ namespace EvolutionHighwayApp
             BreakpointClassificationHighlightColor = (Color) _defaultValues["breakpointClassificationHighlightColor"];
             BreakpointClassificationMaxThreshold = (double) _defaultValues["breakpointClassificationMaxThreshold"];
             AdjacencyFeatureWidth = (int) _defaultValues["adjacencyFeatureWidth"];
-            HighlightRegionMargin = (int) _defaultValues["highlightRegionMargin"];
+            HighlightRegionMargin = (double) _defaultValues["highlightRegionMargin"];
+            HighlightRegionStrokeSize = (double) _defaultValues["highlightRegionStrokeSize"];
         }
 
         public bool ShowCentromere
@@ -459,9 +461,9 @@ namespace EvolutionHighwayApp
             }
         }
 
-        public int HighlightRegionMargin
+        public double HighlightRegionMargin
         {
-            get { return (int)_appSettings.GetValueOrDefault("highlightRegionMargin", _defaultValues["highlightRegionMargin"]); }
+            get { return (double)_appSettings.GetValueOrDefault("highlightRegionMargin", _defaultValues["highlightRegionMargin"]); }
             set
             {
                 var oldValue = HighlightRegionMargin;
@@ -471,6 +473,21 @@ namespace EvolutionHighwayApp
 
                 _appSettings.Set("highlightRegionMargin", value);
                 NotifyPropertyChanged(() => HighlightRegionMargin);
+            }
+        }
+
+        public double HighlightRegionStrokeSize
+        {
+            get { return (double)_appSettings.GetValueOrDefault("highlightRegionStrokeSize", _defaultValues["highlightRegionStrokeSize"]); }
+            set
+            {
+                var oldValue = HighlightRegionMargin;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("SetHighlightRegionStrokeSize: {0}", value);
+
+                _appSettings.Set("highlightRegionStrokeSize", value);
+                NotifyPropertyChanged(() => HighlightRegionStrokeSize);
             }
         }
     }

@@ -178,6 +178,8 @@
     <Compile Include="Converters\DebuggingConverter.cs" />
     <Compile Include="Converters\DoubleToTopMarginConverter.cs" />
     <Compile Include="Converters\CompGenomeNameFormat.cs" />
+    <Compile Include="Converters\DoubleToLeftRightMarginConverter.cs" />
+    <Compile Include="Converters\NegateValueConverter.cs" />
     <Compile Include="Converters\NullableToVisibilityConverter.cs" />
     <Compile Include="Converters\NumberToPrettyTextConverter.cs" />
     <Compile Include="Converters\OrientationToAngleConverter.cs" />

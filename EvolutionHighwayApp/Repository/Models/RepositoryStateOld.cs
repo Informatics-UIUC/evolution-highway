@@ -15,7 +15,6 @@ using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Models;
 using EvolutionHighwayApp.ServiceLayer;
 using EvolutionHighwayApp.Utils;
-using SilverlightColorPicker;
 
 namespace EvolutionHighwayApp.Repository.Models
 {

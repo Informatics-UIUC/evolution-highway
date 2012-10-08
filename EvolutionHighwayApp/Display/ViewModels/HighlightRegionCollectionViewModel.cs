@@ -32,6 +32,8 @@ namespace EvolutionHighwayApp.Display.ViewModels
             private set { NotifyPropertyChanged(() => HighlightRegions, ref _highlightRegions, value); }
         }
 
+        public AppSettings AppSettings { get; private set; }
+
         #endregion
 
         private readonly IDisplayController _displayController;
@@ -40,6 +42,8 @@ namespace EvolutionHighwayApp.Display.ViewModels
 
         public HighlightRegionCollectionViewModel()
         {
+            AppSettings = IoC.Container.Resolve<AppSettings>();
+
             _highlightRegions = new HighlightRegion[0];
 
             _displayController = IoC.Container.Resolve<IDisplayController>();

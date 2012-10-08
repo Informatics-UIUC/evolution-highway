@@ -213,7 +213,7 @@
                 </viblend:MenuItem>
             </viblend:MenuItem>
             
-            <viblend:MenuItem Text="Colors" Command="{Binding ShowColorOptionsWindowCommand}"/>
+            <viblend:MenuItem Text="Settings" Command="{Binding ShowColorOptionsWindowCommand}"/>
             
             <viblend:MenuItem IsSeparator="true"/>
             

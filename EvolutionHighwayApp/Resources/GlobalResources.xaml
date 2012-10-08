@@ -19,4 +19,6 @@
         <SolidColorBrush converters:SignConverter.Sign="1" Color="LightBlue"/>
     </converters:SignConverter>
     <converters:ColorToBrushConverter x:Key="ColorToBrushConverter"/>
+    <converters:DoubleToLeftRightMarginConverter x:Key="IntToLeftRightMarginConverter"/>
+    <converters:NegateValueConverter x:Key="NegateValueConverter"/>
 </ResourceDictionary>
