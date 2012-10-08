@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayApp", "EvolutionHighwayApp\EvolutionHighwayApp.csproj", "{7518F77C-DE17-4A43-8483-BCBA208A4E95}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolutionHighwayApp.Web", "EvolutionHighwayApp.Web\EvolutionHighwayApp.Web.csproj", "{5B4416E3-D97A-4535-A8B4-F7AEDF1DB74E}"

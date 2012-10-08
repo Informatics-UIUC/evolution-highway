@@ -2,8 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
-    xmlns:color="clr-namespace:SilverlightColorPicker;assembly=SilverlightColorPicker" 
-    Width="400" Height="300" OverlayBrush="{x:Null}"
+    xmlns:color="clr-namespace:SilverlightColorChooser;assembly=SilverlightColorChooser"
+    Width="405" Height="300" OverlayBrush="{x:Null}"
     Title="Color Options">
     
     <controls:ChildWindow.Resources>
@@ -11,8 +11,8 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
-        
-        <Style TargetType="color:SilverlightColorPicker">
+
+        <Style TargetType="color:ColorPicker">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="10,0,0,0"/>
         </Style>
@@ -28,6 +28,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             
             <Grid.RowDefinitions>
@@ -44,44 +45,44 @@
             </Grid.RowDefinitions>
 
             <TextBlock Text="Heterochromatin Background:" Grid.Column="0" Grid.Row="0"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.HeterochromatinBgColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="0"/>
+            <color:ColorPicker Color="{Binding AppSettings.HeterochromatinBgColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="0"/>
 
             <TextBlock Text="Centromere Background:" Grid.Column="0" Grid.Row="1"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.CentromereBgColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="1"/>
+            <color:ColorPicker Color="{Binding AppSettings.CentromereBgColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="1"/>
 
             <TextBlock Text="Interior Genome Background:" Grid.Column="0" Grid.Row="2"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.GenomeInsideBgColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="2"/>
+            <color:ColorPicker Color="{Binding AppSettings.GenomeInsideBgColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="2"/>
 
             <TextBlock Text="Feature Background:" Grid.Column="0" Grid.Row="3"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.FeatureDensityBgColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="3"/>
+            <color:ColorPicker Color="{Binding AppSettings.FeatureDensityBgColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="3"/>
             
             <TextBlock Text="Feature Fill Color:" Grid.Column="0" Grid.Row="4"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.FeatureDensityFillColor,Mode=TwoWay}"
+            <color:ColorPicker Color="{Binding AppSettings.FeatureDensityFillColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="4"/>
 
             <TextBlock Text="Feature Sparkline Color:" Grid.Column="0" Grid.Row="5"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.SparklineColor,Mode=TwoWay}"
+            <color:ColorPicker Color="{Binding AppSettings.SparklineColor,Mode=TwoWay}"
                                           Grid.Column="1" Grid.Row="5"/>
 
             <TextBlock Text="Feature Data Point Fill Color:" Grid.Column="0" Grid.Row="6"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.DataPointFillColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="6"/>
+            <color:ColorPicker Color="{Binding AppSettings.DataPointFillColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="6"/>
 
             <TextBlock Text="Search Highlight Color:" Grid.Column="0" Grid.Row="7"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.SearchHighlightColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="7"/>
+            <color:ColorPicker Color="{Binding AppSettings.SearchHighlightColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="7"/>
 
             <TextBlock Text="Conserved Synteny Highlight Color:" Grid.Column="0" Grid.Row="8"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.ConservedSyntenyHighlightColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="8"/>
+            <color:ColorPicker Color="{Binding AppSettings.ConservedSyntenyHighlightColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="8"/>
 
             <TextBlock Text="Breakpoint Classification Highlight Color:" Grid.Column="0" Grid.Row="9"/>
-            <color:SilverlightColorPicker SelectedColor="{Binding AppSettings.BreakpointClassificationHighlightColor,Mode=TwoWay}"
-                                          Grid.Column="1" Grid.Row="9"/>
+            <color:ColorPicker Color="{Binding AppSettings.BreakpointClassificationHighlightColor,Mode=TwoWay}"
+                               Grid.Column="1" Grid.Row="9"/>
 
         </Grid>
         

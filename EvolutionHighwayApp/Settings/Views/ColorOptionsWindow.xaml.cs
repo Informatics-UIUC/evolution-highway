@@ -1,3 +1,5 @@
+using System.Windows.Media;
+using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Settings.ViewModels;
 
 namespace EvolutionHighwayApp.Settings.Views
@@ -20,6 +22,11 @@ namespace EvolutionHighwayApp.Settings.Views
         private void OnOKButtonClick(object sender, System.Windows.RoutedEventArgs e)
         {
             DialogResult = true;
+        }
+
+        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
+        {
+            IoC.Container.Resolve<AppSettings>().HeterochromatinBgColor = Color.FromArgb(100, 200, 30, 30);
         }
     }
 }

@@ -86,8 +86,8 @@
     <Reference Include="Silverlight.Controls.ToolTips">
       <HintPath>..\Lib\ToolTipService.v2.1.1\Silverlight.Controls.ToolTips.dll</HintPath>
     </Reference>
-    <Reference Include="SilverlightColorPicker">
-      <HintPath>..\Lib\SilverlightColorPicker\SilverlightColorPicker.dll</HintPath>
+    <Reference Include="SilverlightColorChooser">
+      <HintPath>..\Lib\SilverlightColorPicker\SilverlightColorChooser.dll</HintPath>
     </Reference>
     <Reference Include="System.CoreEx, Version=1.0.2856.204, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\Lib\Reactive.Extensions.v1.0.2856.0\System.CoreEx.dll</HintPath>
