@@ -48,7 +48,6 @@ namespace EvolutionHighwayApp.Display.ViewModels
 
                 CompGenomes.ReplaceWith(_displayController.GetVisibleCompGenomes(_refChromosome));
 
-                _centromereRegions = _refChromosome.CentromereRegions;
                 NotifyPropertyChanged(() => ClipRegion);
                 NotifyPropertyChanged(() => CustomTracks);
             }
@@ -82,7 +81,6 @@ namespace EvolutionHighwayApp.Display.ViewModels
         private readonly IDisposable _displaySizeChangedObserver;
         private readonly IDisposable _centromereRegionDisplayEventObserver;
         private readonly IDisposable _customTrackEventObserver;
-        private IEnumerable<CentromereRegion> _centromereRegions; 
 
         public CompGenomeCollectionViewModel()
         {
@@ -95,7 +93,7 @@ namespace EvolutionHighwayApp.Display.ViewModels
 
             _compGenomeSelectionChangedObserver = _eventPublisher.GetEvent<CompGenomeSelectionDisplayEvent>()
                 .Where(e => e.RefChromosome == RefChromosome)
-                //.ObserveOnDispatcher()
+                .ObserveOnDispatcher()
                 .Subscribe(OnCompGenomeSelectionDisplay);
 
             _displaySizeChangedObserver = _eventPublisher.GetEvent<DisplaySizeChangedEvent>()
@@ -106,10 +104,9 @@ namespace EvolutionHighwayApp.Display.ViewModels
                         NotifyPropertyChanged(() => ClipRegion);
                     });
 
-            _centromereRegionDisplayEventObserver = _eventPublisher.GetEvent<CentromereRegionDisplayEvent>()
-                .Where(e => e.Chromosome == RefChromosome)
+            _centromereRegionDisplayEventObserver = _eventPublisher.GetEvent<ShowCentromereEvent>()
                 .ObserveOnDispatcher()
-                .Subscribe(e => { _centromereRegions = e.Regions; NotifyPropertyChanged(() => ClipRegion); });
+                .Subscribe(e => NotifyPropertyChanged(() => ClipRegion));
 
             _customTrackEventObserver = _eventPublisher.GetEvent<CustomTrackDataLoadedEvent>()
                 .Subscribe(e => NotifyPropertyChanged(() => CustomTracks));
@@ -141,14 +138,15 @@ namespace EvolutionHighwayApp.Display.ViewModels
 
             var length = (double) ScaleConverter.Convert(RefChromosome.Length, null, null, null);
             var width = BlockWidth * CompGenomes.Count;
+            var centromereRegions = _refChromosome.CentromereRegions;
 
-            if (!_displayController.ShowCentromere || _centromereRegions.IsEmpty())
+            if (!_displayController.ShowCentromere || centromereRegions.IsEmpty())
             {
                 // No centromere to display
                 return new RectangleGeometry { RadiusX = 10, RadiusY = 10, Rect = new Rect(0, 0, width, length) };
             }
 
-            var region = _centromereRegions.First();
+            var region = centromereRegions.First();
             var scaledStart = (double) ScaleConverter.Convert(region.Start, null, null, null);
             var scaledSpan = (double) ScaleConverter.Convert(region.Span, null, null, null);
 

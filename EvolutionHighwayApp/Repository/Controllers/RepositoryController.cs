@@ -6,7 +6,6 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Windows;
-using System.Windows.Threading;
 using Castle.MicroKernel.Registration;
 using EvolutionHighwayApp.Converters;
 using EvolutionHighwayApp.Events;
@@ -609,7 +608,82 @@ namespace EvolutionHighwayApp.Repository.Controllers
             worker.RunWorkerAsync();
         }
 
+        public void GetAdjacencyScoreData(ICollection<RefChromosome> refChromosomes,
+            Action<ActionCompletedEventArgs<List<FeatureDensity>>> successCallback,
+            Action<ActionFailingEventArgs<RefChromosome>> failureCallback = null,
+            Action beforeLoadCallback = null)
+        {
+            var featureName = "AdjacencyScore";
 
+            var chromosomesToLoad = refChromosomes.Where(c => c.AdjacencyScore == null).ToList();
+            if (chromosomesToLoad.IsEmpty())
+            {
+                successCallback(new ActionCompletedEventArgs<List<FeatureDensity>>(
+                    refChromosomes.SelectMany(c => c.AdjacencyScore).ToList()));
+                return;
+            }
+
+            _eventPublisher.Publish(new FeatureLoadingEvent { FeatureName = featureName, IsDoneLoading = false });
+
+            if (beforeLoadCallback != null)
+                beforeLoadCallback();
+
+            var worker = new BackgroundWorker { WorkerReportsProgress = false, WorkerSupportsCancellation = false };
+
+            worker.DoWork += (s, ea) =>
+            {
+                bool retry;
+
+                do
+                {
+                    retry = false;
+
+                    var waitHandles = from chromosome in chromosomesToLoad
+                                      let mre = new ManualResetEvent(false)
+                                      let completed = _dataService.BeginGetFeatureData(featureName, chromosome.Genome.Name, chromosome.Name,
+                                            asyncResult =>
+                                            {
+                                                try
+                                                {
+                                                    var featureDensityData = _dataService.EndGetFeatureData(asyncResult)
+                                                        .Select(d => new FeatureDensity(d.RefStart, d.RefEnd, d.Score, d.CompGen, chromosome)).ToList();
+                                                    chromosome.AdjacencyScore = featureDensityData;
+                                                }
+                                                catch (CommunicationException e)
+                                                {
+                                                    UISynchronizationContext.Instance.InvokeSynchronously(
+                                                        delegate
+                                                        {
+                                                            var errorMsg = string.Format("{0}{2}{1}{2}{2}Press OK if you want to retry, or Cancel to skip.",
+                                                                string.Format("Error retrieving feature density data for {0} chr {1}", chromosome.Genome.Name, chromosome.Name),
+                                                                e.Message, Environment.NewLine);
+                                                            var mbResult = MessageBox.Show(errorMsg, "Error", MessageBoxButton.OKCancel);
+                                                            retry = mbResult == MessageBoxResult.OK;
+                                                        });
+                                                }
+                                                finally
+                                                {
+                                                    ((ManualResetEvent)asyncResult.AsyncState).Set();
+                                                }
+                                            }, mre).IsCompleted
+                                      where !completed
+                                      select mre;
+
+                    waitHandles.All(w => w.WaitOne());
+                } while (retry);
+
+                ea.Result = refChromosomes.Where(c => c.AdjacencyScore != null)
+                    .SelectMany(c => c.AdjacencyScore).ToList();
+            };
+
+            worker.RunWorkerCompleted += (s, ea) =>
+            {
+                _eventPublisher.Publish(new FeatureLoadingEvent { FeatureName = featureName, IsDoneLoading = true });
+                successCallback(new ActionCompletedEventArgs<List<FeatureDensity>>((List<FeatureDensity>)ea.Result));
+            };
+
+            worker.RunWorkerAsync();
+        }
 
         public IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes)
         {

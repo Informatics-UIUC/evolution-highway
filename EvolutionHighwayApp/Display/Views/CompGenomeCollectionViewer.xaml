@@ -100,23 +100,23 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-<!--        <toolkit:LayoutTransformer Grid.Row="0" Grid.Column="3" Margin="5,0,0,5"-->
-<!--                                   Height="{Binding DataContext.AppSettings.LabelSize,ElementName=_compGenomeCollectionViewer}"-->
-<!--                                   Visibility="{Binding Visibility,ElementName=_sparkline}">-->
-<!--            <toolkit:LayoutTransformer.LayoutTransform>-->
-<!--                <RotateTransform Angle="90"/>-->
-<!--            </toolkit:LayoutTransformer.LayoutTransform>-->
-<!---->
-<!--            <Viewbox Stretch="Uniform" MaxHeight="14" HorizontalAlignment="Right">-->
-<!--                <TextBlock Text="Adj. Score" FontFamily="Trebuchet MS"/>-->
-<!--            </Viewbox>-->
-<!--        </toolkit:LayoutTransformer>-->
+        <toolkit:LayoutTransformer Grid.Row="0" Grid.Column="3" Margin="5,0,0,5"
+                                   Height="{Binding DataContext.AppSettings.LabelSize,ElementName=_compGenomeCollectionViewer}"
+                                   Visibility="{Binding Visibility,ElementName=_sparkline}">
+            <toolkit:LayoutTransformer.LayoutTransform>
+                <RotateTransform Angle="90"/>
+            </toolkit:LayoutTransformer.LayoutTransform>
+
+            <Viewbox Stretch="Uniform" MaxHeight="14" HorizontalAlignment="Right">
+                <TextBlock Text="Adj. Score" FontFamily="Trebuchet MS"/>
+            </Viewbox>
+        </toolkit:LayoutTransformer>
         
-<!--        <views:Sparkline x:Name="_sparkline" x:FieldModifier="private" -->
-<!--                         Grid.Row="1" Grid.Column="3" Margin="5,0,0,0" -->
-<!--                         Width="{Binding DataContext.AppSettings.AdjacencyFeatureWidth,ElementName=_compGenomeCollectionViewer}"-->
-<!--                         Height="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"-->
-<!--                         DataPoints="{Binding DataContext.RefChromosome.FeatureDensityData[AdjacencyScore],ElementName=_compGenomeCollectionViewer}"-->
-<!--                         Visibility="{Binding ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}"/>-->
+        <views:Sparkline x:Name="_sparkline" x:FieldModifier="private" 
+                         Grid.Row="1" Grid.Column="3" Margin="5,0,0,0" 
+                         Width="{Binding DataContext.AppSettings.AdjacencyFeatureWidth,ElementName=_compGenomeCollectionViewer}"
+                         Height="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer,Converter={StaticResource ScaleConverter}}"
+                         RefChromosome="{Binding DataContext.RefChromosome,ElementName=_compGenomeCollectionViewer}"
+                         Visibility="{Binding ShowAdjacencyScore,Converter={StaticResource BoolToVisibilityConverter}}"/>
     </Grid>
 </UserControl>

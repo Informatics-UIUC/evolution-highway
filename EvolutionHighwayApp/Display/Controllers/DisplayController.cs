@@ -22,14 +22,39 @@ namespace EvolutionHighwayApp.Display.Controllers
         public bool ShowCentromere
         {
             get { return _showCentromere; }
-            private set { NotifyPropertyChanged(() => ShowCentromere, ref _showCentromere, value); }
+            private set
+            {
+                if (_showCentromere == value) return;
+                _showCentromere = value;
+                _eventPublisher.Publish(new ShowCentromereEvent { ShowCentromere = _showCentromere });
+                NotifyPropertyChanged(() => ShowCentromere);
+            }
         }
 
         private bool _showHeterochromatin;
         public bool ShowHeterochromatin
         {
             get { return _showHeterochromatin; }
-            private set { NotifyPropertyChanged(() => ShowHeterochromatin, ref _showHeterochromatin, value); }
+            private set
+            {
+                if (_showHeterochromatin == value) return;
+                _showHeterochromatin = value;
+                _eventPublisher.Publish(new ShowHeterochromatinEvent { ShowHeterochromatin = _showHeterochromatin });
+                NotifyPropertyChanged(() => ShowHeterochromatin);
+            }
+        }
+
+        private bool _showFeatureDensitySparkline;
+        public bool ShowFeatureDensitySparkline
+        {
+            get { return _showFeatureDensitySparkline; }
+            private set
+            {
+                if (_showFeatureDensitySparkline == value) return;
+                _showFeatureDensitySparkline = value;
+                _eventPublisher.Publish(new ShowFeatureDensitySparklineEvent { ShowFeatureDensitySparkline = _showFeatureDensitySparkline });
+                NotifyPropertyChanged(() => ShowFeatureDensitySparkline);
+            }
         }
 
         private bool _showConservedSynteny;
@@ -60,6 +85,8 @@ namespace EvolutionHighwayApp.Display.Controllers
             get { return _showHighlightRegions; }
             private set { NotifyPropertyChanged(() => ShowHighlightRegions, ref _showHighlightRegions, value); }
         }
+
+
 
         #endregion
 
@@ -172,23 +199,12 @@ namespace EvolutionHighwayApp.Display.Controllers
                 var synBlocksLoadedWaitHandle = new ManualResetEvent(false);
                 waitHandles.Add(synBlocksLoadedWaitHandle);
 
-                if (ShowCentromere)
-                {
-                    var centromereLoadedWaitHandle = new ManualResetEvent(false);
-                    waitHandles.Add(centromereLoadedWaitHandle);
-
-                    _repositoryController.GetCentromereRegions(_visibleCompGenomes.Keys,
-                        cr => centromereLoadedWaitHandle.Set());
-                }
-
-                if (ShowHeterochromatin)
-                {
-                    var heterochromatinLoadedWaitHandle = new ManualResetEvent(false);
-                    waitHandles.Add(heterochromatinLoadedWaitHandle);
-
-                    _repositoryController.GetHeterochromatinRegions(_visibleCompGenomes.Keys,
-                        hr => heterochromatinLoadedWaitHandle.Set());
-                }
+                var extraDataLoaded = new ManualResetEvent(false);
+                waitHandles.Add(extraDataLoaded);
+                SetShowCentromere(ShowCentromere, 
+                    () => SetShowHeterochromatin(ShowHeterochromatin,
+                        () => SetShowFeatureDensitySparkline(ShowFeatureDensitySparkline, 
+                            () => extraDataLoaded.Set())));
 
                 _repositoryController.GetSyntenyBlocks(compGenomes,
                     e => synBlocksLoadedWaitHandle.Set());
@@ -247,12 +263,7 @@ namespace EvolutionHighwayApp.Display.Controllers
             _repositoryController.GetCentromereRegions(GetVisibleRefChromosomes().ToArray(),
                 centromere =>
                     {
-                        centromere.Result.GroupBy(c => c.RefChromosome)
-                            .Select(c => new CentromereRegionDisplayEvent(c.Key, c.ToList()))
-                            .ForEach(evt => _eventPublisher.Publish(evt));
-
                         ShowCentromere = true;
-
                         if (continuation != null) continuation();
                     });
         }
@@ -269,16 +280,27 @@ namespace EvolutionHighwayApp.Display.Controllers
             _repositoryController.GetHeterochromatinRegions(GetVisibleRefChromosomes().ToArray(),
                 heterochromatin =>
                     {
-                        heterochromatin.Result.GroupBy(c => c.RefChromosome)
-                            .Select(c => new HeterochromatinRegionDisplayEvent(c.Key, c.ToList()))
-                            .ForEach(evt => _eventPublisher.Publish(evt));
-
                         ShowHeterochromatin = true;
-
                         if (continuation != null) continuation();
                     });
         }
 
+        public void SetShowFeatureDensitySparkline(bool visible, Action continuation = null)
+        {
+            if (!visible)
+            {
+                ShowFeatureDensitySparkline = false;
+                if (continuation != null) continuation();
+                return;
+            }
+
+            _repositoryController.GetAdjacencyScoreData(GetVisibleRefChromosomes().ToArray(),
+                densityData =>
+                {
+                    ShowFeatureDensitySparkline = true;
+                    if (continuation != null) continuation();
+                });
+        }
         
         public void SetHighlightRegions(RefChromosome chromosome, ICollection<Region> highlightRegions)
         {

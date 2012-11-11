@@ -70,6 +70,11 @@ namespace EvolutionHighwayApp.Repository.Controllers
             Action<ActionFailingEventArgs<RefChromosome>> failureCallback = null,
             Action beforeLoadCallback = null);
 
+        void GetAdjacencyScoreData(ICollection<RefChromosome> refChromosomes,
+            Action<ActionCompletedEventArgs<List<FeatureDensity>>> successCallback,
+            Action<ActionFailingEventArgs<RefChromosome>> failureCallback = null,
+            Action beforeLoadCallback = null);
+
         IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes);
         IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, double maxThreshold);
     }

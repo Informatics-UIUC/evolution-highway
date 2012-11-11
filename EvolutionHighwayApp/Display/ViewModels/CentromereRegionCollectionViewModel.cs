@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Linq;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure;
@@ -28,13 +29,13 @@ namespace EvolutionHighwayApp.Display.ViewModels
         {
             _eventPublisher = IoC.Container.Resolve<IEventPublisher>();
 
-            _centromereRegionDisplayEventObserver = _eventPublisher.GetEvent<CentromereRegionDisplayEvent>()
-                .Where(e => e.Chromosome == RefChromosome)
+            _centromereRegionDisplayEventObserver = _eventPublisher.GetEvent<ShowCentromereEvent>()
+                .Where(e => e.ShowCentromere)
                 .ObserveOnDispatcher()
                 .Subscribe(OnCentromereRegionDisplay);
         }
 
-        private void OnCentromereRegionDisplay(CentromereRegionDisplayEvent e)
+        private void OnCentromereRegionDisplay(ShowCentromereEvent e)
         {
             NotifyPropertyChanged(() => RefChromosome);
         }

@@ -28,13 +28,13 @@ namespace EvolutionHighwayApp.Display.ViewModels
         {
             _eventPublisher = IoC.Container.Resolve<IEventPublisher>();
 
-            _heterochromatinRegionDisplayEventObserver = _eventPublisher.GetEvent<HeterochromatinRegionDisplayEvent>()
-                .Where(e => e.Chromosome == RefChromosome)
+            _heterochromatinRegionDisplayEventObserver = _eventPublisher.GetEvent<ShowHeterochromatinEvent>()
+                .Where(e => e.ShowHeterochromatin)
                 .ObserveOnDispatcher()
                 .Subscribe(OnHeterochromatinRegionDisplay);
         }
 
-        private void OnHeterochromatinRegionDisplay(HeterochromatinRegionDisplayEvent e)
+        private void OnHeterochromatinRegionDisplay(ShowHeterochromatinEvent e)
         {
             NotifyPropertyChanged(() => RefChromosome);
         }

@@ -11,7 +11,12 @@ namespace EvolutionHighwayApp.Events
 
     public class CaptureScreenEvent { }
 
-    public class ShowCentromereEvent 
+    public class ShowBlockOrientationEvent
+    {
+        public bool ShowBlockOrientation { get; set; }
+    }
+
+    public class ShowCentromereEvent
     {
         public bool ShowCentromere { get; set; }
     }
@@ -21,14 +26,9 @@ namespace EvolutionHighwayApp.Events
         public bool ShowHeterochromatin { get; set; }
     }
 
-    public class ShowBlockOrientationEvent
+    public class ShowFeatureDensitySparklineEvent
     {
-        public bool ShowBlockOrientation { get; set; }
-    }
-
-    public class ShowAdjacencyScoreEvent
-    {
-        public bool ShowAdjacencyScore { get; set; }
+        public bool ShowFeatureDensitySparkline { get; set; }
     }
 
     public class CompGenomeNameFormatChangedEvent
@@ -116,6 +116,8 @@ namespace EvolutionHighwayApp.Events
         }
     }
 
+
+
     public abstract class ChromosomeRegionDisplayEvent<T> where T : Region
     {
         public Chromosome Chromosome { get; private set; }
@@ -127,18 +129,6 @@ namespace EvolutionHighwayApp.Events
             Chromosome = chromosome;
             Regions = regions;
         }
-    }
-
-    public class CentromereRegionDisplayEvent : ChromosomeRegionDisplayEvent<CentromereRegion>
-    {
-        public CentromereRegionDisplayEvent(Chromosome chromosome, IEnumerable<CentromereRegion> regions) 
-            : base(chromosome, regions) { }
-    }
-
-    public class HeterochromatinRegionDisplayEvent : ChromosomeRegionDisplayEvent<HeterochromatinRegion>
-    {
-        public HeterochromatinRegionDisplayEvent(Chromosome chromosome, IEnumerable<HeterochromatinRegion> regions) 
-            : base(chromosome, regions) { }
     }
 
     public class HighlightRegionDisplayEvent : ChromosomeRegionDisplayEvent<Region>

@@ -66,6 +66,7 @@ namespace EvolutionHighwayApp
 
             _displayController.SetShowCentromere(ShowCentromere);
             _displayController.SetShowHeterochromatin(ShowHeterochromatin);
+            _displayController.SetShowFeatureDensitySparkline(ShowAdjacencyScore);
         }
 
         public void ResetToDefaults()
@@ -160,7 +161,8 @@ namespace EvolutionHighwayApp
 
                 _appSettings.Set("showAdjacencyScore", value);
                 NotifyPropertyChanged(() => ShowAdjacencyScore);
-                EventPublisher.Publish(new ShowAdjacencyScoreEvent { ShowAdjacencyScore = value });
+                
+                _displayController.SetShowFeatureDensitySparkline(value);
             }
         }
 

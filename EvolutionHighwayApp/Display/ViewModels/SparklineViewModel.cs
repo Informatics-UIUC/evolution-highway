@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using EvolutionHighwayApp.Converters;
+using EvolutionHighwayApp.Display.Controllers;
 using EvolutionHighwayApp.Events;
 using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
@@ -20,16 +21,23 @@ namespace EvolutionHighwayApp.Display.ViewModels
 
         public AppSettings AppSettings { get; set; }
 
-        private List<FeatureDensity> _dataPoints;
-        public List<FeatureDensity> DataPoints
+        private RefChromosome _refChromosome;
+        public RefChromosome RefChromosome
         {
-            get { return _dataPoints; }
+            get { return _refChromosome; }
             set
             {
-                NotifyPropertyChanged(() => SparklinePointCollection, ref _dataPoints, value);
-                NotifyPropertyChanged(() => SparklineDataPoints);
-                NotifyPropertyChanged(() => ShowAdjacencyScore);
+                if (_refChromosome == value)
+                    return;
+
+                _refChromosome = value;
+                Refresh();
             }
+        }
+
+        public List<FeatureDensity> DataPoints
+        {
+            get { return _refChromosome == null ? null : _refChromosome.AdjacencyScore; }
         }
 
         private Size _size;
@@ -56,26 +64,35 @@ namespace EvolutionHighwayApp.Display.ViewModels
             get { return DataPoints == null ? null : DataPoints.Select(data => new FeatureDensityDataPoint(data, Size.Width)); }
         }
 
-        private bool _showAdjacencyScore;
         public bool ShowAdjacencyScore
         {
-            get { return _showAdjacencyScore && DataPoints != null && !DataPoints.IsEmpty(); }
-            set { NotifyPropertyChanged(() => ShowAdjacencyScore, ref _showAdjacencyScore, value); }
+            get { return _displayController.ShowFeatureDensitySparkline && DataPoints != null && !DataPoints.IsEmpty(); }
         }
 
         #endregion
 
         private static readonly ScaleConverter ScaleConverter = new ScaleConverter();
+        private readonly IDisplayController _displayController;
         private readonly IDisposable _showAdjacencyScoreChangedObserver;
+        private readonly IEventPublisher _eventPublisher;
 
         public SparklineViewModel()
         {
             AppSettings = IoC.Container.Resolve<AppSettings>();
-            ShowAdjacencyScore = AppSettings.ShowAdjacencyScore;
 
-            _showAdjacencyScoreChangedObserver = IoC.Container.Resolve<IEventPublisher>().GetEvent<ShowAdjacencyScoreEvent>()
+            _displayController = IoC.Container.Resolve<IDisplayController>();
+            _eventPublisher = IoC.Container.Resolve<IEventPublisher>();
+
+            _showAdjacencyScoreChangedObserver = _eventPublisher.GetEvent<ShowFeatureDensitySparklineEvent>()
                 .ObserveOnDispatcher()
-                .Subscribe(e => ShowAdjacencyScore = e.ShowAdjacencyScore);
+                .Subscribe(e => Refresh());
+        }
+
+        private void Refresh()
+        {
+            NotifyPropertyChanged(() => SparklinePointCollection);
+            NotifyPropertyChanged(() => SparklineDataPoints);
+            NotifyPropertyChanged(() => ShowAdjacencyScore);
         }
 
         private PointCollection GetSparklinePointCollection()

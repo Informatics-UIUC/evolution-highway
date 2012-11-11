@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Windows;
 using EvolutionHighwayApp.Display.ViewModels;
 using EvolutionHighwayApp.Models;
@@ -7,14 +6,14 @@ namespace EvolutionHighwayApp.Display.Views
 {
     public partial class Sparkline
     {
-        public static readonly DependencyProperty DataPointsProperty =
-            DependencyProperty.Register("DataPoints", typeof(List<FeatureDensity>), typeof(Sparkline),
-            new PropertyMetadata((d, e) => ((Sparkline)d).ViewModel.DataPoints = (List<FeatureDensity>)e.NewValue));
+        public static readonly DependencyProperty RefChromosomeProperty =
+            DependencyProperty.Register("RefChromosome", typeof(RefChromosome), typeof(Sparkline), new PropertyMetadata(
+                (o, e) => ((Sparkline)o).ViewModel.RefChromosome = (RefChromosome)e.NewValue));
 
-        public List<FeatureDensity> DataPoints
+        public RefChromosome RefChromosome
         {
-            get { return (List<FeatureDensity>) GetValue(DataPointsProperty); }
-            set { SetValue(DataPointsProperty, value); }
+            get { return (RefChromosome)GetValue(RefChromosomeProperty); }
+            set { SetValue(RefChromosomeProperty, value); }
         }
 
         private SparklineViewModel ViewModel
