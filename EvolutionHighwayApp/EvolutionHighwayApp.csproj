@@ -269,6 +269,7 @@
     </Compile>
     <Compile Include="Models\BlockOrientation.cs" />
     <Compile Include="Models\BreakpointClassificationHighlightRegion.cs" />
+    <Compile Include="Models\BreakpointRegion.cs" />
     <Compile Include="Models\CentromereRegion.cs" />
     <Compile Include="Models\Chromosome.cs" />
     <Compile Include="Models\ConservedSyntenyHighlightRegion.cs" />

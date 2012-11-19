@@ -57,6 +57,11 @@ namespace EvolutionHighwayApp.ServiceLayer
         [OperationContract(Name = "ListDensityFeatures", AsyncPattern = true)]
         IAsyncResult BeginListDensityFeatures(AsyncCallback callback, object state = null);
         IEnumerable<FeatureDto> EndListDensityFeatures(IAsyncResult asyncResult);
+
+//        [WebGet(ResponseFormat = WebMessageFormat.Json, UriTemplate = "/compute/breakpoint/classification/{refGens}/{refChrs}/{compGens}")]
+//        [OperationContract(Name = "ComputeBreakpointClasses", AsyncPattern = true)]
+//        IAsyncResult BeginComputeBreakpointClasses(string refGens, string refChrs, string compGens, AsyncCallback callback, object state = null);
+//        IEnumerable<RegionDto> EndComputeBreakpointClasses(IAsyncResult asyncResult);
     }
 
     // ReSharper disable InconsistentNaming

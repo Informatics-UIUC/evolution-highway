@@ -52,6 +52,8 @@ namespace EvolutionHighwayApp.Menus.ViewModels
         public Command SaveConservedSyntenyCommand { get; private set; }
         public Command ShowBreakpointClassificationCommand { get; private set; }
         public Command SaveBreakpointClassificationCommand { get; private set; }
+//        public Command ShowBreakpointScoreCommand { get; private set; }
+        public Command SaveBreakpointScoreCommand { get; private set; }
 
         #endregion
 
@@ -83,6 +85,44 @@ namespace EvolutionHighwayApp.Menus.ViewModels
             SaveConservedSyntenyCommand = new Command(SaveConservedSynteny, canExecute => true);
             ShowBreakpointClassificationCommand = new Command(ShowBreakpointClassification, canExecute => true);
             SaveBreakpointClassificationCommand = new Command(SaveBreakpointClassification, canExecute => true);
+//            ShowBreakpointScoreCommand = new Command(ShowBreakpointScore, canExecute => true);
+            SaveBreakpointScoreCommand = new Command(SaveBreakpointScore, canExecute => true);
+        }
+
+        private void ShowBreakpointScore(object obj)
+        {
+            
+        }
+
+        private void SaveBreakpointScore(object obj)
+        {
+            var breakpointRegions = _repositoryController.GetBreakpointScore(DisplayController.GetVisibleCompGenomes());
+
+            var sfd = new SaveFileDialog
+            {
+                DefaultExt = "csv",
+                Filter = "CSV Files (*.csv)|*.csv|All files (*.*)|*.*",
+                FilterIndex = 1
+            };
+
+            if (sfd.ShowDialog() != true) return;
+
+            const string header = "ref_gen,ref_chr,comp_gen,start,end,type,score";
+            var csvData = DataExport.BreakpointScoreToCSV(breakpointRegions);
+
+            try
+            {
+                using (var stream = new StreamWriter(sfd.OpenFile()))
+                {
+                    stream.WriteLine(header);
+                    stream.Write(string.Join("", csvData));
+                    stream.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Could not save CSV output: " + e.Message, "Error", MessageBoxButton.OK);
+            }
         }
 
         private void ShowConservedSynteny(object obj)

@@ -72,6 +72,8 @@
                 <viblend:MenuItem Text="Save As..." Command="{Binding SaveBreakpointClassificationCommand}"
                                   IsEnabled="{Binding IsChecked,ElementName=mnuBrkptClass}"/>
             </viblend:MenuItem>
+            <viblend:MenuItem Command="{Binding SaveBreakpointScoreCommand}"
+                              Text="Save Breakpoint Score"/>
             <viblend:MenuItem Text="Features">
                 <viblend:MenuItem AllowCheckState="True"
                                   IsChecked="{Binding AppSettings.ShowAdjacencyScore, Mode=TwoWay}"

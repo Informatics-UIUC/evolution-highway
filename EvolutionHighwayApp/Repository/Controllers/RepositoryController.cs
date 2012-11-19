@@ -693,10 +693,35 @@ namespace EvolutionHighwayApp.Repository.Controllers
         public IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, double maxThreshold)
         {
             var overlapGenomes = GetOverlapRegions(compGenomes.Select(g => g.SyntenyBlocks), BreakpointClassificationHighlightRegionFactory);
-            var overlapClassBreakpoints = GetOverlapRegions(classes.Select(c => GetBreakpoints(c, BreakpointClassificationHighlightRegionFactory).MemoizeAll()), BreakpointClassificationHighlightRegionFactory);
+            var overlapClassBreakpoints = GetOverlapRegions(classes.Select(c => GetBreakpoints(c, BreakpointRegionFactory).MemoizeAll()), BreakpointClassificationHighlightRegionFactory);
             var classRegions = GetOverlapRegions(new[] { overlapGenomes, overlapClassBreakpoints }, BreakpointClassificationHighlightRegionFactory);
 
             return classRegions.Where(r => r.Span < maxThreshold);
+        }
+
+        public IEnumerable<BreakpointRegion> GetBreakpointScore(IEnumerable<CompGenome> compGenomes)
+        {
+            var data = compGenomes.GroupBy(g => g.RefChromosome).ToDictionary(elk => elk.Key, elv => elv.ToList());
+            return data.SelectMany(kvp =>
+            {
+                var refChr = kvp.Key;
+                var compGens = kvp.Value;
+
+                var allBreakpoints = compGens.Select(
+                    g => new { CompGen = g, Breakpoints = GetBreakpoints(g, BreakpointRegionFactory) })
+                                             .ToDictionary(elk => elk.CompGen, elv => elv.Breakpoints.ToList());
+
+                var comparisonPairs =
+                    (from breakpoint1 in allBreakpoints
+                     from breakpoint2 in allBreakpoints
+                     where String.Compare(breakpoint1.Key.Name, breakpoint2.Key.Name, StringComparison.Ordinal) < 0
+                     select new { Breakpoints1 = breakpoint1.Value.ToList(), Breakpoints2 = breakpoint2.Value.ToList() }).ToList();
+
+                comparisonPairs.ForEach(p => p.Breakpoints1.ForEach(b1 => p.Breakpoints2.Where(b1.Overlaps).ForEach(b2 =>
+                    { b1.AddOverlap(b2); b2.AddOverlap(b1); })));
+
+                return allBreakpoints.SelectMany(br => br.Value);
+            }).ToList();
         }
 
         private static IEnumerable<T> GetOverlapRegions<T>(IEnumerable<IEnumerable<Region>> regionsCollection, Func<double, double, T> regionFactory) where T : Region
@@ -725,7 +750,7 @@ namespace EvolutionHighwayApp.Repository.Controllers
             return y >= x ? regionFactory(x, y) : null;
         }
 
-        private static IEnumerable<T> GetBreakpoints<T>(CompGenome compGenome, Func<double, double, T> regionFactory) where T : Region
+        private static IEnumerable<T> GetBreakpoints<T>(CompGenome compGenome, Func<double, double, CompGenome, T> regionFactory) where T : Region
         {
             var sortedRegions = compGenome.SyntenyBlocks.ToList();
             sortedRegions.Sort((a, b) => a.Start.CompareTo(b.Start));
@@ -734,13 +759,13 @@ namespace EvolutionHighwayApp.Repository.Controllers
             foreach (var region in sortedRegions)
             {
                 if (i < region.Start)
-                    yield return regionFactory(i, region.Start);
+                    yield return regionFactory(i, region.Start, compGenome);
 
                 i = region.End;
             }
 
             if (i < compGenome.RefChromosome.Length)
-                yield return regionFactory(i, compGenome.RefChromosome.Length);
+                yield return regionFactory(i, compGenome.RefChromosome.Length, compGenome);
         }
 
         private static readonly Func<double, double, ConservedSyntenyHighlightRegion> ConservedSyntenyHighlightRegionFactory =
@@ -748,6 +773,9 @@ namespace EvolutionHighwayApp.Repository.Controllers
 
         private static readonly Func<double, double, BreakpointClassificationHighlightRegion> BreakpointClassificationHighlightRegionFactory =
            (s, e) => new BreakpointClassificationHighlightRegion(s, e);
+
+        private static readonly Func<double, double, CompGenome, BreakpointRegion> BreakpointRegionFactory =
+            (s, e, c) => new BreakpointRegion(s, e, c);
 
     }
 }

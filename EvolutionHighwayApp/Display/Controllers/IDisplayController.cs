@@ -12,6 +12,7 @@ namespace EvolutionHighwayApp.Display.Controllers
         bool ShowHighlightRegions { get; }
         bool ShowConservedSynteny { get; }
         bool ShowBreakpointClassification { get; }
+        bool ShowBreakpointScore { get; }
 
         IEnumerable<RefGenome> GetVisibleRefGenomes();
 
@@ -30,6 +31,7 @@ namespace EvolutionHighwayApp.Display.Controllers
         void SetHighlightRegions(RefChromosome chromosome, ICollection<Region> highlightRegions);
         void SetShowConservedSynteny(Action continuation = null);
         void SetShowBreakpointClassification(IEnumerable<string> classNames, double maxThreshold, Action continuation = null);
+        void SetShowBreakpointScore(Action continuation = null);
         void ClearHighlight();
     }
 }

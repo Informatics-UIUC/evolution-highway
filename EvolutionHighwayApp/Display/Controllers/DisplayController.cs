@@ -79,6 +79,17 @@ namespace EvolutionHighwayApp.Display.Controllers
             }
         }
 
+        private bool _showBreakpointScore;
+        public bool ShowBreakpointScore
+        {
+            get { return _showBreakpointScore; }
+            private set
+            {
+                if (value) ShowHighlightRegions = true;
+                NotifyPropertyChanged(() => ShowBreakpointScore, ref _showBreakpointScore, value);
+            }
+        }
+
         private bool _showHighlightRegions;
         public bool ShowHighlightRegions
         {
@@ -306,6 +317,7 @@ namespace EvolutionHighwayApp.Display.Controllers
         {
             ShowConservedSynteny = false;
             ShowBreakpointClassification = false;
+            ShowBreakpointScore = false;
 
             _highlightRegions[chromosome] = highlightRegions;
             _eventPublisher.Publish(new HighlightRegionDisplayEvent(chromosome, highlightRegions));
@@ -316,6 +328,7 @@ namespace EvolutionHighwayApp.Display.Controllers
         public void SetShowConservedSynteny(Action continuation = null)
         {
             ShowBreakpointClassification = false;
+            ShowBreakpointScore = false;
             ShowConservedSynteny = true;
 
             foreach (var kvp in _visibleCompGenomes)
@@ -331,6 +344,7 @@ namespace EvolutionHighwayApp.Display.Controllers
         public void SetShowBreakpointClassification(IEnumerable<string> classNames, double maxThreshold, Action continuation = null)
         {
             ShowConservedSynteny = false;
+            ShowBreakpointScore = false;
             ShowBreakpointClassification = true;
 
             _breakpointClassificationOptions = new BreakpointClassificationOptions(classNames.ToList(), maxThreshold);
@@ -349,12 +363,28 @@ namespace EvolutionHighwayApp.Display.Controllers
             if (continuation != null) continuation();
         }
 
+        public void SetShowBreakpointScore(Action continuation = null)
+        {
+            ShowConservedSynteny = false;
+            ShowBreakpointClassification = false;
+            ShowBreakpointScore = true;
+
+            foreach (var kvp in _visibleCompGenomes)
+            {
+                var genomes = kvp.Value.ToList();
+                // TODO not sure how this is displayed yet
+            }
+
+            if (continuation != null) continuation();
+        }
+
         public void ClearHighlight()
         {
             _highlightRegions.Clear();
             ShowHighlightRegions = false;
             ShowConservedSynteny = false;
             ShowBreakpointClassification = false;
+            ShowBreakpointScore = false;
 
             _eventPublisher.Publish(new HighlightRegionDisplayEvent(null, null));
         }

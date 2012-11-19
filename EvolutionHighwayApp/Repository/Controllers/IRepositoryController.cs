@@ -77,5 +77,8 @@ namespace EvolutionHighwayApp.Repository.Controllers
 
         IEnumerable<Region> GetConservedSynteny(IEnumerable<CompGenome> compGenomes);
         IEnumerable<Region> GetBreakpointClassification(IEnumerable<CompGenome> classes, IEnumerable<CompGenome> compGenomes, double maxThreshold);
+
+        IEnumerable<BreakpointRegion> GetBreakpointScore(IEnumerable<CompGenome> compGenomes);
+
     }
 }
