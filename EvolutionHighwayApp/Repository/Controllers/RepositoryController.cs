@@ -726,11 +726,17 @@ namespace EvolutionHighwayApp.Repository.Controllers
 
         private static IEnumerable<T> GetOverlapRegions<T>(IEnumerable<IEnumerable<Region>> regionsCollection, Func<double, double, T> regionFactory) where T : Region
         {
+            var collection = regionsCollection as IList<IEnumerable<Region>> ?? regionsCollection.ToList();
+
+            // if empty, we need to return a full overlap since we're doing breakpoint classification of only one species on itself
+            if (collection.IsEmpty())
+                return new List<T> {regionFactory(0, double.MaxValue)};
+
             IEnumerable<Tuple<IEnumerable<Region>, T>> emptyRegions =
                 new[] { new Tuple<IEnumerable<Region>, T>(Enumerable.Empty<T>(), null) };
 
             return
-                regionsCollection.Aggregate(emptyRegions,
+                collection.Aggregate(emptyRegions,
                     (accRegions, regs) =>
                         from acc in accRegions
                         from region in regs
@@ -752,11 +758,18 @@ namespace EvolutionHighwayApp.Repository.Controllers
 
         private static IEnumerable<T> GetBreakpoints<T>(CompGenome compGenome, Func<double, double, CompGenome, T> regionFactory) where T : Region
         {
+            // Note: Denis Larkin said that the region between the last block and the end of the chromosome
+            //       should not be considered a breakpoint; also, the region between the start of the chromosome and the beginning
+            //       of the first block should also not be considered a breakpoint
+
             var sortedRegions = compGenome.SyntenyBlocks.ToList();
             sortedRegions.Sort((a, b) => a.Start.CompareTo(b.Start));
 
-            double i = 0;
-            foreach (var region in sortedRegions)
+            if (sortedRegions.IsEmpty()) yield return null;
+
+            // skip the region from 0 -> first block
+            var i = sortedRegions.First().End;
+            foreach (var region in sortedRegions.Skip(1))
             {
                 if (i < region.Start)
                     yield return regionFactory(i, region.Start, compGenome);
@@ -764,8 +777,8 @@ namespace EvolutionHighwayApp.Repository.Controllers
                 i = region.End;
             }
 
-            if (i < compGenome.RefChromosome.Length)
-                yield return regionFactory(i, compGenome.RefChromosome.Length, compGenome);
+            // if (i < compGenome.RefChromosome.Length)
+            //     yield return regionFactory(i, compGenome.RefChromosome.Length, compGenome);
         }
 
         private static readonly Func<double, double, ConservedSyntenyHighlightRegion> ConservedSyntenyHighlightRegionFactory =
