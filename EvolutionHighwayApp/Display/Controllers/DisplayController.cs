@@ -97,7 +97,12 @@ namespace EvolutionHighwayApp.Display.Controllers
             private set { NotifyPropertyChanged(() => ShowHighlightRegions, ref _showHighlightRegions, value); }
         }
 
-
+        private bool _showScale;
+        public bool ShowScale
+        {
+            get { return _showScale; }
+            private set { NotifyPropertyChanged(() => ShowScale, ref _showScale, value); }
+        }
 
         #endregion
 
@@ -312,7 +317,20 @@ namespace EvolutionHighwayApp.Display.Controllers
                     if (continuation != null) continuation();
                 });
         }
-        
+
+        public void SetShowScale(bool visible, Action continuation = null)
+        {
+            if (!visible)
+            {
+                ShowScale = false;
+                if (continuation != null) continuation();
+                return;
+            }
+
+            ShowScale = true;
+            if (continuation != null) continuation();
+        }
+
         public void SetHighlightRegions(RefChromosome chromosome, ICollection<Region> highlightRegions)
         {
             ShowConservedSynteny = false;

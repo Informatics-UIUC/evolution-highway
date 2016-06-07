@@ -9,8 +9,6 @@ using EvolutionHighwayApp.Infrastructure;
 using EvolutionHighwayApp.Infrastructure.EventBus;
 using EvolutionHighwayApp.Infrastructure.MVVM;
 using EvolutionHighwayApp.Utils;
-using ImageTools;
-using SilverlightColorChooser;
 
 namespace EvolutionHighwayApp
 {
@@ -40,6 +38,7 @@ namespace EvolutionHighwayApp
                                      {"showHeterochromatin", true},
                                      {"showBlockOrientation", false},
                                      {"showAdjacencyScore", false},
+                                     {"showScale", true },
                                      {"genomeLayout", Orientation.Horizontal},
                                      {"chromosomeLayout", Orientation.Horizontal},
                                      {"synBlocksLayout", Orientation.Vertical},
@@ -50,23 +49,24 @@ namespace EvolutionHighwayApp
                                      {"centromereBgColor", Colors.Black},
                                      {"heterochromatinBgColor", Colors.Transparent},
                                      {"genomeInsideBgColor", Colors.White},
-                                     {"featureDensityBgColor", PredefinedColor.AllColors["Alice Blue"]},
+                                     {"featureDensityBgColor", PredefinedColorMap.Colors["Alice Blue"]},
                                      {"featureDensityFillColor", Colors.Transparent},
                                      {"sparklineColor", Colors.Black},
-                                     {"searchHighlightColor", PredefinedColor.AllColors["Light Green"]},
-                                     {"conservedSyntenyHighlightColor", PredefinedColor.AllColors["Pale Green"]},
-                                     {"breakpointClassificationHighlightColor", PredefinedColor.AllColors["Plum"]},
+                                     {"searchHighlightColor", PredefinedColorMap.Colors["Light Green"]},
+                                     {"conservedSyntenyHighlightColor", PredefinedColorMap.Colors["Pale Green"]},
+                                     {"breakpointClassificationHighlightColor", PredefinedColorMap.Colors["Plum"]},
                                      {"breakpointClassificationMaxThreshold", 100000000d},
-                                     {"dataPointFillColor", PredefinedColor.AllColors["Light Salmon"]},
+                                     {"dataPointFillColor", PredefinedColorMap.Colors["Light Salmon"]},
                                      {"adjacencyFeatureWidth", 20},
                                      {"highlightRegionMargin", -10d},
                                      {"highlightRegionStrokeSize", 1d},
-                                     {"highlightRegionStrokeColor", PredefinedColor.AllColors["Red"]}
+                                     {"highlightRegionStrokeColor", PredefinedColorMap.Colors["Red"]}
                                  };
 
             _displayController.SetShowCentromere(ShowCentromere);
             _displayController.SetShowHeterochromatin(ShowHeterochromatin);
             _displayController.SetShowFeatureDensitySparkline(ShowAdjacencyScore);
+            _displayController.SetShowScale(ShowScale);
         }
 
         public void ResetToDefaults()
@@ -75,6 +75,7 @@ namespace EvolutionHighwayApp
             ShowHeterochromatin = (bool) _defaultValues["showHeterochromatin"];
             ShowBlockOrientation = (bool) _defaultValues["showBlockOrientation"];
             ShowAdjacencyScore = (bool) _defaultValues["showAdjacencyScore"];
+            ShowScale = (bool) _defaultValues["showScale"];
             GenomeLayout = (Orientation) _defaultValues["genomeLayout"];
             ChromosomeLayout = (Orientation) _defaultValues["chromosomeLayout"];
             SynBlocksLayout = (Orientation) _defaultValues["synBlocksLayout"];
@@ -163,6 +164,23 @@ namespace EvolutionHighwayApp
                 NotifyPropertyChanged(() => ShowAdjacencyScore);
                 
                 _displayController.SetShowFeatureDensitySparkline(value);
+            }
+        }
+
+        public bool ShowScale
+        {
+            get { return (bool)_appSettings.GetValueOrDefault("showScale", _defaultValues["showScale"]); }
+            set
+            {
+                var oldValue = ShowScale;
+                if (oldValue == value) return;
+
+                Debug.WriteLine("ShowScale: {0}", value);
+
+                _appSettings.Set("showScale", value);
+                NotifyPropertyChanged(() => ShowScale);
+
+                _displayController.SetShowScale(value);
             }
         }
 

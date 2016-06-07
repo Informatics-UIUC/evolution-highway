@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Browser;
 using System.Windows.Media;
 using System.Globalization;
+using SilverlightColorChooser;
 
 namespace EvolutionHighwayApp.Utils
 {

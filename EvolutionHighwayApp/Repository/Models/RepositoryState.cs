@@ -52,15 +52,15 @@ namespace EvolutionHighwayApp.Repository.Models
                 var end = double.Parse(parts[4]);
 
 
-                var color = PredefinedColor.AllColors["Black"];
+                var color = PredefinedColorMap.Colors["Black"];
                 if (parts.Length == 6)
                 {
                     var colorStr = parts[5];
                     if (colorStr.StartsWith("#"))
                         color = color.FromHexString(colorStr);
                     else
-                        if (PredefinedColor.AllColors.ContainsKey(colorStr))
-                            color = PredefinedColor.AllColors[colorStr];
+                        if (PredefinedColorMap.Colors.ContainsKey(colorStr))
+                            color = PredefinedColorMap.Colors[colorStr];
                         else
                             throw new ParseErrorException(colorStr, lineno);
                 }

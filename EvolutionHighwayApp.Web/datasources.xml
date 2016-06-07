@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <datasources>
-  <datasource name="EH" serviceAddress="http://leovip023.ncsa.uiuc.edu:8080/EvolutionHighway/"/>
-  <datasource name="TA" serviceAddress="http://leovip023.ncsa.uiuc.edu:8080/TA/"/>
-  <datasource name="IGB" serviceAddress="http://leovip023.ncsa.uiuc.edu:8080/IGB/"/>
+  <datasource name="EH" serviceAddress="http://eh.informatics.illinois.edu:8080/EvolutionHighway/"/>
+  <datasource name="TA" serviceAddress="http://eh.informatics.illinois.edu:8080/TA/"/>
+  <datasource name="IGB" serviceAddress="http://eh.informatics.illinois.edu:8080/IGB/"/>
 </datasources>

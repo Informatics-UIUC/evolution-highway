@@ -28,6 +28,7 @@ namespace EvolutionHighwayApp.Display.Controllers
         void SetShowCentromere(bool visible, Action continuation = null);
         void SetShowHeterochromatin(bool value, Action continuation = null);
         void SetShowFeatureDensitySparkline(bool visible, Action continuation = null);
+        void SetShowScale(bool visible, Action continuation = null);
         void SetHighlightRegions(RefChromosome chromosome, ICollection<Region> highlightRegions);
         void SetShowConservedSynteny(Action continuation = null);
         void SetShowBreakpointClassification(IEnumerable<string> classNames, double maxThreshold, Action continuation = null);

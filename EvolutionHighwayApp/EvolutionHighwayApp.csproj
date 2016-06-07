@@ -334,6 +334,7 @@
     <Compile Include="Utils\DataExport.cs" />
     <Compile Include="Utils\FixedListBoxDragDropTarget.cs" />
     <Compile Include="Utils\LinearGradientBrushInterpolator.cs" />
+    <Compile Include="Utils\PredefinedColorMap.cs" />
     <Compile Include="Utils\SmartObservableCollection.cs" />
     <Compile Include="Utils\TextBoxUpdateBehavior.cs" />
     <Compile Include="AppSetup.cs" />

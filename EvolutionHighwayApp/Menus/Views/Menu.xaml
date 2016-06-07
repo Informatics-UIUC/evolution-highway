@@ -37,6 +37,9 @@
         </viblend:MenuItem>
         <viblend:MenuItem Padding="5,3,5,0" Text="View" DropDownWidth="190">
             <viblend:MenuItem AllowCheckState="True" 
+                              IsChecked="{Binding AppSettings.ShowScale, Mode=TwoWay}" 
+                              Text="Tick Marks"/>
+            <viblend:MenuItem AllowCheckState="True" 
                               IsChecked="{Binding AppSettings.ShowCentromere, Mode=TwoWay}" 
                               Text="Centromere"/>
             <viblend:MenuItem AllowCheckState="True" 

@@ -22,11 +22,13 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Text="Mbp" FontSize="7"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom" Text="Mbp" FontSize="7"
+                   Visibility="{Binding DataContext.DisplayController.ShowScale,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
 
         <views:ScaleAxis Grid.Row="1" Grid.Column="0"
                          MinorTickMarks="10" MajorTickMarks="50" 
-                         MaxScale="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer}"/>
+                         MaxScale="{Binding DataContext.RefChromosome.Length,ElementName=_compGenomeCollectionViewer}"
+                         Visibility="{Binding DataContext.DisplayController.ShowScale,Converter={StaticResource BoolToVisibilityConverter},ElementName=_compGenomeCollectionViewer}"/>
 
         <views:CompGenomeNamesViewer Grid.Row="0" Grid.Column="1" Margin="0,0,0,5" 
                                      Height="{Binding DataContext.AppSettings.LabelSize,ElementName=_compGenomeCollectionViewer}"
